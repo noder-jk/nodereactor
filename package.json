@@ -60,5 +60,9 @@
     "wordpress",
     "nodejs",
     "reactjs"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noder-jk/nodereactor.git"
+  }
 }
