@@ -1,0 +1,23 @@
+#post-editor-container
+{
+    .nr_meta_box
+    {
+        background:white;
+        padding:10px;
+        margin-bottom:15px;
+        border-radius: 5px;
+
+
+        h4
+        {
+            border-bottom:1px solid #ccc;
+            margin:0px 0px 10px 0px;
+        }
+    }
+
+    .editor_module
+    {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}

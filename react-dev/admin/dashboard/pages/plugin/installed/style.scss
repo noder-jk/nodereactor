@@ -1,0 +1,22 @@
+#installed_plugins
+{
+    table
+    {
+        background: white;
+    }
+    a{cursor: pointer;}
+    .activated_plugin
+    {
+        .activate_plugin
+        {
+            display: none;
+        }
+    }
+    .deactivated_plugin
+    {
+        .deactivate_plugin
+        {
+            display: none;
+        }
+    }
+}

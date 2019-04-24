@@ -1,0 +1,16 @@
+.taxonomy-admin-page
+{
+    .taxonomy-action
+    {
+        a
+        {
+            display: none;
+            cursor: pointer;
+        }
+
+        &:hover
+        {
+            a{display: inline}
+        }
+    }
+}

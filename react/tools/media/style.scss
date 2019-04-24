@@ -1,0 +1,129 @@
+.nr-media-uploader-explorer
+{
+    .attachment_gallery>[data-block=media]
+    {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .attachment_gallery>[data-block=media]>[data-element=file]
+    {
+        cursor:pointer;
+        transition: transform 0.2s;
+        -o-transition: transform 0.2s;
+        -moz-transition: transform 0.2s;
+        -webkit-transition: transform 0.2s;
+        position: relative;
+        
+        position:relative; 
+        margin:10px 5px; 
+        box-shadow:1px 1px 3px;
+
+        small
+        {
+            display: none;
+            background:rgba(0, 0, 0, 0.637);
+            color:white;
+            padding: 5px;
+            white-space: nowrap;
+            position: absolute;
+            bottom: 0;
+            left:0;
+            right: 0;
+        }
+
+        &:hover
+        {
+            small
+            {
+                display: block;
+            }
+        }
+    }
+    .attachment_gallery>[data-block=media]>[data-element=file]:hover
+    {
+        transform: scale(1.05, 1.05);
+        -o-transform: scale(1.05, 1.05);
+        -moz-transform: scale(1.05, 1.05);
+        -ms-transform: scale(1.05, 1.05);
+        -webkit-transform: scale(1.05, 1.05);
+    }
+
+    .data_file_selected
+    {
+        outline:2px dashed red;
+    }
+
+    .media-sidebar .attachment-info img,
+    .media-sidebar .attachment-info video,
+    .media-sidebar .attachment-info audio
+    {max-width:100%}
+
+    .fixed-media
+    {
+        left: 175px;
+        top:34px;
+        right:0;
+        bottom: 0;
+    }
+    .file_option{left: 175px !important;}
+
+    .dedicated-media
+    {
+        .media-modal-close{display: none}
+        .media-frame-toolbar{display: none}
+        .media-frame-content{bottom: 0;}
+    }
+
+    .media-menu-item, media-menu-item:hover
+    {
+        outline: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .media-router a{text-decoration: none}
+
+
+    .attachment_gallery
+    {
+        margin-top:40px;
+        z-index: 97;
+    }
+
+    .file_option
+    {
+        position: fixed;
+        left: 0;
+        text-align: right;
+        padding: 5px;
+        background: white;
+        margin-top:-2px;
+        z-index: 98;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.123);
+        
+        &>span
+        {
+            margin:
+            {
+                left: 4px;
+                right: 4px;
+            }
+
+            cursor: pointer;
+            display: inline-block;
+        }
+    }
+
+    .foggy
+    {
+        opacity: .5;
+    }
+}
+
+.collapsed_asside+#dashboard_main
+{
+    .fixed-media{left: 34px;}
+
+    .file_option{left: 34px !important;}
+}

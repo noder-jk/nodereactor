@@ -1,0 +1,14 @@
+#post_list_container
+{
+    table
+    {
+        background: white;
+
+        th:first-child,
+        td:first-child
+        {
+            width:50px;
+            text-align: center;
+        }
+    }
+}

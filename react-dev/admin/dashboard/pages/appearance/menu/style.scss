@@ -1,0 +1,78 @@
+.admin-menu-page
+{
+    .recursive_menu_items
+    {
+        padding:
+        {
+            top:7px;
+            left: 15px;
+        }
+
+        &:not(:last-child)
+        {
+            margin-bottom: 7px;
+        }
+    }
+
+    .menu-content-type
+    {
+        border: 1px solid rgba(0, 0, 0, 0.068);
+        padding: 7px;
+        max-height: 400px;
+        overflow: auto;
+    }
+
+    .actions-container
+    {
+        span
+        {
+            display: none;
+            float: right;
+            svg{cursor: pointer;}
+        }
+
+        &:hover
+        {
+            span{display: inline-block}
+        }
+    }
+
+    .menu-name-list
+    {
+        border: 1px solid rgba(0, 0, 0, 0.192);
+        padding: 7px;
+
+        &>span
+        {
+            display: none;
+            float: right;
+
+            &>svg
+            {
+                cursor: pointer;
+            }
+        }
+
+        &:hover
+        {
+            &>span
+            {
+                display: inline-block;
+            }
+        }
+
+        input
+        {
+            border-radius: 0;
+        }
+    }
+
+    .item-single-post
+    {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0;
+        padding: 3px 0;
+    }
+}

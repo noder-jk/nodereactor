@@ -1,0 +1,67 @@
+#widget_area_page
+{
+    [data-area_container]
+    {
+        background:white;
+        padding:12px;
+        margin-bottom:30px;
+        min-height:125px;
+        border-radius: 5px;
+    }
+    [data-area]>div{outline:1px solid #ccc;}
+    [data-area]>div>div{padding:6px}
+
+    [data-area]>div>b
+    {	
+        display:block;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        background:#f5f5f5;
+        padding:8px 0px;
+        text-indent:6px;
+        border-bottom:1px solid #ccc;
+        font-size:13px
+    }
+
+    [data-area]>div>b>i
+    {	
+        float:right;
+        font-size:13px;
+        padding-top:3px;
+        padding-right:5px;
+        cursor:pointer;
+        cursor:-webkit-pointer;
+        cursor:-moz-pointer;
+        cursor:-o-pointer;
+    }
+
+    #widget_areas_containers
+    {
+        .widget_form
+        {
+            margin-top:12px;
+            
+            &:last-child:not(:only-child){display:none}
+
+            .widget_action_i{display: none}
+            &:hover
+            {
+                .widget_action_i{display: inline}
+            }
+        }
+        
+        textarea{resize:vertical}
+    }
+
+    [data-area_container]
+    {
+        .adder_select{display: none}
+
+        &:hover
+        {
+            .adder_select{display: block}
+        }
+    }
+}
+
