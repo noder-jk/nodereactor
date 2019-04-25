@@ -91,7 +91,7 @@ global.exclude_post_media=function(content,post_type)
 	if(content.indexOf('data-attachment_id="')>-1 || content.indexOf('href="'+nr_home_url))
 	{
 		var d=nr_dom(content);
-		var post_type=='attachment' ? d('[data-attachment_id]').remove() :
+		post_type=='attachment' ? d('[data-attachment_id]').remove() :
 		
 		d('[data-attachment_id]').each
 		(
