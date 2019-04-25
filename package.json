@@ -1,6 +1,6 @@
 {
   "name": "nodereactor",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Nodejs and reactjs based Content Management System (CMS), influenced by wordpress.",
   "main": "index.njs",
   "dependencies": {
