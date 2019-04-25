@@ -105,8 +105,6 @@ function (_Component) {
           _configs$used_taxonom = configs.used_taxonomies,
           used_taxonomies = _configs$used_taxonom === void 0 ? {} : _configs$used_taxonom;
       var values = this.state.values;
-      console.log('from perm');
-      console.log(values);
       return _react.default.createElement("div", null, _react.default.createElement("div", {
         className: "row mb-4"
       }, _react.default.createElement("div", {

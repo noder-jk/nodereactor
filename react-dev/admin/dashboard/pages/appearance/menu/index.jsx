@@ -33,7 +33,7 @@ class Menus extends Component
         this.fetchMenuContents=this.fetchMenuContents.bind(this);
 
         this.createNew=this.createNew.bind(this);
-        this.closeNew=this.closeNew.bind(this);
+        this.closeMenuEditor=this.closeMenuEditor.bind(this);
 
         this.deleteMenu=this.deleteMenu.bind(this);
 
@@ -44,7 +44,7 @@ class Menus extends Component
     {   
         let {lastOb=false}=this.props;
 
-        let ed=<MenuEditor lastOb={lastOb} locations={this.state.locations} menus={this.state.menus[menu]} menu_name={menu} closeMenuForm={()=>{this.setState({'editor':{}})}}/>
+        let ed=<MenuEditor lastOb={lastOb} locations={this.state.locations} menus={this.state.menus[menu]} menu_name={menu} closeMenuForm={this.closeMenuEditor}/>
 
         this.setState({'editor':{'name':menu, 'component':ed},'mode':false});
     }
@@ -54,9 +54,14 @@ class Menus extends Component
         this.setState({'mode':'create','editor':{}});
     }
 
-    closeNew()
+    closeMenuEditor(saved)
     {
-        this.setState({'mode':false});
+        this.setState({'editor':{}, 'mode':false});
+
+        if(saved)
+        {
+            this.fetchMenuContents();
+        }
     }
 
     deleteMenu(m)
@@ -147,9 +152,9 @@ class Menus extends Component
             <h4>Menus {this.state.loading==true ? <Spinner size="15px"/> : null}</h4>
             {
                 this.state.mode!=='create' ? 
-                    <span onClick={this.createNew}>+ Create New Menu</span> : 
+                    <span onClick={this.createNew}>+ Create New</span> : 
                     <div className="menu-name-list">
-                        <MenuEditor locations={this.state.locations} closeMenuForm={this.closeNew} lastOb={lastOb}/>
+                        <MenuEditor locations={this.state.locations} closeMenuForm={this.closeMenuEditor} lastOb={lastOb}/>
                     </div>
             }
 
@@ -168,7 +173,7 @@ class Menus extends Component
 
                     {
                         this.state.editor.name==m ? 
-                        <MenuEditor lastOb={lastOb} locations={this.state.locations} menus={this.state.menus[m]} menu_name={m} closeMenuForm={()=>{this.setState({'editor':{}})}}/> : 
+                        <MenuEditor lastOb={lastOb} locations={this.state.locations} menus={this.state.menus[m]} menu_name={m} closeMenuForm={this.closeMenuEditor}/> : 
                         null
                     }
                 </div>
@@ -209,16 +214,19 @@ class Contents extends Component
         {
             'action':'nr_get_nav_posts',
             'title_name':'post_title',
-            'id_name':'post_id'
+            'id_name':'post_id',
+            'parent_name':'post_parent'
         }
 
         let txn=
         {
             'action':'nr_get_nav_terms',
             'title_name':'name',
-            'id_name':'term_id'
+            'id_name':'term_id',
+            'parent_name':'parent'
         }
 
+        
         return  <div className="col-6 col-md-5">
                     <h4>Contents</h4>
 

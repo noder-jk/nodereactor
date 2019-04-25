@@ -7,7 +7,7 @@ import Spinner from 'react-svg-spinner';
 import {ajax_url ,LoginRegistration} from 'nodereactor/react';
 
 import './style.css';
-import Logo from './logo.jpg';
+import Banner from './banner.jpg';
 
 class NodeReactorInstaller extends Component
 {
@@ -113,15 +113,20 @@ class NodeReactorInstaller extends Component
 
                 <br/>
                 <div className="text-center">
-                    <img src={Logo} style={{'width':'30%'}}/>
-                    <h2>NodeReactor</h2>
-                    <small>Created By JK</small>
+                    
+                    
                 </div>
 
-                <div className="text-center" style={{'minHeight':'25px'}}>
+
+                <div className="text-center installation_steps" id="get_config">
+                    <img src={Banner} style={{'width':'100%'}}/>
+                    <small>Create By JK</small>
+                </div>
+
+                <div className="text-center">
                     {this.state.loading ? <Spinner size="15px"/> : null}
                 </div>
-
+                
                 <div className="installation_steps" id="get_config" style={this.showHide('db')}>
 				    <h4>Database Information</h4>
                     <hr/>

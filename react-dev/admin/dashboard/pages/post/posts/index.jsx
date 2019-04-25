@@ -3,7 +3,14 @@ import axios from 'axios';
 import Spinner from "react-svg-spinner";
 import Swal from 'sweetalert2';
 
-import {ajax_url ,Placeholder, parse_form, get_url_parameter, Pagination} from 'nodereactor/react';
+import {
+        ajax_url,
+        Placeholder, 
+        parse_form, 
+        get_url_parameter, 
+        Pagination,
+        get_hierarchy
+    } from 'nodereactor/react';
 
 import './style.scss';
 
@@ -162,6 +169,9 @@ class PostProcess extends Component
     {
         let {post_type}=this.props;
         
+        let st_posts=this.state.posts;
+        st_posts=get_hierarchy(st_posts, 'post_parent', 'post_id');
+
         return(
             <div id="post_list_container">
                 <h4>All Posts {this.state.loading_icon ? <Spinner size="15px"/> : null}</h4>
@@ -200,15 +210,13 @@ class PostProcess extends Component
                     </thead>
                     <tbody>
                         {
-                            Object.keys(this.state.posts).map(k=>
+                            st_posts.map(item=>
                             {
-                                let item=this.state.posts[k];
-
                                 return(
                                     <tr key={item.post_name}>
                                         <td><input type="checkbox" defaultChecked={item.checked_input} onChange={(e)=>this.toggleCheck(e,item.post_name)}/></td>
                                         <td>
-                                            <p>{item.post_title}</p>
+                                            <p>{'-'.repeat(item.nest_level)}{item.post_title}</p>
                                             <a href={item.post_url} className="text-info">View</a> - <a className="text-info" href={item.post_edit_link}>Edit</a>
                                         </td>
                                         <td>{item.display_name}</td>

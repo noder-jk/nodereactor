@@ -89,6 +89,7 @@ global.real_set_option=function($, resp_next)
 	// for core functions. Not for developers.
 	if($.nr_call_real_set_option!==true)
 	{
+		resp_next($);
 		return;
 	}
 	

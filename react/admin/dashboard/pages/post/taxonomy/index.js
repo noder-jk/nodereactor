@@ -365,7 +365,7 @@ function (_Component2) {
         className: "table table-bordered"
       }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null), _react.default.createElement("th", null, "Name"), _react.default.createElement("th", null, "Slug"), _react.default.createElement("th", null, "Description"), _react.default.createElement("th", null, "Posts"))), _react.default.createElement("tbody", null, taxonomies.map(function (item) {
         return [_react.default.createElement("tr", {
-          key: item.term_id + '_list'
+          key: item.term_id
         }, _react.default.createElement("td", null, _react.default.createElement("input", {
           type: "checkbox",
           name: "taxonomy_inp_check",

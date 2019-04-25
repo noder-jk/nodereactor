@@ -75,7 +75,8 @@ function (_Component) {
       'locations': locations,
       'active_index': '',
       'association': association,
-      'show_keyboard_shortcut': false
+      'show_keyboard_shortcut': false,
+      'saved_menu': false
     };
     _this.saveMenu = _this.saveMenu.bind(_assertThisInitialized(_this));
     _this.renderItems = _this.renderItems.bind(_assertThisInitialized(_this));
@@ -153,7 +154,6 @@ function (_Component) {
 
       if (window.nr_ind === false) {} else {
         ob.active_index = child + '[' + window.nr_ind + ']';
-        console.log(ob.active_index);
       }
 
       this.setState(ob);
@@ -215,7 +215,8 @@ function (_Component) {
         _sweetalert.default.fire('Saved');
 
         _this2.setState({
-          'loading': false
+          'loading': false,
+          'saved_menu': true
         });
       }).catch(function (e) {
         _this2.setState({
@@ -236,7 +237,6 @@ function (_Component) {
         return;
       }
 
-      console.log('the lastOb', lastOb);
       var position = lastOb.position;
       window.nr_add_m_i = this.state.items;
       window.nr_ad_i = lastOb.item;
@@ -244,12 +244,9 @@ function (_Component) {
         item.key = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
         return item;
       });
-      console.log(window.nr_ad_i);
       window.nr_ad_s = true;
 
       try {
-        console.log('menu gonna be ', position);
-
         if (position == 'append') {
           window.nr_ind_ = ind;
           window.eval('!window.nr_add_m_i' + window.nr_ind_ + '.children ? window.nr_add_m_i' + window.nr_ind_ + '.children=[] : null;\
@@ -387,7 +384,9 @@ function (_Component) {
         size: "15px"
       }) : null, " \xA0", _react.default.createElement("button", {
         className: "btn btn-secondary btn-sm",
-        onClick: closeMenuForm
+        onClick: function onClick() {
+          return closeMenuForm(_this4.state.saved_menu);
+        }
       }, "Close"), " \xA0", _react.default.createElement("button", {
         className: "btn btn-secondary btn-sm",
         onClick: this.saveMenu

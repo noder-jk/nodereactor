@@ -217,6 +217,8 @@ function (_Component) {
       var _this4 = this;
 
       var post_type = this.props.post_type;
+      var st_posts = this.state.posts;
+      st_posts = (0, _react2.get_hierarchy)(st_posts, 'post_parent', 'post_id');
       return _react.default.createElement("div", {
         id: "post_list_container"
       }, _react.default.createElement("h4", null, "All Posts ", this.state.loading_icon ? _react.default.createElement(_reactSvgSpinner.default, {
@@ -286,8 +288,7 @@ function (_Component) {
         return _react.default.createElement("th", {
           key: t
         }, t);
-      }), _react.default.createElement("th", null, "Posted"))), _react.default.createElement("tbody", null, Object.keys(this.state.posts).map(function (k) {
-        var item = _this4.state.posts[k];
+      }), _react.default.createElement("th", null, "Posted"))), _react.default.createElement("tbody", null, st_posts.map(function (item) {
         return _react.default.createElement("tr", {
           key: item.post_name
         }, _react.default.createElement("td", null, _react.default.createElement("input", {
@@ -296,7 +297,7 @@ function (_Component) {
           onChange: function onChange(e) {
             return _this4.toggleCheck(e, item.post_name);
           }
-        })), _react.default.createElement("td", null, _react.default.createElement("p", null, item.post_title), _react.default.createElement("a", {
+        })), _react.default.createElement("td", null, _react.default.createElement("p", null, '-'.repeat(item.nest_level), item.post_title), _react.default.createElement("a", {
           href: item.post_url,
           className: "text-info"
         }, "View"), " - ", _react.default.createElement("a", {

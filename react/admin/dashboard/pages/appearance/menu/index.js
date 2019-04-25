@@ -69,7 +69,7 @@ function (_Component) {
     };
     _this.fetchMenuContents = _this.fetchMenuContents.bind(_assertThisInitialized(_this));
     _this.createNew = _this.createNew.bind(_assertThisInitialized(_this));
-    _this.closeNew = _this.closeNew.bind(_assertThisInitialized(_this));
+    _this.closeMenuEditor = _this.closeMenuEditor.bind(_assertThisInitialized(_this));
     _this.deleteMenu = _this.deleteMenu.bind(_assertThisInitialized(_this));
     _this.openEditor = _this.openEditor.bind(_assertThisInitialized(_this));
     return _this;
@@ -78,8 +78,6 @@ function (_Component) {
   _createClass(Menus, [{
     key: "openEditor",
     value: function openEditor(menu) {
-      var _this2 = this;
-
       var _this$props$lastOb = this.props.lastOb,
           lastOb = _this$props$lastOb === void 0 ? false : _this$props$lastOb;
 
@@ -88,11 +86,7 @@ function (_Component) {
         locations: this.state.locations,
         menus: this.state.menus[menu],
         menu_name: menu,
-        closeMenuForm: function closeMenuForm() {
-          _this2.setState({
-            'editor': {}
-          });
-        }
+        closeMenuForm: this.closeMenuEditor
       });
 
       this.setState({
@@ -112,16 +106,21 @@ function (_Component) {
       });
     }
   }, {
-    key: "closeNew",
-    value: function closeNew() {
+    key: "closeMenuEditor",
+    value: function closeMenuEditor(saved) {
       this.setState({
+        'editor': {},
         'mode': false
       });
+
+      if (saved) {
+        this.fetchMenuContents();
+      }
     }
   }, {
     key: "deleteMenu",
     value: function deleteMenu(m) {
-      var _this3 = this;
+      var _this2 = this;
 
       _sweetalert.default.fire({
         title: 'Sure to delete?',
@@ -135,7 +134,7 @@ function (_Component) {
         /* Now request to server to delete. */
 
 
-        _this3.setState({
+        _this2.setState({
           'loading': true
         });
 
@@ -147,11 +146,11 @@ function (_Component) {
           },
           url: _react2.ajax_url
         }).then(function (r) {
-          _this3.setState({
+          _this2.setState({
             'loading': true
-          }, _this3.fetchMenuContents);
+          }, _this2.fetchMenuContents);
         }).catch(function (r) {
-          _this3.setState({
+          _this2.setState({
             'loading': false
           });
 
@@ -162,7 +161,7 @@ function (_Component) {
   }, {
     key: "fetchMenuContents",
     value: function fetchMenuContents() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.setState({
         'loading': true
@@ -201,7 +200,7 @@ function (_Component) {
           set_ob.menus = set_ob.menus;
         }
 
-        _this4.setState(set_ob);
+        _this3.setState(set_ob);
       });
     }
   }, {
@@ -212,7 +211,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this5 = this;
+      var _this4 = this;
 
       var _this$props$lastOb2 = this.props.lastOb,
           lastOb = _this$props$lastOb2 === void 0 ? false : _this$props$lastOb2;
@@ -222,36 +221,32 @@ function (_Component) {
         size: "15px"
       }) : null), this.state.mode !== 'create' ? _react.default.createElement("span", {
         onClick: this.createNew
-      }, "+ Create New Menu") : _react.default.createElement("div", {
+      }, "+ Create New") : _react.default.createElement("div", {
         className: "menu-name-list"
       }, _react.default.createElement(_menuEditor.MenuEditor, {
         locations: this.state.locations,
-        closeMenuForm: this.closeNew,
+        closeMenuForm: this.closeMenuEditor,
         lastOb: lastOb
       })), Object.keys(this.state.menus).map(function (m) {
         return _react.default.createElement("div", {
           className: "menu-name-list",
           key: m
-        }, _this5.state.editor.name == m ? null : _react.default.createElement("b", null, m), _this5.state.editor.name == m ? null : _react.default.createElement("span", null, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        }, _this4.state.editor.name == m ? null : _react.default.createElement("b", null, m), _this4.state.editor.name == m ? null : _react.default.createElement("span", null, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faEdit,
           onClick: function onClick() {
-            return _this5.openEditor(m);
+            return _this4.openEditor(m);
           }
         }), " \xA0", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faTrashAlt,
           onClick: function onClick() {
-            return _this5.deleteMenu(m);
+            return _this4.deleteMenu(m);
           }
-        })), _this5.state.editor.name == m ? _react.default.createElement(_menuEditor.MenuEditor, {
+        })), _this4.state.editor.name == m ? _react.default.createElement(_menuEditor.MenuEditor, {
           lastOb: lastOb,
-          locations: _this5.state.locations,
-          menus: _this5.state.menus[m],
+          locations: _this4.state.locations,
+          menus: _this4.state.menus[m],
           menu_name: m,
-          closeMenuForm: function closeMenuForm() {
-            _this5.setState({
-              'editor': {}
-            });
-          }
+          closeMenuForm: _this4.closeMenuEditor
         }) : null);
       }));
     }
@@ -266,17 +261,17 @@ function (_Component2) {
   _inherits(Contents, _Component2);
 
   function Contents(props) {
-    var _this6;
+    var _this5;
 
     _classCallCheck(this, Contents);
 
-    _this6 = _possibleConstructorReturn(this, _getPrototypeOf(Contents).call(this, props));
-    _this6.state = {
+    _this5 = _possibleConstructorReturn(this, _getPrototypeOf(Contents).call(this, props));
+    _this5.state = {
       'current_tab': ''
     };
-    _this6.adder = _this6.adder.bind(_assertThisInitialized(_this6));
-    _this6.open = _this6.open.bind(_assertThisInitialized(_this6));
-    return _this6;
+    _this5.adder = _this5.adder.bind(_assertThisInitialized(_this5));
+    _this5.open = _this5.open.bind(_assertThisInitialized(_this5));
+    return _this5;
   }
 
   _createClass(Contents, [{
@@ -294,17 +289,19 @@ function (_Component2) {
   }, {
     key: "render",
     value: function render() {
-      var _this7 = this;
+      var _this6 = this;
 
       var pst = {
         'action': 'nr_get_nav_posts',
         'title_name': 'post_title',
-        'id_name': 'post_id'
+        'id_name': 'post_id',
+        'parent_name': 'post_parent'
       };
       var txn = {
         'action': 'nr_get_nav_terms',
         'title_name': 'name',
-        'id_name': 'term_id'
+        'id_name': 'term_id',
+        'parent_name': 'parent'
       };
       return _react.default.createElement("div", {
         className: "col-6 col-md-5"
@@ -321,7 +318,7 @@ function (_Component2) {
       }), _react.default.createElement("div", {
         className: "menu-content-type",
         onClick: function onClick() {
-          return _this7.open('custom');
+          return _this6.open('custom');
         }
       }, _react.default.createElement("b", null, "Custom Link"), this.state.current_tab == 'custom' ? _react.default.createElement(_custom.CustomLink, {
         addHook: this.adder
@@ -338,27 +335,27 @@ function (_Component3) {
   _inherits(MenuPage, _Component3);
 
   function MenuPage(props) {
-    var _this8;
+    var _this7;
 
     _classCallCheck(this, MenuPage);
 
-    _this8 = _possibleConstructorReturn(this, _getPrototypeOf(MenuPage).call(this, props));
-    _this8.state = {
+    _this7 = _possibleConstructorReturn(this, _getPrototypeOf(MenuPage).call(this, props));
+    _this7.state = {
       'last_ob': false
     };
-    _this8.getOb = _this8.getOb.bind(_assertThisInitialized(_this8));
-    return _this8;
+    _this7.getOb = _this7.getOb.bind(_assertThisInitialized(_this7));
+    return _this7;
   }
 
   _createClass(MenuPage, [{
     key: "getOb",
     value: function getOb(ob) {
-      var _this9 = this;
+      var _this8 = this;
 
       this.setState({
         'last_ob': ob
       }, function () {
-        return _this9.setState({
+        return _this8.setState({
           'last_ob': false
         });
       });

@@ -38,11 +38,12 @@ const get_nodes_path=function(nodes)
 module.exports=function(project_root)
 {
 	console.log('');
+	console.log('https://github.com/noder-jk/nodereactor');
+	console.log('https://www.npmjs.com/package/nodereactor');
+	console.log('');
 	console.log('https://NodeReactor.com');
 	console.log('https://facebook.com/NodeReactorCMS');
 	console.log('https://facebook.com/groups/NodeReactorDevs');
-	console.log('');
-	console.log('https://www.npmjs.com/package/nodereactor');
 	console.log('');
 	console.log('');
 

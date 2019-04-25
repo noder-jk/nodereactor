@@ -86,7 +86,6 @@ function (_Component) {
           id_name = _this$props$propertie.id_name,
           title_name = _this$props$propertie.title_name;
       var checked = this.state.checked;
-      console.log(checked);
 
       if (checked.length == 0) {
         return;
@@ -145,8 +144,15 @@ function (_Component) {
           current_tab = _this$props.current_tab;
       var _this$props$propertie2 = this.props.properties,
           title_name = _this$props$propertie2.title_name,
-          id_name = _this$props$propertie2.id_name;
-      var items = this.state.items;
+          id_name = _this$props$propertie2.id_name,
+          parent_name = _this$props$propertie2.parent_name;
+      var _this$state$items = this.state.items,
+          items = _this$state$items === void 0 ? {} : _this$state$items;
+
+      for (var k in items) {
+        items[k] = (0, _react2.get_hierarchy)(items[k], parent_name, id_name);
+      }
+
       return Object.keys(items).map(function (item) {
         var tab_ttl = item.charAt(0).toUpperCase() + item.slice(1);
         return _react.default.createElement("div", {
@@ -162,9 +168,13 @@ function (_Component) {
         }, _react.default.createElement("b", null, tab_ttl, " "), current_tab == item ? _react.default.createElement("div", {
           className: "bg-white p-2"
         }, items[item].length == 0 ? _react.default.createElement("i", null, "No ", tab_ttl) : items[item].map(function (post) {
+          console.log(post.nest_level);
           return _react.default.createElement("p", {
             key: post[id_name],
-            className: "item-single-post"
+            className: "item-single-post",
+            style: {
+              'paddingLeft': post.nest_level * 10 + 'px'
+            }
           }, _react.default.createElement("input", {
             type: "checkbox",
             name: "nv_" + id_name,

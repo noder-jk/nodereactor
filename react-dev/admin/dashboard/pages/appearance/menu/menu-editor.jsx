@@ -37,7 +37,8 @@ class MenuEditor extends Component
             'locations':locations,
             'active_index':'',
             'association':association,
-            'show_keyboard_shortcut':false
+            'show_keyboard_shortcut':false,
+            'saved_menu':false
         }
 
         this.saveMenu=this.saveMenu.bind(this);
@@ -166,7 +167,7 @@ class MenuEditor extends Component
         }).then(r=>
         {
             Swal.fire('Saved');
-            this.setState({'loading':false});
+            this.setState({'loading':false, 'saved_menu':true});
         }).catch(e=>
         {
             this.setState({'loading':false});
@@ -339,7 +340,7 @@ class MenuEditor extends Component
                     </div>
                     <div className="text-right">
                         {this.state.loading ? <Spinner size="15px"/> : null} &nbsp;
-                        <button className="btn btn-secondary btn-sm" onClick={closeMenuForm}>Close</button> &nbsp;
+                        <button className="btn btn-secondary btn-sm" onClick={()=>closeMenuForm(this.state.saved_menu)}>Close</button> &nbsp;
                         <button className="btn btn-secondary btn-sm" onClick={this.saveMenu}>Save</button>
                     </div>
                 </div>

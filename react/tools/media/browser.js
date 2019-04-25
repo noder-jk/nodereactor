@@ -296,7 +296,6 @@ function (_Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      console.log('sending test socket', _react2.socket_channel);
       window.nr_socket_client.on('my_own_handler', function (msg) {
         console.log('hi this is from my own handler', msg);
       });

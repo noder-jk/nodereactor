@@ -4,7 +4,7 @@ import axios from 'axios';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowCircleRight, faArrowAltCircleDown} from '@fortawesome/free-solid-svg-icons';
 
-import {ajax_url} from 'nodereactor/react';
+import {ajax_url, get_hierarchy} from 'nodereactor/react';
 
 class ObjectContents extends Component
 {
@@ -104,9 +104,14 @@ class ObjectContents extends Component
     {
         let {opener, current_tab}=this.props;
 
-        let {title_name, id_name}=this.props.properties;
+        let {title_name, id_name, parent_name}=this.props.properties;
 
-        let {items}=this.state;
+        let {items={}}=this.state;
+
+        for(let k in items)
+        {
+            items[k]=get_hierarchy(items[k], parent_name, id_name);
+        }
 
         return  Object.keys(items).map(item=>
         {
@@ -121,7 +126,9 @@ class ObjectContents extends Component
                                     items[item].length==0 ? <i>No {tab_ttl}</i> : 
                                     items[item].map(post=>
                                     {
-                                        return  <p key={post[id_name]} className="item-single-post">
+                                        console.log(post.nest_level);
+
+                                        return  <p key={post[id_name]} className="item-single-post" style={{'paddingLeft':(post.nest_level*10)+'px'}}>
                                                 <input type="checkbox" name={"nv_"+id_name} value={post[id_name]} onChange={this.checker}/> {post[title_name]}
                                             </p>
                                     })

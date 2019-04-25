@@ -156,36 +156,33 @@ module.exports.get_post_list=function($)
 	var process_list=($, next)=>
 	{
 		/* Now get posts and send to browser. */
-		get_posts($, q_ob, function($, r)
+		get_posts($, q_ob, function($, post_ob)
 		{
 			get_pagination($, q_ob, function($, pgn)
 			{
 				var post_ids=[];
-
-				var post_ob={};
 
 				var rg=$.registered_taxonomies_to_post;
 				var txes=rg[condition.post_type] || [];
 
 
 				/* Collect post ids and modify some column */
-				for(var i=0; i<r.length; i++)
+				for(var i=0; i<post_ob.length; i++)
 				{
-					r[i].post_date=nr_local_time($, r[i].post_date);
-					r[i].post_modified=nr_local_time($, r[i].post_modified);
-					r[i].post_edit_link=get_edit_post_link(r[i].post_id, r[i].post_type);
+					post_ob[i].post_date=nr_local_time($, post_ob[i].post_date);
+					post_ob[i].post_modified=nr_local_time($, post_ob[i].post_modified);
+					post_ob[i].post_edit_link=get_edit_post_link(post_ob[i].post_id, post_ob[i].post_type);
 
-					post_ids.push(r[i].post_id);
-					post_ob[r[i].post_name]=r[i];
+					post_ids.push(post_ob[i].post_id);
 				}
 				
 				var get_perms=($, next)=>
 				{
 					get_permalink($, 'post_id', post_ids, function($, urls)
 					{
-						for(var k in post_ob)
+						for(var i=0; i<post_ob.length; i++)
 						{
-							post_ob[k].post_url=urls[post_ob[k].post_id] || ''; 
+							post_ob[i].post_url=urls[post_ob[i].post_id] || ''; 
 						}
 
 						next($);
@@ -207,15 +204,15 @@ module.exports.get_post_list=function($)
 						/* provide terms in post list */
 						r.forEach(item=>
 						{
-							for(var k in post_ob)
+							for(var i=0; i<post_ob.length; i++)
 							{
-								if(post_ob[k].post_id==item.owner_post_id)
+								if(post_ob[i].post_id==item.owner_post_id)
 								{
-									!post_ob[k].terms ? post_ob[k].terms={} : 0;
+									!post_ob[i].terms ? post_ob[i].terms={} : 0;
 
-									!post_ob[k].terms[item.taxonomy] ? post_ob[k].terms[item.taxonomy]=[] : 0;
+									!post_ob[i].terms[item.taxonomy] ? post_ob[i].terms[item.taxonomy]=[] : 0;
 
-									post_ob[k].terms[item.taxonomy].push(item.name);
+									post_ob[i].terms[item.taxonomy].push(item.name);
 								}
 							}
 						});

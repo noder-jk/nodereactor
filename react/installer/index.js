@@ -19,7 +19,7 @@ var _react2 = require("nodereactor/react");
 
 require("./style.css");
 
-var _logo = _interopRequireDefault(require("./logo.jpg"));
+var _banner = _interopRequireDefault(require("./banner.jpg"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -169,16 +169,16 @@ function (_Component) {
         id: "installer_main"
       }, _react.default.createElement(_reactHelmet.default, null, _react.default.createElement("title", null, "NodeReactor Installation")), _react.default.createElement("br", null), _react.default.createElement("div", {
         className: "text-center"
+      }), _react.default.createElement("div", {
+        className: "text-center installation_steps",
+        id: "get_config"
       }, _react.default.createElement("img", {
-        src: _logo.default,
+        src: _banner.default,
         style: {
-          'width': '30%'
+          'width': '100%'
         }
-      }), _react.default.createElement("h2", null, "NodeReactor")), _react.default.createElement("div", {
-        className: "text-center",
-        style: {
-          'minHeight': '25px'
-        }
+      }), _react.default.createElement("small", null, "Create By JK")), _react.default.createElement("div", {
+        className: "text-center"
       }, this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
         size: "15px"
       }) : null), _react.default.createElement("div", {
