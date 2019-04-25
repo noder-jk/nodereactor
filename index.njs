@@ -80,7 +80,6 @@ module.exports=function(project_root)
 
 	/* Set default themes and plugins */
 	data_ob.nr_themes.indexOf('semplicemente')==-1 	 ? 	data_ob.nr_themes.push('semplicemente') : null;
-	data_ob.nr_plugins.indexOf('reacaptcha')==-1 	 ? 	data_ob.nr_plugins.push('reacaptcha') : null;
 
 	global.nr_port					= data_ob.nr_port;
 

@@ -1,1 +1,1 @@
-Node Reactor is Node and React based CMS. Visit <a href="http://nodereactor.com">http://nodereactor.com</a> for details and documentation.
+Node Reactor is Node and React based CMS. Visit <a href="https://nodereactor.com">http://nodereactor.com</a> for details and documentation.
