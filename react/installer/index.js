@@ -21,9 +21,9 @@ require("./style.css");
 
 var _banner = _interopRequireDefault(require("./banner.jpg"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -81,13 +81,13 @@ function (_Component) {
     value: function input(props) {
       var title = props.title,
           name = props.name;
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "row"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "col-12 col-sm-5"
-      }, _react.default.createElement("b", null, title)), _react.default.createElement("div", {
+      }, _react["default"].createElement("b", null, title)), _react["default"].createElement("div", {
         className: "col-12 col-sm-7"
-      }, _react.default.createElement("input", {
+      }, _react["default"].createElement("input", {
         onChange: this.handleChange,
         className: "form-control",
         name: name,
@@ -125,7 +125,7 @@ function (_Component) {
       }
 
       if (/\S+/.test(this.state.db_name) == false) {
-        _sweetalert.default.fire('Attention', 'Please enter database name', 'warning');
+        _sweetalert["default"].fire('Attention', 'Please enter database name', 'warning');
 
         return;
       }
@@ -133,7 +133,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: Object.assign({
@@ -146,14 +146,14 @@ function (_Component) {
             active_tab: next_tab
           });
         } else {
-          _sweetalert.default.fire('Error', r.data.message ? r.data.message : 'Could not process request. Please make sure configs are correct.', 'error');
+          _sweetalert["default"].fire('Error', r.data.message ? r.data.message : 'Could not process request. Please make sure configs are correct.', 'error');
         }
 
         _this2.setState({
           'loading': false
         });
-      }).catch(function (r) {
-        _sweetalert.default.fire('Error', 'Could not connect server.', 'error');
+      })["catch"](function (r) {
+        _sweetalert["default"].fire('Error', 'Could not connect server.', 'error');
 
         _this2.setState({
           'loading': false
@@ -165,92 +165,92 @@ function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      return _react.default.createElement("main", {
+      return _react["default"].createElement("main", {
         id: "installer_main"
-      }, _react.default.createElement(_reactHelmet.default, null, _react.default.createElement("title", null, "NodeReactor Installation")), _react.default.createElement("br", null), _react.default.createElement("div", {
+      }, _react["default"].createElement(_reactHelmet["default"], null, _react["default"].createElement("title", null, "NodeReactor Installation")), _react["default"].createElement("br", null), _react["default"].createElement("div", {
         className: "text-center"
-      }), _react.default.createElement("div", {
+      }), _react["default"].createElement("div", {
         className: "text-center installation_steps",
         id: "get_config"
-      }, _react.default.createElement("img", {
-        src: _banner.default,
+      }, _react["default"].createElement("img", {
+        src: _banner["default"],
         style: {
           'width': '100%'
         }
-      }), _react.default.createElement("small", null, "Create By JK")), _react.default.createElement("div", {
+      }), _react["default"].createElement("small", null, "Create By JK")), _react["default"].createElement("div", {
         className: "text-center"
-      }, this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null), _react.default.createElement("div", {
+      }) : null), _react["default"].createElement("div", {
         className: "installation_steps",
         id: "get_config",
         style: this.showHide('db')
-      }, _react.default.createElement("h4", null, "Database Information"), _react.default.createElement("hr", null), _react.default.createElement("p", null, "Enter database connection details.", _react.default.createElement("span", {
+      }, _react["default"].createElement("h4", null, "Database Information"), _react["default"].createElement("hr", null), _react["default"].createElement("p", null, "Enter database connection details.", _react["default"].createElement("span", {
         style: {
           "color": "#aa0000"
         }
-      }, "Please make sure MySQL database is running. And rememeber,", _react.default.createElement("b", null, "existing table with same name will be replaced"), "."), "Visit ", _react.default.createElement("a", {
+      }, "Please make sure MySQL database is running. And rememeber,", _react["default"].createElement("b", null, "existing table with same name will be replaced"), "."), "Visit ", _react["default"].createElement("a", {
         href: "http://NodeReactor.com/getting-started/installation/",
         target: "_blank"
-      }, "installation"), " tutorial for details and using existing tables."), _react.default.createElement(this.input, {
+      }, "installation"), " tutorial for details and using existing tables."), _react["default"].createElement(this.input, {
         title: "Database Name",
         name: "db_name"
-      }), _react.default.createElement("br", null), _react.default.createElement(this.input, {
+      }), _react["default"].createElement("br", null), _react["default"].createElement(this.input, {
         title: "Database Username",
         name: "db_username"
-      }), _react.default.createElement("br", null), _react.default.createElement(this.input, {
+      }), _react["default"].createElement("br", null), _react["default"].createElement(this.input, {
         title: "Database Password",
         name: "db_password"
-      }), _react.default.createElement("br", null), _react.default.createElement(this.input, {
+      }), _react["default"].createElement("br", null), _react["default"].createElement(this.input, {
         title: "Database Host",
         name: "db_host"
-      }), _react.default.createElement("br", null), _react.default.createElement(this.input, {
+      }), _react["default"].createElement("br", null), _react["default"].createElement(this.input, {
         title: "Table Prefix",
         name: "tb_prefix"
-      }), _react.default.createElement("br", null), _react.default.createElement(this.input, {
+      }), _react["default"].createElement("br", null), _react["default"].createElement(this.input, {
         title: "Database Engine",
         name: "db_engine"
-      }), _react.default.createElement("br", null), _react.default.createElement("div", {
+      }), _react["default"].createElement("br", null), _react["default"].createElement("div", {
         className: "text-right"
-      }, _react.default.createElement("button", {
+      }, _react["default"].createElement("button", {
         "data-button": "submit",
         className: "btn btn-secondary",
         onClick: this.goNext
-      }, "Next"))), _react.default.createElement("div", {
+      }, "Next"))), _react["default"].createElement("div", {
         className: "installation_steps",
         id: "siteinfo",
         style: this.showHide('account')
-      }, _react.default.createElement("h4", null, "Information needed"), _react.default.createElement("hr", null), _react.default.createElement("p", null, "Please provide the following information to create admin account. ", _react.default.createElement("br", null), _react.default.createElement("small", null, "Don\u2019t worry, you can always change these (except username) in setting page later.")), _react.default.createElement(this.input, {
+      }, _react["default"].createElement("h4", null, "Information needed"), _react["default"].createElement("hr", null), _react["default"].createElement("p", null, "Please provide the following information to create admin account. ", _react["default"].createElement("br", null), _react["default"].createElement("small", null, "Don\u2019t worry, you can always change these (except username) in setting page later.")), _react["default"].createElement(this.input, {
         title: "Display Name",
         name: "user_display_name"
-      }), _react.default.createElement("br", null), _react.default.createElement(this.input, {
+      }), _react["default"].createElement("br", null), _react["default"].createElement(this.input, {
         title: "Username",
         name: "user_username"
-      }), _react.default.createElement("br", null), _react.default.createElement(this.input, {
+      }), _react["default"].createElement("br", null), _react["default"].createElement(this.input, {
         title: "Password",
         name: "user_password"
-      }), _react.default.createElement("br", null), _react.default.createElement(this.input, {
+      }), _react["default"].createElement("br", null), _react["default"].createElement(this.input, {
         title: "Email",
         name: "user_email"
-      }), _react.default.createElement("br", null), _react.default.createElement("div", {
+      }), _react["default"].createElement("br", null), _react["default"].createElement("div", {
         className: "text-right"
-      }, _react.default.createElement("button", {
+      }, _react["default"].createElement("button", {
         className: "btn btn-secondary",
         onClick: function onClick() {
           _this3.setState({
             'active_tab': 'db'
           });
         }
-      }, "Back"), "\xA0\xA0", _react.default.createElement("button", {
+      }, "Back"), "\xA0\xA0", _react["default"].createElement("button", {
         className: "btn btn-secondary",
         onClick: function onClick() {
           return _this3.goNext(true);
         }
-      }, "Install"))), _react.default.createElement("div", {
+      }, "Install"))), _react["default"].createElement("div", {
         className: "installation_steps",
         id: "login_hint",
         style: this.showHide('login')
-      }, _react.default.createElement("h2", null, "Success!"), _react.default.createElement("hr", null), _react.default.createElement("p", null, "NodeReactor has been installed. Now you may login using account info you submitted during installation."), _react.default.createElement("br", null), _react.default.createElement(_react2.LoginRegistration, null)));
+      }, _react["default"].createElement("h2", null, "Success!"), _react["default"].createElement("hr", null), _react["default"].createElement("p", null, "NodeReactor has been installed. Now you may login using account info you submitted during installation."), _react["default"].createElement("br", null), _react["default"].createElement(_react2.LoginRegistration, null)));
     }
   }]);
 

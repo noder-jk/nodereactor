@@ -7,7 +7,7 @@ exports.CustomTemplate = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -56,19 +56,19 @@ function (_Component) {
     key: "render",
     value: function render() {
       var templates = this.state.page_templates;
-      return _react.default.createElement("div", null, Object.keys(templates).length > 0 ? _react.default.createElement("select", {
+      return _react["default"].createElement("div", null, Object.keys(templates).length > 0 ? _react["default"].createElement("select", {
         name: "custom_template",
         className: "form-control",
-        defaultValue: this.state.default
-      }, _react.default.createElement("option", {
+        defaultValue: this.state["default"]
+      }, _react["default"].createElement("option", {
         key: "0",
         value: "0"
       }, "None"), Object.keys(templates).map(function (comp) {
-        return _react.default.createElement("option", {
+        return _react["default"].createElement("option", {
           key: comp,
           value: comp
         }, templates[comp]);
-      })) : _react.default.createElement("span", null, "No Template Set"));
+      })) : _react["default"].createElement("span", null, "No Template Set"));
     }
   }]);
 

@@ -13,9 +13,9 @@ var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -104,7 +104,7 @@ function (_Component) {
         this.setState({
           loading_icon: true
         });
-        (0, _axios.default)({
+        (0, _axios["default"])({
           method: 'post',
           data: {
             'action': 'nr_get_featured_image',
@@ -121,7 +121,7 @@ function (_Component) {
           }
 
           _this2.setState(ob);
-        }).catch(function (r) {
+        })["catch"](function (r) {
           _this2.setState({
             loading_icon: false
           });
@@ -131,25 +131,25 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         id: "featured_image_container"
-      }, this.state.loading_icon ? _react.default.createElement("p", null, _react.default.createElement(_reactSvgSpinner.default, {
+      }, this.state.loading_icon ? _react["default"].createElement("p", null, _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      })) : null, _react.default.createElement("input", {
+      })) : null, _react["default"].createElement("input", {
         type: "hidden",
         name: "featured_image",
         value: this.state.image_post_id
-      }), this.state.image_url ? _react.default.createElement("img", {
+      }), this.state.image_url ? _react["default"].createElement("img", {
         src: this.state.image_url,
         style: {
           'width': '100%'
         }
-      }) : null, this.state.image_url ? _react.default.createElement("span", {
+      }) : null, this.state.image_url ? _react["default"].createElement("span", {
         className: "text-danger",
         onClick: this.removeImage
-      }, "- Remove Featured Image") : _react.default.createElement("span", {
+      }, "- Remove Featured Image") : _react["default"].createElement("span", {
         onClick: this.showMedia
-      }, "+ Add Featured Image"), _react.default.createElement(_react2.Media, {
+      }, "+ Add Featured Image"), _react["default"].createElement(_react2.Media, {
         open: this.state.media_opened,
         onClose: this.closeMedia,
         onResult: this.getFiles,

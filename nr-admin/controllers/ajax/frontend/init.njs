@@ -37,6 +37,7 @@ module.exports.init=function($)
 	/* Retrieve posts based on accessed page */
 	var send_resp=($)=>
 	{
+		console.log('sending resp ', p_query)
 		get_posts($, p_query, ($, posts_for_theme)=>
 		{
 			/* Now get pagination */
@@ -115,13 +116,19 @@ module.exports.init=function($)
 	/* otherwise it might be individual post */
 	var check_post=($, next)=>
 	{
+		console.log('checking individual post', object_);
+
 		get_permalink($, 'post_name', object_, function($, url)
 		{
+			console.log('after checked ', url);
+
 			/* url exist means the url is valid */
 			if(url[object_])
 			{
+				/* Delete page offset and post type as it single post */
 				delete p_query.page;
-				
+				delete p_query.intersect.post_type;
+
 				nr_resp.is_singular=true;
 
 				if(url[object_]==pathname)

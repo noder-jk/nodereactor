@@ -126,8 +126,6 @@ class ObjectContents extends Component
                                     items[item].length==0 ? <i>No {tab_ttl}</i> : 
                                     items[item].map(post=>
                                     {
-                                        console.log(post.nest_level);
-
                                         return  <p key={post[id_name]} className="item-single-post" style={{'paddingLeft':(post.nest_level*10)+'px'}}>
                                                 <input type="checkbox" name={"nv_"+id_name} value={post[id_name]} onChange={this.checker}/> {post[title_name]}
                                             </p>

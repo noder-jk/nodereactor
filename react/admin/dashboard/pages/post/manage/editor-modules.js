@@ -17,7 +17,7 @@ var _react2 = require("nodereactor/react");
 
 var _compFinder = require("nodereactor/react/helper/comp-finder");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -79,7 +79,7 @@ function (_Component) {
       this.setState({
         'loading_icon': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: {
@@ -105,13 +105,13 @@ function (_Component) {
 
 
         _this2.setState(ob);
-      }).catch(function (e) {
+      })["catch"](function (e) {
         _this2.setState({
           slug_edit_mode: false,
           loading_icon: false
         });
 
-        _sweetalert.default.fire('Slug Generate Request Error.');
+        _sweetalert["default"].fire('Slug Generate Request Error.');
       });
     }
   }, {
@@ -130,9 +130,9 @@ function (_Component) {
           _this$props$defaultVa = _this$props.defaultValue,
           defaultValue = _this$props$defaultVa === void 0 ? '' : _this$props$defaultVa,
           onChange = _this$props.onChange;
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "editor_module"
-      }, _react.default.createElement("input", {
+      }, _react["default"].createElement("input", {
         type: "text",
         className: "form-control mb-1",
         placeholder: "Title",
@@ -142,11 +142,11 @@ function (_Component) {
           return _this3.slugCheck(e);
         },
         onChange: onChange
-      }), this.state.loading_icon ? _react.default.createElement(_reactSvgSpinner.default, {
+      }), this.state.loading_icon ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null, this.state.slug_edit_mode == true ? _react.default.createElement("p", {
+      }) : null, this.state.slug_edit_mode == true ? _react["default"].createElement("p", {
         className: "form-inline"
-      }, _react.default.createElement("input", {
+      }, _react["default"].createElement("input", {
         type: "text",
         className: "form-control form-control-sm",
         style: {
@@ -154,13 +154,13 @@ function (_Component) {
         },
         placeholder: "Post Slug",
         defaultValue: this.state.slug
-      }), _react.default.createElement("button", {
+      }), _react["default"].createElement("button", {
         className: "btn btn-outline-secondary btn-sm ml-1",
         onClick: function onClick(e) {
           _this3.slugCheck(e, e.currentTarget.previousElementSibling);
         },
         disabled: this.state.loading_icon
-      }, "Ok")) : _react.default.createElement("p", null, _react.default.createElement("small", null, _react.default.createElement("b", null, "Post Slug: "), " ", _react.default.createElement("u", null, this.state.slug, " "), _react.default.createElement("button", {
+      }, "Ok")) : _react["default"].createElement("p", null, _react["default"].createElement("small", null, _react["default"].createElement("b", null, "Post Slug: "), " ", _react["default"].createElement("u", null, this.state.slug, " "), _react["default"].createElement("button", {
         className: "btn btn-outline-secondary btn-sm ml-1",
         onClick: this.enableSlugEdit,
         disabled: this.state.loading_icon
@@ -176,16 +176,16 @@ exports.Title = Title;
 var Comment = function Comment(props) {
   var defaultValue = props.defaultValue,
       onChange = props.onChange;
-  return _react.default.createElement("p", null, _react.default.createElement("b", null, "Comments: "), "\xA0", _react.default.createElement("select", {
+  return _react["default"].createElement("p", null, _react["default"].createElement("b", null, "Comments: "), "\xA0", _react["default"].createElement("select", {
     name: "comment_status",
     defaultValue: defaultValue,
     onChange: onChange,
     className: "form-control"
-  }, _react.default.createElement("option", {
+  }, _react["default"].createElement("option", {
     value: "1"
-  }, "Allowed"), _react.default.createElement("option", {
+  }, "Allowed"), _react["default"].createElement("option", {
     value: "0"
-  }, "Disallowed")), _react.default.createElement("small", null, "Commenting is not available yet. But you may specify for later versions."));
+  }, "Disallowed")), _react["default"].createElement("small", null, "Commenting is not available yet. But you may specify for later versions."));
 };
 
 exports.Comment = Comment;
@@ -194,9 +194,9 @@ var Excerpt = function Excerpt(props) {
   var onChange = props.onChange,
       _props$defaultValue = props.defaultValue,
       defaultValue = _props$defaultValue === void 0 ? '' : _props$defaultValue;
-  return _react.default.createElement("div", {
+  return _react["default"].createElement("div", {
     className: "nr_meta_box editor_module"
-  }, _react.default.createElement("h4", null, "Excerpt"), _react.default.createElement("div", null, _react.default.createElement("textarea", {
+  }, _react["default"].createElement("h4", null, "Excerpt"), _react["default"].createElement("div", null, _react["default"].createElement("textarea", {
     className: "form-control",
     defaultValue: defaultValue,
     name: "post_excerpt",
@@ -216,10 +216,10 @@ var LoadMetaBox = function LoadMetaBox(props) {
   delete params.position;
   return meta_boxes.map(function (item) {
     if (item.position == position) {
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         key: item.key,
         className: "nr_meta_box nr_custom_meta_boxes"
-      }, _react.default.createElement("h4", null, item.title), _react.default.createElement("div", null, _react.default.createElement(_compFinder.FindComp, _extends({
+      }, _react["default"].createElement("h4", null, item.title), _react["default"].createElement("div", null, _react["default"].createElement(_compFinder.FindComp, _extends({
         comp_props: {
           'component': item.component,
           'node_type': item.node_type,

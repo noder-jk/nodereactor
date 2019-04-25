@@ -19,9 +19,9 @@ var _react2 = require("nodereactor/react");
 
 var _tinymceMin = _interopRequireDefault(require("nodereactor/nr-includes/tinymce-4.9.3/tinymce.min.js"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -69,8 +69,8 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      if (typeof _tinymceMin.default == 'function') {
-        (0, _tinymceMin.default)(window.nr_configs.nr_home_url);
+      if (typeof _tinymceMin["default"] == 'function') {
+        (0, _tinymceMin["default"])(window.nr_configs.nr_home_url);
       }
 
       var editor_id = this.state.editor_id;
@@ -97,10 +97,10 @@ function (_Component) {
           });
           editor.on('FullscreenStateChanged', function () {
             if (nr_tyni_fullscreen == false) {
-              (0, _jquery.default)('main').css('z-index', 103);
+              (0, _jquery["default"])('main').css('z-index', 103);
               nr_tyni_fullscreen = true;
             } else {
-              (0, _jquery.default)('main').css('z-index', 100);
+              (0, _jquery["default"])('main').css('z-index', 100);
               nr_tyni_fullscreen = false;
             }
           });
@@ -242,7 +242,7 @@ function (_Component) {
         var ext = results[i].file_extension;
         var mime = results[i].mime_type;
         var attachment_id = results[i].post_id;
-        media += _server.default.renderToStaticMarkup(_react.default.createElement(_react2.RenderMediaFile, {
+        media += _server["default"].renderToStaticMarkup(_react["default"].createElement(_react2.RenderMediaFile, {
           url: url,
           mime: mime,
           extension: ext,
@@ -259,7 +259,7 @@ function (_Component) {
       if (text_area) {
         text_area.execCommand('mceInsertContent', false, media);
       } else {
-        _sweetalert.default.fire('Something went wrong. Media file could not be inserted into editor. Cancel Media, and save the post. Then try again.');
+        _sweetalert["default"].fire('Something went wrong. Media file could not be inserted into editor. Cancel Media, and save the post. Then try again.');
       }
     }
   }, {
@@ -284,22 +284,22 @@ function (_Component) {
           defaultValue = _this$props$defaultVa === void 0 ? '' : _this$props$defaultVa,
           _this$props$addMedia = _this$props.addMedia,
           addMedia = _this$props$addMedia === void 0 ? true : _this$props$addMedia;
-      return _react.default.createElement("div", null, addMedia ? _react.default.createElement("button", {
+      return _react["default"].createElement("div", null, addMedia ? _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm mb-1",
         onClick: this.openMedia
-      }, "Add Media") : null, addMedia ? _react.default.createElement(_react2.Media, {
+      }, "Add Media") : null, addMedia ? _react["default"].createElement(_react2.Media, {
         open: this.state.media_open,
         onClose: this.mediaClose,
         onResult: this.getResult,
         multiple: true
-      }) : null, this.state.loading ? _react.default.createElement("span", {
+      }) : null, this.state.loading ? _react["default"].createElement("span", {
         style: {
           'display': 'inline-block',
           'float': 'right'
         }
-      }, _react.default.createElement(_reactSvgSpinner.default, {
+      }, _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      })) : null, _react.default.createElement("textarea", {
+      })) : null, _react["default"].createElement("textarea", {
         id: this.state.editor_id,
         className: "form-control",
         defaultValue: defaultValue

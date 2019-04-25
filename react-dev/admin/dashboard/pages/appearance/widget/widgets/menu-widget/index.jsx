@@ -1,6 +1,6 @@
 import React from "react";
 
-import {Placeholder, NrNavMenu} from 'nodereactor/react';
+import {Placeholder, nr_nav_menu} from 'nodereactor/react';
 
 const ProcessMenuInput=(props)=>
 {
@@ -34,19 +34,16 @@ const ProcessMenuInput=(props)=>
 
 const MenuWidgetInput=(props)=>
 {
-    let {properties={}}=props;
-
-    return <Placeholder Data={{'action':'nr_get_menu_for_visitor'}} Component={ProcessMenuInput} {...properties}/>
+    return <Placeholder Data={{'action':'nr_get_menu_for_visitor'}} Component={ProcessMenuInput} {...props}/>
 }
 
 const MenuWidgetOutput=(props)=>
 {
-    let {properties={}}=props;
-    let {menu_names=[]}=properties;
+    let {menu_names=[]}=props;
     
     return menu_names.map(item=>
     {
-        return <NrNavMenu key={item} menu_name={item} {...properties}/>
+        return nr_nav_menu({'menu_name':item});
     });
 }
 

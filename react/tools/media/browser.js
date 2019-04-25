@@ -19,9 +19,9 @@ var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
 var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -47,36 +47,36 @@ var FileDetails = function FileDetails(props) {
   var _props$details_for = props.details_for,
       details_for = _props$details_for === void 0 ? [] : _props$details_for,
       fileCount = props.fileCount;
-  return _react.default.createElement("div", {
+  return _react["default"].createElement("div", {
     className: "media-sidebar visible"
-  }, _react.default.createElement("div", _defineProperty({
+  }, _react["default"].createElement("div", _defineProperty({
     className: "file_details"
-  }, "className", "attachment-details"), details_for == null || details_for.length == 0 ? _react.default.createElement("span", null, fileCount, " files.") : null, details_for && details_for.length > 1 ? _react.default.createElement("table", {
+  }, "className", "attachment-details"), details_for == null || details_for.length == 0 ? _react["default"].createElement("span", null, fileCount, " files.") : null, details_for && details_for.length > 1 ? _react["default"].createElement("table", {
     className: "table table-striped",
     style: {
       "background": "white"
     }
-  }, _react.default.createElement("tbody", null, details_for.map(function (item) {
-    return _react.default.createElement("tr", {
+  }, _react["default"].createElement("tbody", null, details_for.map(function (item) {
+    return _react["default"].createElement("tr", {
       key: item.post_name
-    }, _react.default.createElement("td", null, _react.default.createElement(_react2.RenderMediaFile, {
+    }, _react["default"].createElement("td", null, _react["default"].createElement(_react2.RenderMediaFile, {
       url: item.file_url,
       mime: item.mime_type,
       extension: item.file_extension,
       style: {
         'width': '40px'
       }
-    })), _react.default.createElement("td", null, item.post_title, item.file_extension));
-  }))) : null, details_for !== null && details_for[0] ? _react.default.createElement("div", {
+    })), _react["default"].createElement("td", null, item.post_title, item.file_extension));
+  }))) : null, details_for !== null && details_for[0] ? _react["default"].createElement("div", {
     className: "attachment-info"
-  }, _react.default.createElement("p", null, _react.default.createElement("b", null, details_for[0].post_title), _react.default.createElement("br", null), _react.default.createElement("small", null, details_for[0].post_date), _react.default.createElement("br", null), _react.default.createElement("small", null, "Uploaded By ", details_for[0].display_name)), _react.default.createElement("p", null, details_for[0].post_excerpt), _react.default.createElement("div", {
+  }, _react["default"].createElement("p", null, _react["default"].createElement("b", null, details_for[0].post_title), _react["default"].createElement("br", null), _react["default"].createElement("small", null, details_for[0].post_date), _react["default"].createElement("br", null), _react["default"].createElement("small", null, "Uploaded By ", details_for[0].display_name)), _react["default"].createElement("p", null, details_for[0].post_excerpt), _react["default"].createElement("div", {
     dangerouslySetInnerHTML: {
       __html: details_for[0].post_content
     }
-  }), details_for[0].file_size, _react.default.createElement("p", null, _react.default.createElement("small", null, _react.default.createElement("a", {
+  }), details_for[0].file_size, _react["default"].createElement("p", null, _react["default"].createElement("small", null, _react["default"].createElement("a", {
     href: details_for[0].edit_url,
     target: "_blank"
-  }, "Edit Details"), " - ", _react.default.createElement("a", {
+  }, "Edit Details"), " - ", _react["default"].createElement("a", {
     href: details_for[0].file_url,
     target: "_blank"
   }, "Open in New Tab")))) : null));
@@ -176,7 +176,7 @@ function (_Component) {
         return;
       }
 
-      _sweetalert.default.fire({
+      _sweetalert["default"].fire({
         title: 'Sure to delete?',
         text: "You won't be able to revert this!",
         type: 'warning',
@@ -192,7 +192,7 @@ function (_Component) {
           post_ids.push(f[i].post_id);
         }
 
-        (0, _axios.default)({
+        (0, _axios["default"])({
           method: 'post',
           url: _react2.ajax_url,
           data: {
@@ -220,8 +220,8 @@ function (_Component) {
             'selected': [],
             'files': new_ar
           });
-        }).catch(function (r) {
-          _sweetalert.default.fire('Request Error');
+        })["catch"](function (r) {
+          _sweetalert["default"].fire('Request Error');
         });
       });
     }
@@ -250,13 +250,13 @@ function (_Component) {
       }
 
       this.setState({
-        'spinner': _react.default.createElement(_reactSvgSpinner.default, {
+        'spinner': _react["default"].createElement(_reactSvgSpinner["default"], {
           size: "15px"
         })
       });
       var _this$props$accept = this.props.accept,
           accept = _this$props$accept === void 0 ? [] : _this$props$accept;
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         data: {
           'action': 'nr_get_gallery',
@@ -274,16 +274,16 @@ function (_Component) {
           ob.files = r.data.files;
           ob.pagination = r.data.pagination;
         } else {
-          ob.message = _react.default.createElement("span", null, "No file");
+          ob.message = _react["default"].createElement("span", null, "No file");
         }
 
         ob.spinner = null;
 
         _this3.setState(ob);
-      }).catch(function (r) {
+      })["catch"](function (r) {
         _this3.setState({
           'spinner': null,
-          'message': _react.default.createElement("span", null, "Request Error")
+          'message': _react["default"].createElement("span", null, "Request Error")
         });
       });
     }
@@ -296,9 +296,7 @@ function (_Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      window.nr_socket_client.on('my_own_handler', function (msg) {
-        console.log('hi this is from my own handler', msg);
-      });
+      window.nr_socket_client.on('my_own_handler', function (msg) {});
       window.nr_socket_client.emit(_react2.socket_channel, {
         'action': 'nr_test_socket',
         'hi': 'some dt'
@@ -315,20 +313,20 @@ function (_Component) {
       var json = {
         'right': '267px'
       };
-      return _react.default.createElement("div", _defineProperty({
+      return _react["default"].createElement("div", _defineProperty({
         className: "attachment_browser"
-      }, "className", "attachments-browser"), _react.default.createElement("div", {
+      }, "className", "attachments-browser"), _react["default"].createElement("div", {
         className: "attachments",
         style: json
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         style: json,
         className: "file_option"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "d-inline-block form-group form-inline float-left mb-0",
         ref: function ref(el) {
           return _this4.filter_container = el;
         }
-      }, _react.default.createElement("input", {
+      }, _react["default"].createElement("input", {
         name: "keyword",
         type: "text",
         placeholder: "Search",
@@ -336,7 +334,7 @@ function (_Component) {
         defaultValue: this.state.keyword,
         className: cls,
         title: "Keyword"
-      }), _react.default.createElement("input", {
+      }), _react["default"].createElement("input", {
         name: "page",
         type: "number",
         min: "1",
@@ -348,7 +346,7 @@ function (_Component) {
           return _this4.page_number = el;
         },
         title: "Specific Page"
-      }), _react.default.createElement("input", {
+      }), _react["default"].createElement("input", {
         name: "posts_per_page",
         type: "number",
         min: "1",
@@ -357,18 +355,18 @@ function (_Component) {
         defaultValue: this.state.posts_per_page,
         className: cls,
         title: "File limit per page"
-      }), _react.default.createElement("button", {
+      }), _react["default"].createElement("button", {
         className: "btn btn-sm btn-outline-secondary",
         title: "Press to filter",
         onClick: function onClick() {
           return _this4.getMedia();
         }
-      }, "Filter")), _react.default.createElement("span", null, this.state.selected.length > 0 ? _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      }, "Filter")), _react["default"].createElement("span", null, this.state.selected.length > 0 ? _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
         icon: _freeSolidSvgIcons.faTrash,
         onClick: this.deleteFile
-      }) : null)), _react.default.createElement("div", {
+      }) : null)), _react["default"].createElement("div", {
         className: "attachment_gallery"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         "data-block": "media",
         onClick: this.unSelectAll
       }, this.state.files.map(function (item, index) {
@@ -382,29 +380,29 @@ function (_Component) {
           }
         }
 
-        return _react.default.createElement("span", {
+        return _react["default"].createElement("span", {
           key: item.real_path,
           "data-element": "file",
           onClick: function onClick(e) {
             return _this4.fileClicked(e, index);
           },
           className: cls
-        }, _react.default.createElement(_react2.RenderMediaFile, {
+        }, _react["default"].createElement(_react2.RenderMediaFile, {
           url: item.file_url,
           extension: item.file_extension,
           mime: item.mime_type,
           style: {
             "height": "140px"
           }
-        }), _react.default.createElement("small", null, item.post_title));
-      })), this.state.spinner, this.state.message), _react.default.createElement("div", {
+        }), _react["default"].createElement("small", null, item.post_title));
+      })), this.state.spinner, this.state.message), _react["default"].createElement("div", {
         className: "text-center mt-1 mb-1"
-      }, _react.default.createElement(_react2.Pagination, {
+      }, _react["default"].createElement(_react2.Pagination, {
         pgn: this.state.pagination,
         activeClass: "btn btn-outline-secondary btn-sm ml-1 mr-1",
         inactiveClass: "btn btn-secondary btn-sm ml-1 mr-1",
         clickEvent: this.handlePaginate
-      }))), _react.default.createElement(FileDetails, {
+      }))), _react["default"].createElement(FileDetails, {
         details_for: this.state.details_for,
         fileCount: flength
       }));

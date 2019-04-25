@@ -9,7 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -25,31 +25,31 @@ var ProcessMenuInput = function ProcessMenuInput(props) {
       anchor_class = _props$anchor_class === void 0 ? '' : _props$anchor_class,
       _props$menu_names = props.menu_names,
       menu_names = _props$menu_names === void 0 ? [] : _props$menu_names;
-  return _react.default.createElement("div", null, _react.default.createElement("small", null, "Menu Name"), Object.keys(menu_widget).map(function (menu_name) {
-    return _react.default.createElement("div", {
+  return _react["default"].createElement("div", null, _react["default"].createElement("small", null, "Menu Name"), Object.keys(menu_widget).map(function (menu_name) {
+    return _react["default"].createElement("div", {
       key: menu_name
-    }, _react.default.createElement("input", {
+    }, _react["default"].createElement("input", {
       type: "checkbox",
       name: "menu_names",
       value: menu_name,
       defaultChecked: menu_names.indexOf(menu_name) > -1
     }), " ", menu_name);
-  }), _react.default.createElement("small", null, "UL Class"), _react.default.createElement("input", {
+  }), _react["default"].createElement("small", null, "UL Class"), _react["default"].createElement("input", {
     type: "text",
     name: "ul_class",
     className: "form-control",
     defaultValue: ul_class
-  }), _react.default.createElement("small", null, "LI Class"), _react.default.createElement("input", {
+  }), _react["default"].createElement("small", null, "LI Class"), _react["default"].createElement("input", {
     type: "text",
     name: "li_class",
     className: "form-control",
     defaultValue: li_class
-  }), _react.default.createElement("small", null, "LI Active Class"), _react.default.createElement("input", {
+  }), _react["default"].createElement("small", null, "LI Active Class"), _react["default"].createElement("input", {
     type: "text",
     name: "li_active_class",
     className: "form-control",
     defaultValue: li_active_class
-  }), _react.default.createElement("small", null, "Anchor Class"), _react.default.createElement("input", {
+  }), _react["default"].createElement("small", null, "Anchor Class"), _react["default"].createElement("input", {
     type: "text",
     name: "anchor_class",
     className: "form-control",
@@ -58,28 +58,23 @@ var ProcessMenuInput = function ProcessMenuInput(props) {
 };
 
 var MenuWidgetInput = function MenuWidgetInput(props) {
-  var _props$properties = props.properties,
-      properties = _props$properties === void 0 ? {} : _props$properties;
-  return _react.default.createElement(_react2.Placeholder, _extends({
+  return _react["default"].createElement(_react2.Placeholder, _extends({
     Data: {
       'action': 'nr_get_menu_for_visitor'
     },
     Component: ProcessMenuInput
-  }, properties));
+  }, props));
 };
 
 exports.MenuWidgetInput = MenuWidgetInput;
 
 var MenuWidgetOutput = function MenuWidgetOutput(props) {
-  var _props$properties2 = props.properties,
-      properties = _props$properties2 === void 0 ? {} : _props$properties2;
-  var _properties$menu_name = properties.menu_names,
-      menu_names = _properties$menu_name === void 0 ? [] : _properties$menu_name;
+  var _props$menu_names2 = props.menu_names,
+      menu_names = _props$menu_names2 === void 0 ? [] : _props$menu_names2;
   return menu_names.map(function (item) {
-    return _react.default.createElement(_react2.NrNavMenu, _extends({
-      key: item,
-      menu_name: item
-    }, properties));
+    return (0, _react2.nr_nav_menu)({
+      'menu_name': item
+    });
   });
 };
 

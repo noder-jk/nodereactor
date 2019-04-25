@@ -1,7 +1,5 @@
 module.exports.dispatch=function($)
 {
-    console.log('re q come here');
-
     var usr={};
 
     var user=nr_get_current_user($) || {};
@@ -43,8 +41,6 @@ module.exports.dispatch=function($)
             resp.nr_configs.component='InitFrontend';
         }
     }
-    
-    console.log('should end resp');
     
     exit($, resp);
 }

@@ -15,9 +15,9 @@ var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -68,7 +68,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         'method': 'post',
         'url': _react2.ajax_url,
         'data': {
@@ -84,8 +84,8 @@ function (_Component) {
         }
 
         _this2.setState(set_ob);
-      }).catch(function (e) {
-        _sweetalert.default.fire('Error', 'Request Failed', 'error');
+      })["catch"](function (e) {
+        _sweetalert["default"].fire('Error', 'Request Failed', 'error');
 
         _this2.setState({
           'loading': false
@@ -105,11 +105,11 @@ function (_Component) {
           _configs$used_taxonom = configs.used_taxonomies,
           used_taxonomies = _configs$used_taxonom === void 0 ? {} : _configs$used_taxonom;
       var values = this.state.values;
-      return _react.default.createElement("div", null, _react.default.createElement("div", {
+      return _react["default"].createElement("div", null, _react["default"].createElement("div", {
         className: "row mb-4"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "col-12"
-      }, _react.default.createElement("h4", null, "Permalink Structure", this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, _react["default"].createElement("h4", null, "Permalink Structure", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       }) : null))), Object.keys(post_types).map(function (pt) {
         var used_tx = Object.keys(taxonomies).filter(function (tx) {
@@ -117,41 +117,41 @@ function (_Component) {
         });
         var ptn = pt + '_post_permalink';
         var ptxn = pt + '_post_taxonomy';
-        return _react.default.createElement("form", {
+        return _react["default"].createElement("form", {
           key: pt,
           className: "row mb-4"
-        }, _react.default.createElement("div", {
+        }, _react["default"].createElement("div", {
           className: "col-12 col-sm-4 col-md-3 col-lg-2"
-        }, pt), _react.default.createElement("div", {
+        }, pt), _react["default"].createElement("div", {
           className: "col-12 col-sm-8 col-md-6 col-lg-4"
-        }, post_types[pt].hierarchical == true ? _react.default.createElement("div", null, _react.default.createElement("input", {
+        }, post_types[pt].hierarchical == true ? _react["default"].createElement("div", null, _react["default"].createElement("input", {
           type: "radio",
           name: ptn,
           onChange: onChange,
           defaultChecked: true,
           value: "h"
-        }), " hierarchical") : _react.default.createElement("div", null, _react.default.createElement("input", {
+        }), " hierarchical") : _react["default"].createElement("div", null, _react["default"].createElement("input", {
           type: "radio",
           name: ptn,
           onChange: onChange,
           value: "n",
           defaultChecked: used_tx.length == 0 || values[ptn] == 'n'
-        }), " post-name", _react.default.createElement("br", null), used_tx.length > 0 ? _react.default.createElement("div", null, _react.default.createElement("input", {
+        }), " post-name", _react["default"].createElement("br", null), used_tx.length > 0 ? _react["default"].createElement("div", null, _react["default"].createElement("input", {
           type: "radio",
           name: ptn,
           onChange: onChange,
           value: "tn",
           defaultChecked: values[ptn] == 'tn'
-        }), " terms/post-name", _react.default.createElement("br", null), _react.default.createElement("input", {
+        }), " terms/post-name", _react["default"].createElement("br", null), _react["default"].createElement("input", {
           type: "radio",
           name: ptn,
           onChange: onChange,
           value: "ttn",
           defaultChecked: values[ptn] == 'ttn'
-        }), " taxonomy/terms/post-name") : null, _react.default.createElement("br", null), used_tx.length > 0 ? _react.default.createElement("b", null, "Permalink Taxonomy :") : null, used_tx.map(function (tx) {
-          return _react.default.createElement("div", {
+        }), " taxonomy/terms/post-name") : null, _react["default"].createElement("br", null), used_tx.length > 0 ? _react["default"].createElement("b", null, "Permalink Taxonomy :") : null, used_tx.map(function (tx) {
+          return _react["default"].createElement("div", {
             key: tx
-          }, _react.default.createElement("input", {
+          }, _react["default"].createElement("input", {
             type: "radio",
             onChange: onChange,
             name: ptxn,
@@ -159,19 +159,19 @@ function (_Component) {
             defaultChecked: values[ptxn] == tx
           }), " ", tx);
         }))));
-      }), _react.default.createElement("hr", null), _react.default.createElement("form", {
+      }), _react["default"].createElement("hr", null), _react["default"].createElement("form", {
         className: "row mb-4"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "col-12 col-sm-4 col-md-3 col-lg-2"
-      }, "Terms"), _react.default.createElement("div", {
+      }, "Terms"), _react["default"].createElement("div", {
         className: "col-12 col-sm-8 col-md-6 col-lg-4"
-      }, _react.default.createElement("div", null, _react.default.createElement("input", {
+      }, _react["default"].createElement("div", null, _react["default"].createElement("input", {
         type: "radio",
         name: "term_permalink",
         value: "t",
         onChange: onChange,
         defaultChecked: values.term_permalink == 't'
-      }), " terms"), _react.default.createElement("div", null, _react.default.createElement("input", {
+      }), " terms"), _react["default"].createElement("div", null, _react["default"].createElement("input", {
         type: "radio",
         name: "term_permalink",
         value: "tt",

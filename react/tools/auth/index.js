@@ -19,9 +19,9 @@ var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 require("./style.css");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -77,7 +77,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: Object.assign({
@@ -87,14 +87,14 @@ function (_Component) {
         if (r.data && r.data.status == 'done' && r.data.go_to) {
           window.location.assign(r.data.go_to);
         } else {
-          _sweetalert.default.fire('Error', r.data.message ? r.data.message : 'Something went wrong. Could not login.', 'error');
+          _sweetalert["default"].fire('Error', r.data.message ? r.data.message : 'Something went wrong. Could not login.', 'error');
         }
 
         _this2.setState({
           'loading': false
         });
-      }).catch(function (r) {
-        _sweetalert.default.fire('Error', 'Something went wrong.', 'error');
+      })["catch"](function (r) {
+        _sweetalert["default"].fire('Error', 'Something went wrong.', 'error');
 
         _this2.setState({
           'loading': false
@@ -104,27 +104,27 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "container-fluid"
-      }, _react.default.createElement(_reactHelmet.Helmet, null, _react.default.createElement("title", null, "NodeReactor Login")), _react.default.createElement("div", {
+      }, _react["default"].createElement(_reactHelmet.Helmet, null, _react["default"].createElement("title", null, "NodeReactor Login")), _react["default"].createElement("div", {
         className: "container login_container"
-      }, _react.default.createElement("p", {
+      }, _react["default"].createElement("p", {
         className: "text-right"
-      }, _react.default.createElement("i", null, "Login . . . "), " ", this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, _react["default"].createElement("i", null, "Login . . . "), " ", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null), _react.default.createElement("br", null), _react.default.createElement("b", null, "Username or Email Address"), _react.default.createElement("input", {
+      }) : null), _react["default"].createElement("br", null), _react["default"].createElement("b", null, "Username or Email Address"), _react["default"].createElement("input", {
         name: "user_username",
         className: "form-control",
         type: "text",
         onChange: this.handleChange
-      }), _react.default.createElement("br", null), _react.default.createElement("b", null, "Password"), _react.default.createElement("input", {
+      }), _react["default"].createElement("br", null), _react["default"].createElement("b", null, "Password"), _react["default"].createElement("input", {
         name: "user_password",
         className: "form-control",
         type: "text",
         onChange: this.handleChange
-      }), _react.default.createElement("br", null), _react.default.createElement("div", {
+      }), _react["default"].createElement("br", null), _react["default"].createElement("div", {
         className: "right"
-      }, _react.default.createElement("button", {
+      }, _react["default"].createElement("button", {
         className: "btn btn-secondary",
         onClick: this.Login
       }, "Log In"))));

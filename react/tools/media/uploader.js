@@ -13,9 +13,9 @@ var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -48,7 +48,7 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Uploader).call(this, props));
     _this.state = {
       'button_disabled': false,
-      'upload_details': _react.default.createElement("span", null, "Select Files to Start Upload.")
+      'upload_details': _react["default"].createElement("span", null, "Select Files to Start Upload.")
     };
     _this.startUpload = _this.startUpload.bind(_assertThisInitialized(_this));
     return _this;
@@ -64,7 +64,7 @@ function (_Component) {
 
       for (var i = 0; i < input.files.length; i++) {
         if (input.files[i].size > window.nr_configs.max_upload_size_byte) {
-          _sweetalert.default.fire('Action failed. ' + input.files[i].name + ' exceeds size limit ' + window.nr_configs.max_upload_size_readable + '.');
+          _sweetalert["default"].fire('Action failed. ' + input.files[i].name + ' exceeds size limit ' + window.nr_configs.max_upload_size_readable + '.');
 
           return;
         }
@@ -94,7 +94,7 @@ function (_Component) {
         formData.append('nr_media_file', f, f.name);
         formData.append('to_do', 'upload');
         formData.append('action', 'nr_media_upload');
-        (0, _axios.default)({
+        (0, _axios["default"])({
           method: 'post',
           url: _react2.ajax_url,
           data: formData,
@@ -104,7 +104,7 @@ function (_Component) {
           onUploadProgress: function onUploadProgress(progressEvent) {
             var percentCompleted = Math.round(progressEvent.loaded * 100 / progressEvent.total);
 
-            var d = _react.default.createElement("span", null, "Upload in Progress:", files_to_upload_total - files_to_upload.length + '/' + files_to_upload_total + ' (' + percentCompleted + ')%');
+            var d = _react["default"].createElement("span", null, "Upload in Progress:", files_to_upload_total - files_to_upload.length + '/' + files_to_upload_total + ' (' + percentCompleted + ')%');
 
             _this2.setState({
               upload_details: d
@@ -114,7 +114,7 @@ function (_Component) {
           if (!r.data || !r.data.insertId) {
             _this2.setState({
               button_disabled: false,
-              upload_details: _react.default.createElement("span", null, "Upload Error. Probably server error or no internet, or you are logged out.")
+              upload_details: _react["default"].createElement("span", null, "Upload Error. Probably server error or no internet, or you are logged out.")
             });
           } else {
             if (files_to_upload.length > 0) {
@@ -122,14 +122,14 @@ function (_Component) {
             } else {
               _this2.setState({
                 button_disabled: false,
-                upload_details: _react.default.createElement("span", null, "Upload has been completed.")
+                upload_details: _react["default"].createElement("span", null, "Upload has been completed.")
               });
             }
           }
-        }).catch(function (r) {
+        })["catch"](function (r) {
           _this2.setState({
             button_disabled: false,
-            upload_details: _react.default.createElement("span", null, "Upload Error.")
+            upload_details: _react["default"].createElement("span", null, "Upload Error.")
           });
         });
       };
@@ -139,32 +139,32 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         id: "attachment_uploader",
         className: "uploader-inline"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "uploader-inline-content no-upload-message"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "upload-ui"
-      }, _react.default.createElement("button", {
+      }, _react["default"].createElement("button", {
         disabled: this.state.button_disabled,
         type: "button",
         className: "btn btn-outline-secondary btn-lg",
         onClick: function onClick(e) {
           return e.currentTarget.nextElementSibling.click();
         }
-      }, "Select Files"), _react.default.createElement("input", {
+      }, "Select Files"), _react["default"].createElement("input", {
         type: "file",
         style: {
           'display': 'none'
         },
         onChange: this.startUpload,
         multiple: "multiple"
-      })), _react.default.createElement("div", {
+      })), _react["default"].createElement("div", {
         className: "upload-inline-status"
-      }, this.state.upload_details), _react.default.createElement("div", {
+      }, this.state.upload_details), _react["default"].createElement("div", {
         className: "post-upload-ui"
-      }, _react.default.createElement("p", {
+      }, _react["default"].createElement("p", {
         className: "max-upload-size"
       }, "Individual File Size Limit ", window.nr_configs.max_upload_size_readable, "."))));
     }

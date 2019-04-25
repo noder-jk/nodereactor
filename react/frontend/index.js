@@ -15,9 +15,9 @@ var _react2 = require("nodereactor/react");
 
 var _compFinder = require("../helper/comp-finder");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -51,9 +51,9 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(InitFrontEnd).call(this, props));
     _this.state = {
-      'content': _react.default.createElement("div", {
+      'content': _react["default"].createElement("div", {
         className: "text-center"
-      }, _react.default.createElement(_reactSvgSpinner.default, {
+      }, _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       }))
     };
@@ -66,7 +66,7 @@ function (_Component) {
       var _this2 = this;
 
       var pathname = window.location.pathname;
-      (0, _axios.default)({
+      (0, _axios["default"])({
         'method': 'post',
         'url': _react2.ajax_url + window.location.search,
         'data': {
@@ -103,14 +103,14 @@ function (_Component) {
           };
 
           _this2.setState({
-            'content': _react.default.createElement(_compFinder.FindComp, _extends({
+            'content': _react["default"].createElement(_compFinder.FindComp, _extends({
               comp_props: find_params
             }, params))
           });
         }
-      }).catch(function (e) {
+      })["catch"](function (e) {
         _this2.setState({
-          'content': _react.default.createElement("p", {
+          'content': _react["default"].createElement("p", {
             className: "text-center text-danger"
           }, "Request Error.")
         });

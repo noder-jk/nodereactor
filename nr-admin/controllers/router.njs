@@ -60,8 +60,6 @@ const is_it_file_request=($, f_next)=>
 
 module.exports.run=($)=>
 {
-	console.log('req come');
-	
 	var check_if_file=($, after_filter, inc_next)=>
 	{
 		is_it_file_request($, ($, f)=>

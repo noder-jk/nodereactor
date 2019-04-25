@@ -21,9 +21,9 @@ var _permalink = require("./permalink");
 
 var _reading = require("./reading");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -93,7 +93,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: vals
@@ -102,13 +102,13 @@ function (_Component) {
           'loading': false
         });
 
-        _sweetalert.default.fire(r.data && r.data.status == 'done' ? 'Saved' : 'Could not saved');
-      }).catch(function (r) {
+        _sweetalert["default"].fire(r.data && r.data.status == 'done' ? 'Saved' : 'Could not saved');
+      })["catch"](function (r) {
         _this2.setState({
           'loading': false
         });
 
-        _sweetalert.default.fire('Error', 'Request Failed', 'error');
+        _sweetalert["default"].fire('Error', 'Request Failed', 'error');
       });
     }
   }, {
@@ -118,21 +118,21 @@ function (_Component) {
       var components = this.state.components;
       var resp = this.props.ResponseData;
       var Comp = components[settingPage];
-      return _react.default.createElement("div", null, _react.default.createElement(Comp, {
+      return _react["default"].createElement("div", null, _react["default"].createElement(Comp, {
         onChange: this.storeVal,
         ResponseData: resp
-      }), _react.default.createElement("div", {
+      }), _react["default"].createElement("div", {
         className: "row"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "col-12 col-sm-4 col-md-3 col-lg-2"
-      }), _react.default.createElement("div", {
+      }), _react["default"].createElement("div", {
         className: "col-12 col-sm-8 col-md-6 col-lg-4"
-      }, _react.default.createElement("button", {
+      }, _react["default"].createElement("button", {
         "data-button": "save",
         className: "btn btn-secondary btn-sm",
         disabled: this.state.loading,
         onClick: this.saveOption
-      }, "Save"), " \xA0", this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, "Save"), " \xA0", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       }) : null)));
     }
@@ -142,7 +142,7 @@ function (_Component) {
 }(_react.Component);
 
 var GeneralSetting = function GeneralSetting() {
-  return _react.default.createElement(_react2.Placeholder, {
+  return _react["default"].createElement(_react2.Placeholder, {
     Data: {
       'action': 'nr_get_general_settings'
     },
@@ -154,7 +154,7 @@ var GeneralSetting = function GeneralSetting() {
 exports.GeneralSetting = GeneralSetting;
 
 var PermalinkSetting = function PermalinkSetting() {
-  return _react.default.createElement(_react2.Placeholder, {
+  return _react["default"].createElement(_react2.Placeholder, {
     Data: {
       'action': 'nr_get_general_settings'
     },
@@ -166,7 +166,7 @@ var PermalinkSetting = function PermalinkSetting() {
 exports.PermalinkSetting = PermalinkSetting;
 
 var ReadingSetting = function ReadingSetting() {
-  return _react.default.createElement(_react2.Placeholder, {
+  return _react["default"].createElement(_react2.Placeholder, {
     Data: {
       'action': 'nr_get_general_settings'
     },

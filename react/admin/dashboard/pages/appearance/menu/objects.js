@@ -15,9 +15,9 @@ var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
 var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -120,7 +120,7 @@ function (_Component) {
       var _this3 = this;
 
       var action = this.props.properties.action;
-      (0, _axios.default)({
+      (0, _axios["default"])({
         'method': 'post',
         'url': _react2.ajax_url,
         'data': {
@@ -132,7 +132,7 @@ function (_Component) {
             'items': r.data.objects
           });
         }
-      }).catch(function (e) {});
+      })["catch"](function (e) {});
     }
   }, {
     key: "render",
@@ -155,7 +155,7 @@ function (_Component) {
 
       return Object.keys(items).map(function (item) {
         var tab_ttl = item.charAt(0).toUpperCase() + item.slice(1);
-        return _react.default.createElement("div", {
+        return _react["default"].createElement("div", {
           className: "menu-content-type",
           key: item,
           onClick: function onClick() {
@@ -165,39 +165,38 @@ function (_Component) {
             'overflowY': 'auto',
             'maxHeight': '300px'
           }
-        }, _react.default.createElement("b", null, tab_ttl, " "), current_tab == item ? _react.default.createElement("div", {
+        }, _react["default"].createElement("b", null, tab_ttl, " "), current_tab == item ? _react["default"].createElement("div", {
           className: "bg-white p-2"
-        }, items[item].length == 0 ? _react.default.createElement("i", null, "No ", tab_ttl) : items[item].map(function (post) {
-          console.log(post.nest_level);
-          return _react.default.createElement("p", {
+        }, items[item].length == 0 ? _react["default"].createElement("i", null, "No ", tab_ttl) : items[item].map(function (post) {
+          return _react["default"].createElement("p", {
             key: post[id_name],
             className: "item-single-post",
             style: {
               'paddingLeft': post.nest_level * 10 + 'px'
             }
-          }, _react.default.createElement("input", {
+          }, _react["default"].createElement("input", {
             type: "checkbox",
             name: "nv_" + id_name,
             value: post[id_name],
             onChange: _this4.checker
           }), " ", post[title_name]);
-        }), _react.default.createElement("div", {
+        }), _react["default"].createElement("div", {
           className: "text-right"
-        }, _react.default.createElement("button", {
+        }, _react["default"].createElement("button", {
           onClick: function onClick() {
             return _this4.adder('append');
           },
           className: "btn btn-secondary btn-sm",
           title: "Append to Selected"
-        }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        }, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faArrowCircleRight
-        })), " \xA0", _react.default.createElement("button", {
+        })), " \xA0", _react["default"].createElement("button", {
           onClick: function onClick() {
             return _this4.adder('after');
           },
           className: "btn btn-secondary btn-sm",
           title: "Add After Selected"
-        }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        }, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faArrowAltCircleDown
         })))) : null);
       });

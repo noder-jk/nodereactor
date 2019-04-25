@@ -39,6 +39,7 @@ class PostProcess extends Component
             'pagination':resp.pagination,
             'taxonomies':resp.taxonomies || [],
             'loading_icon':false, 
+            'checked_posts':[]
         }
 
         this.deletePost=this.deletePost.bind(this);
@@ -46,18 +47,25 @@ class PostProcess extends Component
         this.filterPost=this.filterPost.bind(this);
     }
 
-    toggleCheck(e,post_name)
+    toggleCheck(e, post_id)
     {
         let el=e.currentTarget;
 
-        let posts=this.state.posts;
+        let checked=this.state.checked_posts;
 
-
-        if(post_name && posts[post_name])
+        if(el.checked)
         {
-            posts[post_name].checked_input=el.checked;
-            this.setState({'posts':posts});
+            if(checked.indexOf(post_id)==-1)
+            {
+                checked.push(post_id);
+            }
         }
+        else if(checked.indexOf(post_id)>-1)
+        {
+            checked.splice(checked.indexOf(post_id), 1);
+        }
+
+        this.setState({'checked_posts':checked});
     }
     
     deletePost(e)
@@ -67,18 +75,8 @@ class PostProcess extends Component
 
         if(action!=='delete'){return;}
         
-        /* Store unselected posts in this array */
-        let new_posts=[];
-
-        let posts=this.state.posts;
-        let to_delete=[];
-
-        /* Filter post based on checkbox checked */
-        for(let k in posts)
-        {
-            posts[k].checked_input ? to_delete.push(posts[k].post_id) : new_posts.push(posts[k]);
-        }
-
+        let to_delete=this.state.checked_posts;
+        
         if(to_delete.length==0){return;}
 
         /* Ask confirmation */
@@ -101,22 +99,25 @@ class PostProcess extends Component
                 data:{'action':'nr_delete_posts', 'post_id':to_delete}
             }).then(r=>
             {
-                let ob={loading_icon:false};
-
                 if(r.data && r.data.status=='done')
                 {
-                    ob.posts=new_posts;
+                    let ob={'to_delete':[]};
+
+                    let {posts=[]}=this.state;
+                    ob.posts = posts.filter(p=>to_delete.indexOf(p.post_id)==-1);
+
+                    this.setState(ob);   
                 }
                 else
                 {
-                    Swal.fire('Something went wrong.');
+                    Swal.fire('Error', 'Something went wrong.', 'error');
                 }
 
-                this.setState(ob);    
+                this.setState({'loading_icon':false});   
             }).catch(e=>
             {
                 this.setState({loading_icon:false});
-                Swal.fire('Request Error');
+                Swal.fire('Error', 'Request Error', 'error');
             })
         })
     }
@@ -213,8 +214,8 @@ class PostProcess extends Component
                             st_posts.map(item=>
                             {
                                 return(
-                                    <tr key={item.post_name}>
-                                        <td><input type="checkbox" defaultChecked={item.checked_input} onChange={(e)=>this.toggleCheck(e,item.post_name)}/></td>
+                                    <tr key={item.post_id}>
+                                        <td><input type="checkbox" defaultChecked={item.checked_input} onChange={(e)=>this.toggleCheck(e, item.post_id)}/></td>
                                         <td>
                                             <p>{'-'.repeat(item.nest_level)}{item.post_title}</p>
                                             <a href={item.post_url} className="text-info">View</a> - <a className="text-info" href={item.post_edit_link}>Edit</a>

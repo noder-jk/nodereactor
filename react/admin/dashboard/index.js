@@ -15,9 +15,9 @@ var _compFinder = require("nodereactor/react/helper/comp-finder");
 
 require("./style.css");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -49,7 +49,7 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(DashboardContainer).call(this, props));
     _this.state = {
-      'content': _react.default.createElement(_reactSvgSpinner.default, {
+      'content': _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       })
     };
@@ -64,13 +64,13 @@ function (_Component) {
       (0, _navs.getNavList)(function (r, c) {
         if (r) {
           _this2.setState({
-            'content': _react.default.createElement(_compFinder.FindComp, {
+            'content': _react["default"].createElement(_compFinder.FindComp, {
               comp_props: c
             })
           });
         } else {
           _this2.setState({
-            'content': _react.default.createElement("div", null, "Something went wrong.")
+            'content': _react["default"].createElement("div", null, "Something went wrong.")
           });
         }
       });
@@ -78,9 +78,9 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("main", {
+      return _react["default"].createElement("main", {
         id: "dashboard_main"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         id: "admin_panel_container",
         className: "container-fluid"
       }, this.state.content));

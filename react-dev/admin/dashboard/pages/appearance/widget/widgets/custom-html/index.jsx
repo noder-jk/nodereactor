@@ -1,12 +1,12 @@
-import React, {Component} from "react";
+import React from "react";
 
 const CustomHtmlInput=(props)=>
 {
-    let {properties={}}=props;
+    let {custom_code=''}=props;
 
     return(
         <div>
-			<textarea type="text" name="custom_code" placeholder="Enter Code" defaultValue={properties.custom_code} className="form-control"></textarea>
+			<textarea type="text" name="custom_code" placeholder="Enter Code" defaultValue={custom_code} className="form-control"></textarea>
         </div>
     )
 } 
@@ -14,8 +14,7 @@ const CustomHtmlInput=(props)=>
 
 const CustomHtmlOutput=(props)=>
 {
-    let {properties={}}=props;
-    let {custom_code=''}=properties;
+    let {custom_code=''}=props;
 
     return <div dangerouslySetInnerHTML={{__html:custom_code}}></div>
 }

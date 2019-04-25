@@ -1,29 +1,18 @@
-import React, {Component} from "react";
-import axios from 'axios';
-import {ajax_url ,Loading,Placeholder} from 'nodereactor/react';
+import React from "react";
 
-
-class SearchWidgetInput extends Component
+const SearchWidgetInput=()=>
 {
-    render()
-    {
-        return(<div></div>)
-    }
+    return <div></div>
 }
 
-class SearchWidgetOutput extends Component
+const SearchWidgetOutput=()=>
 {
-    render()
-    {
-        return(
-            <form method="get">
-                <label>
-                    <input type="search" placeholder="Search …" />
-                </label>
-                <input type="submit"/>
-            </form>
-        )
-    }
+    return <form method="get" action="/">
+            <label>
+                <input type="search" name="search" placeholder="Search . . ." />
+            </label>
+            <button type="submit">Search</button>
+        </form>
 }
 
 export {SearchWidgetInput, SearchWidgetOutput}

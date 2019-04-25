@@ -15,9 +15,9 @@ var _react2 = require("nodereactor/react");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -74,7 +74,7 @@ function (_Component) {
         to_do: t_do,
         node_package: pkg
       };
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: dt
@@ -87,10 +87,10 @@ function (_Component) {
             'plugins': pl
           });
         } else {
-          _sweetalert.default.fire('Action failed.');
+          _sweetalert["default"].fire('Action failed.');
         }
-      }).catch(function (r) {
-        _sweetalert.default.fire('Request Error');
+      })["catch"](function (r) {
+        _sweetalert["default"].fire('Request Error');
       });
     }
   }, {
@@ -99,11 +99,11 @@ function (_Component) {
       var _this3 = this;
 
       var plugins = this.props.ResponseData;
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         id: "installed_plugins"
-      }, _react.default.createElement("h3", null, "Installed Plugins"), _react.default.createElement("table", {
+      }, _react["default"].createElement("h3", null, "Installed Plugins"), _react["default"].createElement("table", {
         className: "table table-bordered"
-      }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null, "Name"), _react.default.createElement("th", null, "Author"), _react.default.createElement("th", null, "Description"), _react.default.createElement("th", null, "Version"), _react.default.createElement("th", null, "License"))), _react.default.createElement("tbody", null, Object.keys(plugins).map(function (k) {
+      }, _react["default"].createElement("thead", null, _react["default"].createElement("tr", null, _react["default"].createElement("th", null, "Name"), _react["default"].createElement("th", null, "Author"), _react["default"].createElement("th", null, "Description"), _react["default"].createElement("th", null, "Version"), _react["default"].createElement("th", null, "License"))), _react["default"].createElement("tbody", null, Object.keys(plugins).map(function (k) {
         var ind_p = _this3.state.plugins[k] || {};
         var _plugins$k$author = plugins[k].author,
             author = _plugins$k$author === void 0 ? {} : _plugins$k$author;
@@ -111,25 +111,25 @@ function (_Component) {
             name = _author$name === void 0 ? '' : _author$name,
             _author$url = author.url,
             url = _author$url === void 0 ? '' : _author$url;
-        return _react.default.createElement("tr", {
+        return _react["default"].createElement("tr", {
           key: k,
           className: ind_p.activated ? 'activated_plugin' : 'deactivated_plugin'
-        }, _react.default.createElement("td", null, k, _react.default.createElement("div", {
+        }, _react["default"].createElement("td", null, k, _react["default"].createElement("div", {
           className: "mt-4"
-        }, _react.default.createElement("a", {
+        }, _react["default"].createElement("a", {
           className: "activate_plugin text-success",
           onClick: function onClick(e) {
             return _this3.activateDeactivate(e, k, 'activate');
           }
-        }, "Activate"), _react.default.createElement("a", {
+        }, "Activate"), _react["default"].createElement("a", {
           className: "deactivate_plugin text-danger",
           onClick: function onClick(e) {
             return _this3.activateDeactivate(e, k, 'deactivate');
           }
-        }, "Deactivate"))), _react.default.createElement("td", null, _react.default.createElement("a", {
+        }, "Deactivate"))), _react["default"].createElement("td", null, _react["default"].createElement("a", {
           href: url,
           target: "_blank"
-        }, name)), _react.default.createElement("td", null, plugins[k].description), _react.default.createElement("td", null, plugins[k].version), _react.default.createElement("td", null, plugins[k].license));
+        }, name)), _react["default"].createElement("td", null, plugins[k].description), _react["default"].createElement("td", null, plugins[k].version), _react["default"].createElement("td", null, plugins[k].license));
       }))));
     }
   }]);
@@ -138,7 +138,7 @@ function (_Component) {
 }(_react.Component);
 
 var InstalledPlugins = function InstalledPlugins() {
-  return _react.default.createElement(_react2.Placeholder, {
+  return _react["default"].createElement(_react2.Placeholder, {
     Data: {
       'action': 'nr_get_plugins'
     },

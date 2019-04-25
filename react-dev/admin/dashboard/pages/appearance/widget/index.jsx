@@ -207,7 +207,11 @@ class WidgetProcess extends Component
 
         switch(action)
         {
-            case 'delete'   :   lnk[area].splice(n, 1);
+            case 'delete'   :   if(!confirm('Sure to remove ?'))
+                                {
+                                    return;
+                                }
+                                lnk[area].splice(n, 1);
                                 break;
 
             case 'up'       :   lnk[area]=array_pull_up(lnk[area], n);

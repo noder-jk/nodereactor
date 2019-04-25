@@ -13,9 +13,9 @@ var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -66,7 +66,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: {
@@ -83,7 +83,7 @@ function (_Component) {
         };
 
         _this2.setState(st);
-      }).catch(function (e) {
+      })["catch"](function (e) {
         _this2.setState({
           'loading': false,
           'error': 'Request Error'
@@ -95,16 +95,16 @@ function (_Component) {
     value: function render() {
       var _this$props$post_pare = this.props.post_parent,
           post_parent = _this$props$post_pare === void 0 ? 0 : _this$props$post_pare;
-      return _react.default.createElement("div", null, this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      return _react["default"].createElement("div", null, this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null, _react.default.createElement("select", {
+      }) : null, _react["default"].createElement("select", {
         className: "form-control",
         name: "nr_post_parent",
         defaultValue: post_parent
-      }, _react.default.createElement("option", {
+      }, _react["default"].createElement("option", {
         value: "0"
       }, "None"), this.state.posts.map(function (item) {
-        return _react.default.createElement("option", {
+        return _react["default"].createElement("option", {
           key: item.post_id,
           value: item.post_id,
           title: item.post_title

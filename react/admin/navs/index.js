@@ -19,9 +19,9 @@ var _react2 = require("nodereactor/react");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -55,7 +55,7 @@ var getNavList = function getNavList(cback) {
   /* Get all admin menus and decide which component will be used to render admin page. */
 
 
-  (0, _axios.default)({
+  (0, _axios["default"])({
     method: 'post',
     url: _react2.ajax_url,
     data: {
@@ -95,7 +95,7 @@ var getNavList = function getNavList(cback) {
     }
 
     cback(AdminMenus, CurrentNav);
-  }).catch(function (r) {
+  })["catch"](function (r) {
     cback(false, CurrentNav);
   });
 };
@@ -156,14 +156,14 @@ function (_Component) {
 
       this.li_tags = {};
       var navs = this.props.navs;
-      return _react.default.createElement("aside", {
+      return _react["default"].createElement("aside", {
         id: "nav_aside",
         className: this.state.collapsed ? 'collapsed_asside' : ''
-      }, _react.default.createElement("ul", null, Object.keys(navs).map(function (k) {
+      }, _react["default"].createElement("ul", null, Object.keys(navs).map(function (k) {
         var title = navs[k].main.menu_title;
         var icon = navs[k].main.menu_icon;
         var slug = navs[k].main.slug;
-        return _react.default.createElement("li", {
+        return _react["default"].createElement("li", {
           key: title,
           onMouseOver: function onMouseOver() {
             return _this2.showPopNav(title);
@@ -172,11 +172,11 @@ function (_Component) {
             return _this2.li_tags[title] = el;
           },
           className: OpenedNavSlug == slug && OpenedNavRoot == k ? 'main-opened' : 'main-closed'
-        }, _react.default.createElement("a", {
+        }, _react["default"].createElement("a", {
           href: '/nr-admin/' + k + '/' + slug
-        }, _react.default.createElement("span", null, FaIcons[icon] ? _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        }, _react["default"].createElement("span", null, FaIcons[icon] ? _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: FaIcons[icon]
-        }) : null), _react.default.createElement("span", null, title)), _react.default.createElement("ul", {
+        }) : null), _react["default"].createElement("span", null, title)), _react["default"].createElement("ul", {
           className: "to_pop_up",
           style: {
             'left': _this2.state.left_offset,
@@ -189,22 +189,22 @@ function (_Component) {
             stl.display = 'none';
           }
 
-          return _react.default.createElement("li", {
+          return _react["default"].createElement("li", {
             key: item.slug,
             style: stl
-          }, _react.default.createElement("a", {
+          }, _react["default"].createElement("a", {
             href: '/nr-admin/' + k + '/' + item.slug,
             className: OpenedSubSlug == item.slug ? 'active_sub' : ''
           }, item.menu_title));
         })));
-      }), _react.default.createElement("li", {
+      }), _react["default"].createElement("li", {
         className: "main-closed"
-      }, _react.default.createElement("a", {
+      }, _react["default"].createElement("a", {
         href: "/",
         onClick: this.collapseExpand
-      }, _react.default.createElement("span", null, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      }, _react["default"].createElement("span", null, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
         icon: this.state.collapsed ? FaIcons.faArrowRight : FaIcons.faArrowLeft
-      })), _react.default.createElement("span", null, "Collapse")))));
+      })), _react["default"].createElement("span", null, "Collapse")))));
     }
   }]);
 
@@ -223,7 +223,7 @@ function (_Component2) {
 
     _this3 = _possibleConstructorReturn(this, _getPrototypeOf(Navigation).call(this, props));
     _this3.state = {
-      content: _react.default.createElement(_reactSvgSpinner.default, {
+      content: _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       })
     };
@@ -238,13 +238,13 @@ function (_Component2) {
       getNavList(function (r) {
         if (r) {
           _this4.setState({
-            'content': _react.default.createElement(ProcessNav, {
+            'content': _react["default"].createElement(ProcessNav, {
               navs: r
             })
           });
         } else {
           _this4.setState({
-            'content': _react.default.createElement("span", {
+            'content': _react["default"].createElement("span", {
               className: "text-danger"
             }, "Loading Failed")
           });

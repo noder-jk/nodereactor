@@ -21,7 +21,7 @@ const install_nr=function($, nr_fields, nr_data)
 			return;
 		}
 		
-		var sql=require('./nr_sql_str.njs')(nr_data);
+		var sql=require('./nr_sql_str.njs')(connection, nr_data);
 		
 		connection.query(sql, function(e,r)
 		{

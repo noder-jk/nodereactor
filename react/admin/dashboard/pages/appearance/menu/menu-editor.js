@@ -15,9 +15,9 @@ var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -184,7 +184,7 @@ function (_Component) {
       var menu_name = this.state.menu_name.trim();
 
       if (/\S+/.test(menu_name) == false) {
-        _sweetalert.default.fire('Error', 'Menu name must not be empty.', 'error');
+        _sweetalert["default"].fire('Error', 'Menu name must not be empty.', 'error');
 
         return;
       }
@@ -204,7 +204,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         'method': 'post',
         'url': _react2.ajax_url,
         'data': {
@@ -212,18 +212,18 @@ function (_Component) {
           'menus': standalone_menu
         }
       }).then(function (r) {
-        _sweetalert.default.fire('Saved');
+        _sweetalert["default"].fire('Saved');
 
         _this2.setState({
           'loading': false,
           'saved_menu': true
         });
-      }).catch(function (e) {
+      })["catch"](function (e) {
         _this2.setState({
           'loading': false
         });
 
-        _sweetalert.default.fire('Error', 'Menu Could Not Saved', 'error');
+        _sweetalert["default"].fire('Error', 'Menu Could Not Saved', 'error');
       });
     }
   }, {
@@ -314,23 +314,23 @@ function (_Component) {
               'paddingRight': '5px',
               'paddingBottom': '5px'
             };
-            return _typeof(item) == 'object' ? _react.default.createElement("div", {
+            return _typeof(item) == 'object' ? _react["default"].createElement("div", {
               key: item.key,
               className: "recursive_menu_items",
               style: _this3.state.active_index == act_ind ? act_st : {},
               onClick: function onClick(e) {
                 return _this3.setIndex(e, act_ind);
               }
-            }, _react.default.createElement("div", {
+            }, _react["default"].createElement("div", {
               className: "actions-container"
-            }, _react.default.createElement("input", {
+            }, _react["default"].createElement("input", {
               type: "text",
               defaultValue: item.title,
               className: "form-control",
               onChange: function onChange(e) {
                 return _this3.setValState(e, act_ind, 'title');
               }
-            }), item.url ? _react.default.createElement("input", {
+            }), item.url ? _react["default"].createElement("input", {
               type: "text",
               defaultValue: item.url,
               className: "form-control",
@@ -353,13 +353,13 @@ function (_Component) {
           closeMenuForm = _this$props$closeMenu === void 0 ? function () {} : _this$props$closeMenu;
       var _this$state$locations2 = this.state.locations,
           locations = _this$state$locations2 === void 0 ? {} : _this$state$locations2;
-      return _react.default.createElement("div", null, _react.default.createElement("input", {
+      return _react["default"].createElement("div", null, _react["default"].createElement("input", {
         type: "text",
         className: "form-control",
         defaultValue: this.state.menu_name
-      }), _react.default.createElement("small", null, _react.default.createElement("i", null, "Existing menu that matches this name will be replaced, if any.")), _react.default.createElement("br", null), _react.default.createElement("div", null, _react.default.createElement("b", null, "Menu Items"), this.renderItems()), _react.default.createElement("div", null, _react.default.createElement("div", {
+      }), _react["default"].createElement("small", null, _react["default"].createElement("i", null, "Existing menu that matches this name will be replaced, if any.")), _react["default"].createElement("br", null), _react["default"].createElement("div", null, _react["default"].createElement("b", null, "Menu Items"), this.renderItems()), _react["default"].createElement("div", null, _react["default"].createElement("div", {
         className: "text-right"
-      }, _react.default.createElement("i", {
+      }, _react["default"].createElement("i", {
         style: {
           'cursor': 'pointer'
         },
@@ -368,26 +368,26 @@ function (_Component) {
             'show_keyboard_shortcut': !_this4.state.show_keyboard_shortcut
           });
         }
-      }, this.state.show_keyboard_shortcut ? 'Hide' : 'Show', " Keyboard Shortcut")), this.state.show_keyboard_shortcut ? _react.default.createElement("ul", null, _react.default.createElement("li", null, "Up Arrow: Move selected menu one step up"), _react.default.createElement("li", null, "Down Arrow: Move selected menu one step down"), _react.default.createElement("li", null, "Delete Key: Remove selected menu")) : null), _react.default.createElement("br", null), _react.default.createElement("div", null, _react.default.createElement("b", null, "Associate To Locations"), _react.default.createElement("hr", null), Object.keys(locations).length == 0 ? _react.default.createElement("span", null, "No Locations Registered") : Object.keys(locations).map(function (item) {
-        return _react.default.createElement("p", {
+      }, this.state.show_keyboard_shortcut ? 'Hide' : 'Show', " Keyboard Shortcut")), this.state.show_keyboard_shortcut ? _react["default"].createElement("ul", null, _react["default"].createElement("li", null, "Up Arrow: Move selected menu one step up"), _react["default"].createElement("li", null, "Down Arrow: Move selected menu one step down"), _react["default"].createElement("li", null, "Delete Key: Remove selected menu")) : null), _react["default"].createElement("br", null), _react["default"].createElement("div", null, _react["default"].createElement("b", null, "Associate To Locations"), _react["default"].createElement("hr", null), Object.keys(locations).length == 0 ? _react["default"].createElement("span", null, "No Locations Registered") : Object.keys(locations).map(function (item) {
+        return _react["default"].createElement("p", {
           key: item
-        }, _react.default.createElement("input", {
+        }, _react["default"].createElement("input", {
           type: "checkbox",
           name: "locations_checker",
           value: item,
           defaultChecked: _this4.state.association.indexOf(item) > -1,
           onChange: _this4.locationChecker
-        }), " ", locations[item].title, " ", _react.default.createElement("br", null), _react.default.createElement("small", null, locations[item].description));
-      })), _react.default.createElement("div", {
+        }), " ", locations[item].title, " ", _react["default"].createElement("br", null), _react["default"].createElement("small", null, locations[item].description));
+      })), _react["default"].createElement("div", {
         className: "text-right"
-      }, this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null, " \xA0", _react.default.createElement("button", {
+      }) : null, " \xA0", _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm",
         onClick: function onClick() {
           return closeMenuForm(_this4.state.saved_menu);
         }
-      }, "Close"), " \xA0", _react.default.createElement("button", {
+      }, "Close"), " \xA0", _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm",
         onClick: this.saveMenu
       }, "Save")));

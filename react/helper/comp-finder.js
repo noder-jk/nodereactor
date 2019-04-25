@@ -9,9 +9,9 @@ var _react = _interopRequireDefault(require("react"));
 
 var AdminComps = _interopRequireWildcard(require("../admin/dashboard/pages"));
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var FindComp = function FindComp(props) {
   var vendor_comps = window.nr_vendor_comps;
@@ -27,9 +27,9 @@ var FindComp = function FindComp(props) {
   var params = Object.assign({}, props);
   delete params.comp_props;
 
-  var default_resp = _react.default.createElement("small", {
+  var default_resp = _react["default"].createElement("small", {
     className: "text-danger"
-  }, _react.default.createElement("u", null, _react.default.createElement("b", null, _react.default.createElement("i", null, component))), " not found.");
+  }, _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, component))), " not found.");
 
   if (node_type === true) {
     if (AdminComps[component]) {
@@ -37,7 +37,7 @@ var FindComp = function FindComp(props) {
       var Cmp = {
         c: AdminComps[component]
       };
-      return _react.default.createElement(Cmp.c, params);
+      return _react["default"].createElement(Cmp.c, params);
     }
   } else if (typeof node_type == 'string' && vendor_comps[node_type] && nr_package !== false) {
     var ret = function ret(component) {
@@ -49,7 +49,7 @@ var FindComp = function FindComp(props) {
           var Cmpc = {
             c: node.component[component]
           };
-          return _react.default.createElement(Cmpc.c, params);
+          return _react["default"].createElement(Cmpc.c, params);
         }
       }
 

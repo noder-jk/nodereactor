@@ -19,9 +19,9 @@ require("./wp-style.css");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -127,59 +127,59 @@ function (_Component) {
           accept = _this$props3$accept === void 0 ? [] : _this$props3$accept,
           _this$props3$open = _this$props3.open,
           open = _this$props3$open === void 0 ? false : _this$props3$open;
-      return open == true ? _react.default.createElement("div", {
+      return open == true ? _react["default"].createElement("div", {
         className: "nr-media-uploader-explorer"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: cls
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "media-modal-content"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "media-frame mode-select wp-core-ui",
         id: "__wp-uploader-id-0"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "media-frame-title"
-      }, _react.default.createElement("h1", null, "File Manager")), _react.default.createElement("div", {
+      }, _react["default"].createElement("h1", null, "File Manager")), _react["default"].createElement("div", {
         className: "media-frame-router"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "media-router"
-      }, _react.default.createElement("a", {
+      }, _react["default"].createElement("a", {
         href: "#",
         className: "media-menu-item" + (this.state.active_tab == 'uploader' ? ' active' : ''),
         onClick: function onClick(e) {
           return _this2.navigate(e, 'uploader');
         }
-      }, "Upload Files"), _react.default.createElement("a", {
+      }, "Upload Files"), _react["default"].createElement("a", {
         href: "#",
         "data-current_offset": "1",
         className: "media-menu-item" + (this.state.active_tab == 'explorer' ? ' active' : ''),
         onClick: function onClick(e) {
           return _this2.navigate(e, 'explorer');
         }
-      }, "Media Library"))), _react.default.createElement("div", {
+      }, "Media Library"))), _react["default"].createElement("div", {
         className: "media-frame-content",
         "data-columns": "6"
-      }, this.state.active_tab == 'explorer' ? _react.default.createElement(_browser.Browser, {
+      }, this.state.active_tab == 'explorer' ? _react["default"].createElement(_browser.Browser, {
         onSelectChange: this.getSelected,
         multiple: multiple,
         accept: accept
-      }) : _react.default.createElement(_uploader.Uploader, null)), adminCall ? null : _react.default.createElement("div", {
+      }) : _react["default"].createElement(_uploader.Uploader, null)), adminCall ? null : _react["default"].createElement("div", {
         className: "media-frame-toolbar"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "media-toolbar"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "media-toolbar-secondary"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "media-selection"
-      })), _react.default.createElement("div", {
+      })), _react["default"].createElement("div", {
         className: "media-toolbar-primary search-form mr-3"
-      }, _react.default.createElement("button", {
+      }, _react["default"].createElement("button", {
         className: "btn btn-outline-secondary btn-sm mr-1 mt-3",
         onClick: this.closeThisMedia
-      }, cancelText), _react.default.createElement("button", {
+      }, cancelText), _react["default"].createElement("button", {
         className: "btn btn-outline-secondary btn-sm mt-3",
         disabled: insert_disable,
         onClick: this.insertEvent
-      }, insertText))))))), _react.default.createElement("div", {
+      }, insertText))))))), _react["default"].createElement("div", {
         className: "media-modal-backdrop"
       })) : null;
     }

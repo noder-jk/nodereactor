@@ -19,9 +19,9 @@ var _react2 = require("nodereactor/react");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -72,36 +72,36 @@ var LoadInputComponent = function LoadInputComponent(props) {
       for (var n = 0; n < widgets.length; n++) {
         if (widgets[n].node_type == l.node_type && widgets[n].nr_package == l.nr_package && widgets[n].id == l.widget_id) {
           var component = widgets[n].input_component;
-          ret.push(_react.default.createElement("div", {
+          ret.push(_react["default"].createElement("div", {
             key: l.key,
             className: "widget_form mb-4",
             "data-widget_id": l.widget_id,
             "data-node_type": l.node_type,
             "data-nr_package": l.nr_package
-          }, _react.default.createElement("b", null, _react.default.createElement("span", {
+          }, _react["default"].createElement("b", null, _react["default"].createElement("span", {
             style: {
               "float": "left"
             }
-          }, widgets[n].title), _react.default.createElement("i", {
+          }, widgets[n].title), _react["default"].createElement("i", {
             className: "widget_action_i fa fa-trash",
             onClick: function onClick() {
               return widget_action('delete', area, i);
             }
-          }), _react.default.createElement("i", {
+          }), _react["default"].createElement("i", {
             className: "widget_action_i fa fa-arrow-up",
             onClick: function onClick() {
               return widget_action('up', area, i);
             }
-          }), _react.default.createElement("i", {
+          }), _react["default"].createElement("i", {
             className: "widget_action_i fa fa-arrow-down",
             onClick: function onClick() {
               return widget_action('down', area, i);
             }
-          })), _react.default.createElement("div", null, _react.default.createElement("form", null, "Widget Title", _react.default.createElement("input", {
+          })), _react["default"].createElement("div", null, _react["default"].createElement("form", null, "Widget Title", _react["default"].createElement("input", {
             name: "nr_widget_title",
             className: "form-control mb-3",
             defaultValue: l.properties.nr_widget_title || widgets[n].title
-          }), _react.default.createElement(_compFinder.FindComp, _extends({
+          }), _react["default"].createElement(_compFinder.FindComp, _extends({
             comp_props: {
               'component': component,
               'node_type': widgets[n].node_type,
@@ -166,7 +166,7 @@ function (_Component) {
       var _this2 = this;
 
       if (!this.widget_container) {
-        _sweetalert.default.fire('Something went wrong.');
+        _sweetalert["default"].fire('Something went wrong.');
 
         return;
       }
@@ -205,7 +205,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: {
@@ -213,17 +213,17 @@ function (_Component) {
           'action': 'nr_widget_save'
         }
       }).then(function (r) {
-        _sweetalert.default.fire('Changes Saved.');
+        _sweetalert["default"].fire('Changes Saved.');
 
         _this2.setState({
           'loading': false
         });
-      }).catch(function (r) {
+      })["catch"](function (r) {
         _this2.setState({
           'loading': false
         });
 
-        _sweetalert.default.fire('Request Error');
+        _sweetalert["default"].fire('Request Error');
       });
     }
   }, {
@@ -266,13 +266,17 @@ function (_Component) {
       var lnk = this.state.widget_in_sidebar;
 
       if (!lnk[area] || !lnk[area][n]) {
-        _sweetalert.default.fire('Error', 'Something Went Wrong. Page Reload May Resolve the Issue.', 'error');
+        _sweetalert["default"].fire('Error', 'Something Went Wrong. Page Reload May Resolve the Issue.', 'error');
 
         return;
       }
 
       switch (action) {
         case 'delete':
+          if (!confirm('Sure to remove ?')) {
+            return;
+          }
+
           lnk[area].splice(n, 1);
           break;
 
@@ -306,41 +310,41 @@ function (_Component) {
       var ch_length = Math.floor(ob.length / 3);
       ch_length = ch_length < 1 ? 1 : ch_length;
       var chunk = ob.length > 0 ? array_chunk(ob, ch_length) : [];
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         id: "widget_area_page",
         className: "row",
         ref: function ref(el) {
           _this3.widget_container = el;
         }
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "col-12 mb-4"
-      }, _react.default.createElement("h4", null, "Widget & Areas \xA0", _react.default.createElement("button", {
+      }, _react["default"].createElement("h4", null, "Widget & Areas \xA0", _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm",
         onClick: this.saveWidgets
-      }, "Save All"), this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, "Save All"), this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null), _react.default.createElement("hr", null)), chunk.map(function (item, ind) {
-        return _react.default.createElement("div", {
+      }) : null), _react["default"].createElement("hr", null)), chunk.map(function (item, ind) {
+        return _react["default"].createElement("div", {
           key: 'area_' + ind,
           className: "col-12 col-md-6 col-xl-4"
         }, item.map(function (s_bar) {
-          return _react.default.createElement("div", {
+          return _react["default"].createElement("div", {
             key: s_bar.id,
             "data-area_container": "",
             className: ".indiv_area_container",
             "data-area_id": s_bar.id
-          }, _react.default.createElement("h5", {
+          }, _react["default"].createElement("h5", {
             className: "area-head"
-          }, s_bar.title), _react.default.createElement("div", {
+          }, s_bar.title), _react["default"].createElement("div", {
             "data-area": ""
-          }, _react.default.createElement(LoadInputComponent, {
+          }, _react["default"].createElement(LoadInputComponent, {
             area: s_bar.id,
             widgets: widgets,
             linking: widget_in_sidebar,
             widget_action: _this3.widgetAction
-          })), _react.default.createElement("div", {
+          })), _react["default"].createElement("div", {
             className: "text-center adder_select"
-          }, _react.default.createElement("hr", null), _react.default.createElement("select", {
+          }, _react["default"].createElement("hr", null), _react["default"].createElement("select", {
             className: "form-control d-inline-block",
             style: {
               'width': '160px'
@@ -349,10 +353,10 @@ function (_Component) {
             onChange: function onChange(e) {
               return _this3.addWidget(e, s_bar.id);
             }
-          }, _react.default.createElement("option", {
+          }, _react["default"].createElement("option", {
             value: "0"
           }, "Select Widget"), widgets.map(function (item) {
-            return _react.default.createElement("option", {
+            return _react["default"].createElement("option", {
               key: item.unique_key,
               value: item.unique_key
             }, item.title);
@@ -366,7 +370,7 @@ function (_Component) {
 }(_react.Component);
 
 var AdminWidget = function AdminWidget(props) {
-  return _react.default.createElement(_react2.Placeholder, {
+  return _react["default"].createElement(_react2.Placeholder, {
     Data: {
       'action': 'nr_get_widget_list'
     },

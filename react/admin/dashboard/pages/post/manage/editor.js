@@ -19,9 +19,9 @@ var _editorModules = require("./editor-modules");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -140,7 +140,7 @@ function (_Component) {
       this.setState({
         'loading_icon': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: {
@@ -154,7 +154,7 @@ function (_Component) {
         };
 
         if (r.data && r.data.status == 'done') {
-          _sweetalert.default.fire('Success', r.data && r.data.message ? r.data.message : 'Saved', 'success');
+          _sweetalert["default"].fire('Success', r.data && r.data.message ? r.data.message : 'Saved', 'success');
 
           if (r.data.post_id) {
             /* Save the returned post id and set state */
@@ -162,7 +162,7 @@ function (_Component) {
             _this2.store_vals.post_id = r.data.post_id;
           }
         } else {
-          _sweetalert.default.fire('Error', r.data && r.data.message ? r.data.message : 'Action Failed.', 'error');
+          _sweetalert["default"].fire('Error', r.data && r.data.message ? r.data.message : 'Action Failed.', 'error');
         }
 
         _this2.setState(ob, function () {
@@ -170,8 +170,8 @@ function (_Component) {
             'post_updated': false
           });
         });
-      }).catch(function (r) {
-        _sweetalert.default.fire('Error', 'Request Failed', 'error');
+      })["catch"](function (r) {
+        _sweetalert["default"].fire('Error', 'Request Failed', 'error');
 
         _this2.setState({
           loading_icon: false
@@ -204,59 +204,59 @@ function (_Component) {
       meta_props.custom_templates = custom_templates;
       meta_props.meta_boxes = this.state.meta_boxes;
       meta_props.post_updated = this.state.post_updated;
-      return post == 'not_found' ? _react.default.createElement("span", {
+      return post == 'not_found' ? _react["default"].createElement("span", {
         className: "text-danger"
-      }, "Post Not Found") : _react.default.createElement("div", {
+      }, "Post Not Found") : _react["default"].createElement("div", {
         className: "row",
         id: "post-editor-container",
         ref: function ref(el) {
           _this3.editor_container = el;
         }
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "col-12"
-      }, _react.default.createElement("h4", null, this.state.post_id ? _react.default.createElement("span", null, "Edit") : _react.default.createElement("span", null, "Create"), " ", this.state.loading_icon == true ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, _react["default"].createElement("h4", null, this.state.post_id ? _react["default"].createElement("span", null, "Edit") : _react["default"].createElement("span", null, "Create"), " ", this.state.loading_icon == true ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null)), _react.default.createElement("div", {
+      }) : null)), _react["default"].createElement("div", {
         className: "col-12 col-sm-6 col-md-7 col-lg-8 col-xl-9"
-      }, post_modules.indexOf('title') > -1 ? _react.default.createElement(_editorModules.Title, {
+      }, post_modules.indexOf('title') > -1 ? _react["default"].createElement(_editorModules.Title, {
         defaultValue: this.store_vals.post_title,
         onChange: this.getValues,
         sendSlug: this.getSlug,
         defaultSlug: this.state.slug
-      }) : null, post_modules.indexOf('editor') > -1 ? _react.default.createElement(_react2.Editor, {
+      }) : null, post_modules.indexOf('editor') > -1 ? _react["default"].createElement(_react2.Editor, {
         get_input_by: function get_input_by(content) {
           return _this3.getValues(content, true);
         },
         defaultValue: this.store_vals.post_content,
         addMedia: post_modules.indexOf('media') > -1
-      }) : null, post_modules.indexOf('excerpt') > -1 ? _react.default.createElement(_editorModules.Excerpt, {
+      }) : null, post_modules.indexOf('excerpt') > -1 ? _react["default"].createElement(_editorModules.Excerpt, {
         onChange: this.getValues,
         defaultValue: this.store_vals.post_excerpt
-      }) : null, _react.default.createElement(_editorModules.LoadMetaBox, _extends({
+      }) : null, _react["default"].createElement(_editorModules.LoadMetaBox, _extends({
         position: "left"
-      }, meta_props))), _react.default.createElement("div", {
+      }, meta_props))), _react["default"].createElement("div", {
         className: "col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "nr_meta_box",
         id: "publish_box"
-      }, _react.default.createElement("h4", null, "Action"), _react.default.createElement("div", null, _react.default.createElement("p", null, _react.default.createElement("b", null, "Status: "), _react.default.createElement("select", (_React$createElement = {
+      }, _react["default"].createElement("h4", null, "Action"), _react["default"].createElement("div", null, _react["default"].createElement("p", null, _react["default"].createElement("b", null, "Status: "), _react["default"].createElement("select", (_React$createElement = {
         name: "post_status"
-      }, _defineProperty(_React$createElement, "name", "post_status"), _defineProperty(_React$createElement, "defaultValue", this.store_vals.post_status), _defineProperty(_React$createElement, "onChange", this.getValues), _defineProperty(_React$createElement, "className", "form-control"), _React$createElement), _react.default.createElement("option", {
+      }, _defineProperty(_React$createElement, "name", "post_status"), _defineProperty(_React$createElement, "defaultValue", this.store_vals.post_status), _defineProperty(_React$createElement, "onChange", this.getValues), _defineProperty(_React$createElement, "className", "form-control"), _React$createElement), _react["default"].createElement("option", {
         value: "draft"
-      }, "Draft"), _react.default.createElement("option", {
+      }, "Draft"), _react["default"].createElement("option", {
         value: "publish"
-      }, "Publish")), _react.default.createElement("small", null, "Only logged in administrators can see draft post.")), post_modules.indexOf('comment') > -1 ? _react.default.createElement(_editorModules.Comment, {
+      }, "Publish")), _react["default"].createElement("small", null, "Only logged in administrators can see draft post.")), post_modules.indexOf('comment') > -1 ? _react["default"].createElement(_editorModules.Comment, {
         defaultValue: this.store_vals.comment_status,
         onChange: this.getValues
-      }) : null, _react.default.createElement("p", {
+      }) : null, _react["default"].createElement("p", {
         className: "text-right"
-      }, this.state.loading_icon ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, this.state.loading_icon ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null, " \xA0", _react.default.createElement("button", {
+      }) : null, " \xA0", _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm",
         onClick: this.saveContent,
         disabled: this.state.loading_icon
-      }, "Save")))), _react.default.createElement(_editorModules.LoadMetaBox, _extends({
+      }, "Save")))), _react["default"].createElement(_editorModules.LoadMetaBox, _extends({
         position: "right"
       }, meta_props))));
     }

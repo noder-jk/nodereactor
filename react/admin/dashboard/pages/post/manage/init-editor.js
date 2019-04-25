@@ -11,7 +11,7 @@ var _react2 = require("nodereactor/react");
 
 var _editor = require("./editor");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var InitPostEditor = function InitPostEditor(props) {
   /* detect if it is create or edit. if edit parse post id */
@@ -35,7 +35,7 @@ var InitPostEditor = function InitPostEditor(props) {
     return;
   }
 
-  return _react.default.createElement(_react2.Placeholder, {
+  return _react["default"].createElement(_react2.Placeholder, {
     Data: ob,
     Component: _editor.PostProcess
   });

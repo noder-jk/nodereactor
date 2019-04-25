@@ -17,9 +17,9 @@ var _react2 = require("nodereactor/react");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -104,7 +104,7 @@ function (_Component) {
         return;
       }
 
-      _sweetalert.default.fire({
+      _sweetalert["default"].fire({
         title: 'Sure to delete?',
         text: "You won't be able to revert this!",
         type: 'warning',
@@ -120,7 +120,7 @@ function (_Component) {
           'loading': true
         });
 
-        (0, _axios.default)({
+        (0, _axios["default"])({
           method: 'post',
           data: {
             'action': 'nr_delete_users',
@@ -132,12 +132,12 @@ function (_Component) {
           _this2.setState({
             'loading': true
           }, _this2.fetchUser);
-        }).catch(function (r) {
+        })["catch"](function (r) {
           _this2.setState({
             'loading': false
           });
 
-          _sweetalert.default.fire('Request Error');
+          _sweetalert["default"].fire('Request Error');
         });
       });
     }
@@ -149,7 +149,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: {
@@ -164,7 +164,7 @@ function (_Component) {
           'current_user_id': current_user_id,
           'loading': false
         });
-      }).catch(function (r) {
+      })["catch"](function (r) {
         _this3.setState({
           'loading': false
         });
@@ -182,55 +182,55 @@ function (_Component) {
 
       var current_user_id = this.state.current_user_id;
       var users = this.state.users;
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         id: "users_container"
-      }, _react.default.createElement("h4", null, "Registered Users ", this.state.loading == true ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, _react["default"].createElement("h4", null, "Registered Users ", this.state.loading == true ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null), this.state.user_action == 'abandon' ? _react.default.createElement("small", null, "Everything of this user except username and email will be deleted. So, email and username will not be reusable.") : null, this.state.user_action == 'delete' ? _react.default.createElement("small", null, "Everything will be deleted. Username and email will be reusable by someone else.") : null, _react.default.createElement("div", null, _react.default.createElement("div", {
+      }) : null), this.state.user_action == 'abandon' ? _react["default"].createElement("small", null, "Everything of this user except username and email will be deleted. So, email and username will not be reusable.") : null, this.state.user_action == 'delete' ? _react["default"].createElement("small", null, "Everything will be deleted. Username and email will be reusable by someone else.") : null, _react["default"].createElement("div", null, _react["default"].createElement("div", {
         className: "d-inline-block form-group form-inline mr-2 mb-1"
-      }, _react.default.createElement("select", {
+      }, _react["default"].createElement("select", {
         className: "form-control form-control-sm float-left",
         defaultValue: this.state.user_action,
         onChange: this.userAction
-      }, _react.default.createElement("option", {
+      }, _react["default"].createElement("option", {
         value: ""
-      }, "Bulk Action"), _react.default.createElement("option", {
+      }, "Bulk Action"), _react["default"].createElement("option", {
         value: "abandon",
         title: "All data except user name and email will be deleted permanently."
-      }, "Abandon Permanently"), _react.default.createElement("option", {
+      }, "Abandon Permanently"), _react["default"].createElement("option", {
         value: "delete",
         title: "Delete everything. The email and username associated with this account can be allocated again."
-      }, "Delete Permanently")), _react.default.createElement("button", {
+      }, "Delete Permanently")), _react["default"].createElement("button", {
         className: "btn btn-sm btn-outline-secondary",
         onClick: this.deleteUser,
         title: "Click to apply action"
-      }, "Apply"))), _react.default.createElement("table", {
+      }, "Apply"))), _react["default"].createElement("table", {
         className: "table table-bordered"
-      }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null), _react.default.createElement("th", null, "Username"), _react.default.createElement("th", null, "Display Name"), _react.default.createElement("th", null, "Email"), _react.default.createElement("th", null, "Role"), _react.default.createElement("th", null, "Status"))), _react.default.createElement("tbody", null, users.map(function (item) {
-        return _react.default.createElement("tr", {
+      }, _react["default"].createElement("thead", null, _react["default"].createElement("tr", null, _react["default"].createElement("th", null), _react["default"].createElement("th", null, "Username"), _react["default"].createElement("th", null, "Display Name"), _react["default"].createElement("th", null, "Email"), _react["default"].createElement("th", null, "Role"), _react["default"].createElement("th", null, "Status"))), _react["default"].createElement("tbody", null, users.map(function (item) {
+        return _react["default"].createElement("tr", {
           key: item.user_id
-        }, _react.default.createElement("td", null, current_user_id == item.user_id ? null : _react.default.createElement("input", {
+        }, _react["default"].createElement("td", null, current_user_id == item.user_id ? null : _react["default"].createElement("input", {
           type: "checkbox",
           onClick: function onClick(e) {
             return _this4.selectUser(e, item.user_id);
           }
-        })), _react.default.createElement("td", null, _react.default.createElement("span", {
+        })), _react["default"].createElement("td", null, _react["default"].createElement("span", {
           style: {
             'display': 'inline-block',
             'float': 'left'
           }
-        }, _react.default.createElement("img", {
+        }, _react["default"].createElement("img", {
           src: item.gravatar
-        })), _react.default.createElement("span", {
+        })), _react["default"].createElement("span", {
           style: {
             'display': 'inline-block',
             'float': 'left',
             'marginLeft': '5px'
           }
-        }, item.user_login, _react.default.createElement("br", null), _react.default.createElement("a", {
+        }, item.user_login, _react["default"].createElement("br", null), _react["default"].createElement("a", {
           className: "text-info",
           href: "/nr-admin/users/edit/" + item.user_id
-        }, "Edit"))), _react.default.createElement("td", null, item.display_name), _react.default.createElement("td", null, item.user_email), _react.default.createElement("td", null, item.user_role), _react.default.createElement("td", null, item.user_status));
+        }, "Edit"))), _react["default"].createElement("td", null, item.display_name), _react["default"].createElement("td", null, item.user_email), _react["default"].createElement("td", null, item.user_role), _react["default"].createElement("td", null, item.user_status));
       }))));
     }
   }]);

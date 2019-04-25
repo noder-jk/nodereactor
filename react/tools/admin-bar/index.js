@@ -11,9 +11,9 @@ var _logo = _interopRequireDefault(require("./logo.jpg"));
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -54,41 +54,41 @@ function (_Component) {
           _current_user$gravata = current_user.gravatar,
           gravatar = _current_user$gravata === void 0 ? '' : _current_user$gravata;
       var show_home = window.location.pathname.indexOf('/nr-admin') === 0;
-      return display_name ? _react.default.createElement("div", {
+      return display_name ? _react["default"].createElement("div", {
         id: "admin_header"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "has_sub_content"
-      }, _react.default.createElement("img", {
-        src: _logo.default,
+      }, _react["default"].createElement("img", {
+        src: _logo["default"],
         style: {
           "maxHeight": "100%",
           "padding": "5px"
         }
-      }), _react.default.createElement("div", {
+      }), _react["default"].createElement("div", {
         className: "sub_content left"
-      }, show_home ? _react.default.createElement("a", {
+      }, show_home ? _react["default"].createElement("a", {
         href: "/"
-      }, "Visit Home") : _react.default.createElement("a", {
+      }, "Visit Home") : _react["default"].createElement("a", {
         href: "/nr-admin"
-      }, "Dashboard"), _react.default.createElement("a", {
+      }, "Dashboard"), _react["default"].createElement("a", {
         href: "//NodeReactor.com",
         target: "_blank"
-      }, "NR Documentation"))), _react.default.createElement("div", {
+      }, "NR Documentation"))), _react["default"].createElement("div", {
         className: "has_sub_content",
         style: {
           "float": "right"
         }
-      }, _react.default.createElement("span", null, display_name), _react.default.createElement("img", {
+      }, _react["default"].createElement("span", null, display_name), _react["default"].createElement("img", {
         src: gravatar,
         style: {
           "maxHeight": "100%",
           "padding": "6px"
         }
-      }), _react.default.createElement("div", {
+      }), _react["default"].createElement("div", {
         className: "sub_content right"
-      }, _react.default.createElement("a", {
+      }, _react["default"].createElement("a", {
         href: "/logout"
-      }, "Logout"), _react.default.createElement("a", {
+      }, "Logout"), _react["default"].createElement("a", {
         href: "/logout/all"
       }, "Logout From All")))) : null;
     }

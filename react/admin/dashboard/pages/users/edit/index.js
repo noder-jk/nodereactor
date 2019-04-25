@@ -13,9 +13,9 @@ var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -46,13 +46,13 @@ var InputFields = function InputFields(props) {
       disabled = _props$disabled === void 0 ? false : _props$disabled,
       _props$children = props.children,
       children = _props$children === void 0 ? null : _props$children;
-  return _react.default.createElement("div", {
+  return _react["default"].createElement("div", {
     className: "row mb-4"
-  }, _react.default.createElement("div", {
+  }, _react["default"].createElement("div", {
     className: "col-12 col-sm-4 col-md-3 col-lg-2"
-  }, title), _react.default.createElement("div", {
+  }, title), _react["default"].createElement("div", {
     className: "col-12 col-sm-8 col-md-6 col-lg-4"
-  }, _react.default.createElement("input", {
+  }, _react["default"].createElement("input", {
     name: name,
     type: "text",
     className: "form-control",
@@ -124,7 +124,7 @@ function (_Component) {
         'action': 'nr_update_user',
         'values': vals
       };
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         url: _react2.ajax_url,
         data: send_data
@@ -133,7 +133,7 @@ function (_Component) {
           'message': r.data.message ? r.data.message : 'No response',
           'loading': false
         });
-      }).catch(function (r) {
+      })["catch"](function (r) {
         _this2.setState({
           'message': 'Request Error',
           'loading': false
@@ -145,62 +145,62 @@ function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      return !this.state.user_id || this.state.user_id == 0 ? _react.default.createElement("small", null, "User Not Found") : _react.default.createElement("div", null, _react.default.createElement("div", {
+      return !this.state.user_id || this.state.user_id == 0 ? _react["default"].createElement("small", null, "User Not Found") : _react["default"].createElement("div", null, _react["default"].createElement("div", {
         className: "row mb-4"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "col-12"
-      }, _react.default.createElement("h3", null, "Add New User"), _react.default.createElement("small", null, "Only administrator user role available for now.", _react.default.createElement("br", null), "More user roles and role based capabilities will be added in future versions."))), _react.default.createElement(InputFields, {
+      }, _react["default"].createElement("h3", null, "Add New User"), _react["default"].createElement("small", null, "Only administrator user role available for now.", _react["default"].createElement("br", null), "More user roles and role based capabilities will be added in future versions."))), _react["default"].createElement(InputFields, {
         title: "Display Name",
         name: "display_name",
         default_value: this.state.display_name,
         val_colletor: this.storeVal
-      }, _react.default.createElement("small", null, "Visible everywhere")), _react.default.createElement(InputFields, {
+      }, _react["default"].createElement("small", null, "Visible everywhere")), _react["default"].createElement(InputFields, {
         title: "Username",
         name: "user_username",
         default_value: this.state.user_username,
         disabled: true
-      }), _react.default.createElement(InputFields, {
+      }), _react["default"].createElement(InputFields, {
         title: "Email Address",
         name: "user_email",
         default_value: this.state.user_email,
         val_colletor: this.storeVal
-      }), this.state.change_pass ? _react.default.createElement(InputFields, {
+      }), this.state.change_pass ? _react["default"].createElement(InputFields, {
         title: "Password",
         name: "user_password",
         val_colletor: this.storeVal
-      }, _react.default.createElement("small", null, "Min. 8, Max. 20 characters."), _react.default.createElement("br", null), _react.default.createElement("a", {
+      }, _react["default"].createElement("small", null, "Min. 8, Max. 20 characters."), _react["default"].createElement("br", null), _react["default"].createElement("a", {
         className: "text-info",
         onClick: function onClick() {
           return _this3.togglePass(false);
         }
-      }, "Don't Change Password")) : _react.default.createElement("p", null, _react.default.createElement("a", {
+      }, "Don't Change Password")) : _react["default"].createElement("p", null, _react["default"].createElement("a", {
         className: "text-info",
         onClick: function onClick() {
           return _this3.togglePass(true);
         }
-      }, "Change Password")), _react.default.createElement("div", {
+      }, "Change Password")), _react["default"].createElement("div", {
         className: "row mb-4"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "col-12 col-sm-4 col-md-3 col-lg-2"
-      }, "User Role"), _react.default.createElement("div", {
+      }, "User Role"), _react["default"].createElement("div", {
         className: "col-12 col-sm-8 col-md-6 col-lg-4"
-      }, _react.default.createElement("select", {
+      }, _react["default"].createElement("select", {
         className: "form-control",
         disabled: "disabled"
-      }, _react.default.createElement("option", {
+      }, _react["default"].createElement("option", {
         selected: "selected"
-      }, "administrator")))), _react.default.createElement("div", {
+      }, "administrator")))), _react["default"].createElement("div", {
         className: "row mb-4"
-      }, _react.default.createElement("div", {
+      }, _react["default"].createElement("div", {
         className: "col-12 col-sm-4 col-md-3 col-lg-2"
-      }), _react.default.createElement("div", {
+      }), _react["default"].createElement("div", {
         className: "col-12 col-sm-8 col-md-6 col-lg-4"
-      }, _react.default.createElement("button", {
+      }, _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm",
         onClick: this.updateUser
-      }, "Update"), " \xA0\xA0", this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, "Update"), " \xA0\xA0", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null)), _react.default.createElement("div", null, this.state.message));
+      }) : null)), _react["default"].createElement("div", null, this.state.message));
     }
   }]);
 
@@ -218,7 +218,7 @@ var EditUser = function EditUser(props) {
     user_id = user_id[user_id.length - 1];
   }
 
-  return _react.default.createElement(_react2.Placeholder, {
+  return _react["default"].createElement(_react2.Placeholder, {
     Data: {
       'action': 'nr_get_edit_user',
       'user_id': user_id

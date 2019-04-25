@@ -17,9 +17,9 @@ var _react2 = require("nodereactor/react");
 
 var _index = require("../taxonomy/index");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -88,7 +88,7 @@ function (_Component) {
       var _this$props2 = this.props,
           post_id = _this$props2.post_id,
           meta_box_id = _this$props2.meta_box_id;
-      (0, _axios.default)({
+      (0, _axios["default"])({
         'method': 'post',
         'url': _react2.ajax_url,
         'data': {
@@ -109,12 +109,12 @@ function (_Component) {
           hierarchical: hierarchical,
           multiple: multiple
         });
-      }).catch(function (e) {
+      })["catch"](function (e) {
         _this2.setState({
           'loading': false
         });
 
-        _sweetalert.default.fire('Error', 'Request Error In Taxonomy Parse', 'error');
+        _sweetalert["default"].fire('Error', 'Request Error In Taxonomy Parse', 'error');
       });
     }
   }, {
@@ -188,7 +188,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         'method': 'post',
         'url': _react2.ajax_url,
         'data': req_ob
@@ -196,7 +196,7 @@ function (_Component) {
         _this3.setState({
           'loading': false
         });
-      }).catch(function (e) {
+      })["catch"](function (e) {
         _this3.setState({
           'loading': false
         });
@@ -223,9 +223,9 @@ function (_Component) {
           all_terms = _this$state.all_terms,
           _this$state$current_t = _this$state.current_terms,
           current_terms = _this$state$current_t === void 0 ? [] : _this$state$current_t;
-      return _react.default.createElement("div", null, this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      return _react["default"].createElement("div", null, this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null, _react.default.createElement("form", {
+      }) : null, _react["default"].createElement("form", {
         onSubmit: function onSubmit(e) {
           return e.preventDefault();
         },
@@ -233,27 +233,27 @@ function (_Component) {
           'maxHeight': '500px',
           'overflow': 'auto'
         }
-      }, _react.default.createElement("table", {
+      }, _react["default"].createElement("table", {
         style: {
           'width': '100%'
         }
-      }, _react.default.createElement("tbody", null, all_terms.map(function (item) {
-        return _react.default.createElement("tr", {
+      }, _react["default"].createElement("tbody", null, all_terms.map(function (item) {
+        return _react["default"].createElement("tr", {
           key: item.term_id
-        }, _react.default.createElement("td", null, _react.default.createElement("div", {
+        }, _react["default"].createElement("td", null, _react["default"].createElement("div", {
           style: {
             'paddingLeft': item.nest_level * 12 + 'px'
           }
-        }, _react.default.createElement("input", {
+        }, _react["default"].createElement("input", {
           type: _this4.state.multiple == true ? "checkbox" : "radio",
           "data-ignore": true,
           name: "taxonomy_" + meta_box_id,
           value: item.term_id,
           defaultChecked: current_terms.indexOf(item.term_id) > -1,
           onChange: _this4.toggleCurrentTerms
-        }), " ", item.name)), _react.default.createElement("td", {
+        }), " ", item.name)), _react["default"].createElement("td", {
           className: "text-right"
-        }, current_terms.indexOf(item.term_id) > -1 || current_terms.indexOf(item.term_id.toString()) > -1 ? _react.default.createElement("input", {
+        }, current_terms.indexOf(item.term_id) > -1 || current_terms.indexOf(item.term_id.toString()) > -1 ? _react["default"].createElement("input", {
           type: "radio",
           title: "Select Primary Term",
           name: _this4.state.primary_term_key,
@@ -261,15 +261,15 @@ function (_Component) {
           defaultChecked: _this4.state.primary_term == item.term_id,
           onChange: _this4.setPrimaryTerm
         }) : null));
-      })))), this.state.create ? _react.default.createElement("div", {
+      })))), this.state.create ? _react["default"].createElement("div", {
         className: "mt-2"
-      }, _react.default.createElement(_index.Editor, _extends({}, pass_prop, {
+      }, _react["default"].createElement(_index.Editor, _extends({}, pass_prop, {
         fetchTaxonomies: this.fetchTaxonomy,
         closeEditor: this.toggleEditor,
         cls: "container-fluid"
-      }))) : _react.default.createElement("div", {
+      }))) : _react["default"].createElement("div", {
         className: "text-right mt-2"
-      }, _react.default.createElement("span", {
+      }, _react["default"].createElement("span", {
         className: "text-info pointer",
         onClick: function onClick() {
           return _this4.toggleEditor(true, true);

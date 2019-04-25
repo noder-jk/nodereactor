@@ -27,9 +27,9 @@ var _menuEditor = require("./menu-editor");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -81,7 +81,7 @@ function (_Component) {
       var _this$props$lastOb = this.props.lastOb,
           lastOb = _this$props$lastOb === void 0 ? false : _this$props$lastOb;
 
-      var ed = _react.default.createElement(_menuEditor.MenuEditor, {
+      var ed = _react["default"].createElement(_menuEditor.MenuEditor, {
         lastOb: lastOb,
         locations: this.state.locations,
         menus: this.state.menus[menu],
@@ -122,7 +122,7 @@ function (_Component) {
     value: function deleteMenu(m) {
       var _this2 = this;
 
-      _sweetalert.default.fire({
+      _sweetalert["default"].fire({
         title: 'Sure to delete?',
         text: "You won't be able to revert this!",
         type: 'warning',
@@ -138,7 +138,7 @@ function (_Component) {
           'loading': true
         });
 
-        (0, _axios.default)({
+        (0, _axios["default"])({
           method: 'post',
           data: {
             'action': 'nr_delete_menu',
@@ -149,12 +149,12 @@ function (_Component) {
           _this2.setState({
             'loading': true
           }, _this2.fetchMenuContents);
-        }).catch(function (r) {
+        })["catch"](function (r) {
           _this2.setState({
             'loading': false
           });
 
-          _sweetalert.default.fire('Request Error');
+          _sweetalert["default"].fire('Request Error');
         });
       });
     }
@@ -166,7 +166,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         'method': 'post',
         'url': _react2.ajax_url,
         'data': {
@@ -215,33 +215,33 @@ function (_Component) {
 
       var _this$props$lastOb2 = this.props.lastOb,
           lastOb = _this$props$lastOb2 === void 0 ? false : _this$props$lastOb2;
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "col-6 col-md-7"
-      }, _react.default.createElement("h4", null, "Menus ", this.state.loading == true ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, _react["default"].createElement("h4", null, "Menus ", this.state.loading == true ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null), this.state.mode !== 'create' ? _react.default.createElement("span", {
+      }) : null), this.state.mode !== 'create' ? _react["default"].createElement("span", {
         onClick: this.createNew
-      }, "+ Create New") : _react.default.createElement("div", {
+      }, "+ Create New") : _react["default"].createElement("div", {
         className: "menu-name-list"
-      }, _react.default.createElement(_menuEditor.MenuEditor, {
+      }, _react["default"].createElement(_menuEditor.MenuEditor, {
         locations: this.state.locations,
         closeMenuForm: this.closeMenuEditor,
         lastOb: lastOb
       })), Object.keys(this.state.menus).map(function (m) {
-        return _react.default.createElement("div", {
+        return _react["default"].createElement("div", {
           className: "menu-name-list",
           key: m
-        }, _this4.state.editor.name == m ? null : _react.default.createElement("b", null, m), _this4.state.editor.name == m ? null : _react.default.createElement("span", null, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        }, _this4.state.editor.name == m ? null : _react["default"].createElement("b", null, m), _this4.state.editor.name == m ? null : _react["default"].createElement("span", null, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faEdit,
           onClick: function onClick() {
             return _this4.openEditor(m);
           }
-        }), " \xA0", _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        }), " \xA0", _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faTrashAlt,
           onClick: function onClick() {
             return _this4.deleteMenu(m);
           }
-        })), _this4.state.editor.name == m ? _react.default.createElement(_menuEditor.MenuEditor, {
+        })), _this4.state.editor.name == m ? _react["default"].createElement(_menuEditor.MenuEditor, {
           lastOb: lastOb,
           locations: _this4.state.locations,
           menus: _this4.state.menus[m],
@@ -303,24 +303,24 @@ function (_Component2) {
         'id_name': 'term_id',
         'parent_name': 'parent'
       };
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "col-6 col-md-5"
-      }, _react.default.createElement("h4", null, "Contents"), _react.default.createElement(_objects.ObjectContents, {
+      }, _react["default"].createElement("h4", null, "Contents"), _react["default"].createElement(_objects.ObjectContents, {
         properties: pst,
         opener: this.open,
         current_tab: this.state.current_tab,
         addHook: this.adder
-      }), _react.default.createElement(_objects.ObjectContents, {
+      }), _react["default"].createElement(_objects.ObjectContents, {
         properties: txn,
         opener: this.open,
         current_tab: this.state.current_tab,
         addHook: this.adder
-      }), _react.default.createElement("div", {
+      }), _react["default"].createElement("div", {
         className: "menu-content-type",
         onClick: function onClick() {
           return _this6.open('custom');
         }
-      }, _react.default.createElement("b", null, "Custom Link"), this.state.current_tab == 'custom' ? _react.default.createElement(_custom.CustomLink, {
+      }, _react["default"].createElement("b", null, "Custom Link"), this.state.current_tab == 'custom' ? _react["default"].createElement(_custom.CustomLink, {
         addHook: this.adder
       }) : null));
     }
@@ -363,11 +363,11 @@ function (_Component3) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "row admin-menu-page"
-      }, _react.default.createElement(Contents, {
+      }, _react["default"].createElement(Contents, {
         pingParent: this.getOb
-      }), _react.default.createElement(Menus, {
+      }), _react["default"].createElement(Menus, {
         lastOb: this.state.last_ob
       }));
     }

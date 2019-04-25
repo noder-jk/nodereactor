@@ -21,7 +21,7 @@ var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -111,7 +111,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         'method': 'post',
         'url': _react2.ajax_url,
         'data': {
@@ -126,21 +126,21 @@ function (_Component) {
         if (r.data.status == 'done') {
           _this2.clearValues();
 
-          closeEditor ? closeEditor(true) : _sweetalert.default.fire('Success', 'Term Has Been Created', 'success');
+          closeEditor ? closeEditor(true) : _sweetalert["default"].fire('Success', 'Term Has Been Created', 'success');
           fetchTaxonomies();
         } else {
-          _sweetalert.default.fire('Error', r.data.message ? r.data.message : 'Action Failed.', 'error');
+          _sweetalert["default"].fire('Error', r.data.message ? r.data.message : 'Action Failed.', 'error');
         }
 
         if (!closeEditor || r.data.status !== 'done') {
           _this2.setState(set_ob);
         }
-      }).catch(function (e) {
+      })["catch"](function (e) {
         _this2.setState({
           'loading': false
         });
 
-        _sweetalert.default.fire('Request Error');
+        _sweetalert["default"].fire('Request Error');
       });
     }
   }, {
@@ -157,48 +157,48 @@ function (_Component) {
           taxonomies = _this$props2.taxonomies,
           taxonomy_title = _this$props2.taxonomy_title;
       taxonomies = (0, _react2.get_hierarchy)(taxonomies, 'parent', 'term_id', this.state.term_id > 0 ? this.state.term_id : 'dddddd');
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: cls
-      }, taxonomy_title !== false ? _react.default.createElement("h4", null, this.state.term_id == 0 ? 'Create New' : 'Edit', " ", taxonomy_title) : null, _react.default.createElement("div", {
+      }, taxonomy_title !== false ? _react["default"].createElement("h4", null, this.state.term_id == 0 ? 'Create New' : 'Edit', " ", taxonomy_title) : null, _react["default"].createElement("div", {
         ref: function ref(el) {
           return _this3.filed_container = el;
         }
-      }, "Name", _react.default.createElement("input", {
+      }, "Name", _react["default"].createElement("input", {
         type: "text",
         name: "name",
         className: "form-control",
         onChange: this.storeVals,
         defaultValue: this.state.name
-      }), _react.default.createElement("br", null), "Slug", _react.default.createElement("input", {
+      }), _react["default"].createElement("br", null), "Slug", _react["default"].createElement("input", {
         type: "text",
         name: "slug",
         className: "form-control",
         onChange: this.storeVals,
         defaultValue: this.state.slug
-      }), _react.default.createElement("br", null), hierarchical ? _react.default.createElement("div", null, "Parent", _react.default.createElement("select", {
+      }), _react["default"].createElement("br", null), hierarchical ? _react["default"].createElement("div", null, "Parent", _react["default"].createElement("select", {
         name: "parent",
         className: "form-control",
         onChange: this.storeVals,
         defaultValue: this.state.parent
-      }, _react.default.createElement("option", {
+      }, _react["default"].createElement("option", {
         value: "0"
       }, "None"), taxonomies.map(function (item) {
-        return item.term_id !== _this3.state.term_id ? _react.default.createElement("option", {
+        return item.term_id !== _this3.state.term_id ? _react["default"].createElement("option", {
           key: item.term_id,
           value: item.term_id
         }, '-'.repeat(item.nest_level) + item.name) : null;
-      })), _react.default.createElement("br", null)) : null, "Description", _react.default.createElement("textarea", {
+      })), _react["default"].createElement("br", null)) : null, "Description", _react["default"].createElement("textarea", {
         name: "description",
         className: "form-control",
         onChange: this.storeVals,
         defaultValue: this.state.description
-      }), _react.default.createElement("br", null), closeEditor ? _react.default.createElement("button", {
+      }), _react["default"].createElement("br", null), closeEditor ? _react["default"].createElement("button", {
         onClick: closeEditor,
         className: "btn btn-secondary btn-sm"
-      }, "Close") : null, "\xA0", _react.default.createElement("button", {
+      }, "Close") : null, "\xA0", _react["default"].createElement("button", {
         onClick: this.saveTaxonomy,
         className: "btn btn-secondary btn-sm"
-      }, this.state.term_id > 0 ? 'Update' : 'Create'), "\xA0", this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, this.state.term_id > 0 ? 'Update' : 'Create'), "\xA0", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       }) : null));
     }
@@ -289,7 +289,7 @@ function (_Component2) {
         return;
       }
 
-      _sweetalert.default.fire({
+      _sweetalert["default"].fire({
         title: 'Sure to delete?',
         text: "You won't be able to revert this!",
         type: 'warning',
@@ -303,7 +303,7 @@ function (_Component2) {
           'loading': true
         });
 
-        (0, _axios.default)({
+        (0, _axios["default"])({
           'method': 'post',
           'url': _react2.ajax_url,
           'data': {
@@ -312,7 +312,7 @@ function (_Component2) {
           }
         }).then(function (r) {
           if (r.data.status !== 'done') {
-            _sweetalert.default.fire('Error', 'Something Went Wrong', 'error');
+            _sweetalert["default"].fire('Error', 'Something Went Wrong', 'error');
           }
 
           _this5.setState({
@@ -320,12 +320,12 @@ function (_Component2) {
           });
 
           fetchTaxonomies();
-        }).catch(function (e) {
+        })["catch"](function (e) {
           _this5.setState({
             'loading': false
           });
 
-          _sweetalert.default.fire('Error', 'Request Failed or Server Error', 'error');
+          _sweetalert["default"].fire('Error', 'Request Failed or Server Error', 'error');
         });
       });
     }
@@ -349,53 +349,53 @@ function (_Component2) {
       };
       taxonomies = (0, _react2.get_hierarchy)(taxonomies, 'parent', 'term_id'); // No need exclude current, cause it's the list, not edit
 
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "col-6 col-md-8 col-xl-9"
-      }, _react.default.createElement("h4", null, taxonomy_title, " ", this.state.loading ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, _react["default"].createElement("h4", null, taxonomy_title, " ", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null), _react.default.createElement("hr", null), _react.default.createElement("div", {
+      }) : null), _react["default"].createElement("hr", null), _react["default"].createElement("div", {
         className: "mb-2 text-right"
-      }, this.state.selected.length > 0 ? _react.default.createElement("button", {
+      }, this.state.selected.length > 0 ? _react["default"].createElement("button", {
         className: "btn btn-outline-secondary btn-sm",
         onClick: this.deleteTaxonomy
-      }, "Delete") : null), _react.default.createElement("table", {
+      }, "Delete") : null), _react["default"].createElement("table", {
         style: {
           'background': 'white'
         },
         className: "table table-bordered"
-      }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null), _react.default.createElement("th", null, "Name"), _react.default.createElement("th", null, "Slug"), _react.default.createElement("th", null, "Description"), _react.default.createElement("th", null, "Posts"))), _react.default.createElement("tbody", null, taxonomies.map(function (item) {
-        return [_react.default.createElement("tr", {
+      }, _react["default"].createElement("thead", null, _react["default"].createElement("tr", null, _react["default"].createElement("th", null), _react["default"].createElement("th", null, "Name"), _react["default"].createElement("th", null, "Slug"), _react["default"].createElement("th", null, "Description"), _react["default"].createElement("th", null, "Posts"))), _react["default"].createElement("tbody", null, taxonomies.map(function (item) {
+        return [_react["default"].createElement("tr", {
           key: item.term_id
-        }, _react.default.createElement("td", null, _react.default.createElement("input", {
+        }, _react["default"].createElement("td", null, _react["default"].createElement("input", {
           type: "checkbox",
           name: "taxonomy_inp_check",
           value: item.term_id,
           onChange: _this6.taxonomySelect
-        })), _react.default.createElement("td", {
+        })), _react["default"].createElement("td", {
           className: "taxonomy-action"
-        }, '-'.repeat(item.nest_level) + item.name, _react.default.createElement("br", null), _this6.state.editor == item.term_id ? null : _react.default.createElement("a", {
+        }, '-'.repeat(item.nest_level) + item.name, _react["default"].createElement("br", null), _this6.state.editor == item.term_id ? null : _react["default"].createElement("a", {
           className: "text-warning",
           onClick: function onClick() {
             return _this6.openEditor(item.term_id);
           }
-        }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        }, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faEdit
-        })), " \xA0", _react.default.createElement("a", {
+        })), " \xA0", _react["default"].createElement("a", {
           className: "text-info"
-        }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        }, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faEye
-        })), " \xA0", _react.default.createElement("a", {
+        })), " \xA0", _react["default"].createElement("a", {
           className: "text-danger",
           onClick: function onClick(e) {
             return _this6.deleteTaxonomy(e, item.term_id);
           }
-        }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+        }, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faTrashAlt
-        }))), _react.default.createElement("td", null, item.slug), _react.default.createElement("td", null, item.description), _react.default.createElement("td", null, item.post_count)), _this6.state.editor == item.term_id ? _react.default.createElement("tr", {
+        }))), _react["default"].createElement("td", null, item.slug), _react["default"].createElement("td", null, item.description), _react["default"].createElement("td", null, item.post_count)), _this6.state.editor == item.term_id ? _react["default"].createElement("tr", {
           key: item.term_id + '_editor'
-        }, _react.default.createElement("td", {
+        }, _react["default"].createElement("td", {
           colSpan: "5"
-        }, _react.default.createElement(Editor, _extends({}, pass_prop, {
+        }, _react["default"].createElement(Editor, _extends({}, pass_prop, {
           closeEditor: _this6.closeEditor,
           cls: "container-fluid",
           term: item
@@ -443,7 +443,7 @@ function (_Component3) {
         'loading': true,
         'taxonomy': taxonomy
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         'method': 'post',
         'url': _react2.ajax_url,
         'data': {
@@ -459,13 +459,13 @@ function (_Component3) {
         };
 
         _this8.setState(set_ob);
-      }).catch(function (e) {
+      })["catch"](function (e) {
         _this8.setState({
           'loading': false,
           'selected': []
         });
 
-        _sweetalert.default.fire('Request Error. Could Not Fetch Taxonomies.');
+        _sweetalert["default"].fire('Request Error. Could Not Fetch Taxonomies.');
       });
     }
   }, {
@@ -488,9 +488,9 @@ function (_Component3) {
         taxonomy_title: taxonomy_title
       };
       pass_prop.fetchTaxonomies = this.fetchTaxonomies;
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "row taxonomy-admin-page"
-      }, _react.default.createElement(Editor, pass_prop), _react.default.createElement(Browser, pass_prop));
+      }, _react["default"].createElement(Editor, pass_prop), _react["default"].createElement(Browser, pass_prop));
     }
   }]);
 

@@ -276,7 +276,7 @@ class Browser extends Component
     {
         window.nr_socket_client.on('my_own_handler', (msg)=>
         {   
-            console.log('hi this is from my own handler', msg);
+            
         });
 
         window.nr_socket_client.emit(socket_channel, {'action':'nr_test_socket', 'hi':'some dt'});

@@ -1,22 +1,14 @@
-import React, {Component} from "react";
+import React from "react";
 
 const RecentPostInput=(props)=>
 {
-    const {properties}=props;
-
-    return(
-        <div>
-			<textarea type="text" name="arbitrary_text" placeholder="Enter Texts" className="form-control"></textarea>
-        </div>
-    )
+    return <div>Sorry, this widget component in this NR version</div>
 } 
 
 
 const RecentPostOutput=()=>
 {
-    return(
-        <p>This is recent</p>
-    )
+    return <p>Sorry, this widget component in this NR version</p>
 }
 
 export {RecentPostInput, RecentPostOutput}

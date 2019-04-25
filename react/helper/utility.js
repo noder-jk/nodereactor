@@ -7,7 +7,7 @@ exports.get_hierarchy = exports.Pagination = exports.get_url_parameter = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var get_url_parameter = function get_url_parameter(name) {
   name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -34,7 +34,7 @@ var Pagination = function Pagination(props) {
     return null;
   }
 
-  return _react.default.createElement("div", {
+  return _react["default"].createElement("div", {
     id: wrapperId
   }, pgn.pages.length > 1 ? pgn.pages.map(function (item) {
     var attr = {
@@ -50,7 +50,7 @@ var Pagination = function Pagination(props) {
       };
     }
 
-    return _react.default.createElement("a", attr, item);
+    return _react["default"].createElement("a", attr, item);
   }) : null);
 };
 

@@ -1,12 +1,12 @@
-import React, {Component} from "react";
+import React from "react";
 
 const ArbitraryTextInput=(props)=>
 {
-    let {properties={}}=props;
+    let {arbitrary_text=''}=props;
 
     return(
         <div>
-			<textarea type="text" name="arbitrary_text" placeholder="Enter Texts" defaultValue={properties.arbitrary_text} className="form-control"></textarea>
+			<textarea type="text" name="arbitrary_text" placeholder="Enter Texts" defaultValue={arbitrary_text} className="form-control"></textarea>
         </div>
     )
 } 
@@ -14,8 +14,7 @@ const ArbitraryTextInput=(props)=>
 
 const ArbitraryTextOutput=(props)=>
 {
-    let {properties={}}=props;
-    let {arbitrary_text=''}=properties;
+    let {arbitrary_text=''}=props;
 
     return <p>{arbitrary_text}</p>
 }

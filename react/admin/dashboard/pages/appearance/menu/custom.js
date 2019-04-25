@@ -13,9 +13,9 @@ var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -80,7 +80,7 @@ function (_Component) {
           position: position
         });
       } else {
-        _sweetalert.default.fire('Input fields must not be empty.');
+        _sweetalert["default"].fire('Input fields must not be empty.');
       }
     }
   }, {
@@ -88,37 +88,37 @@ function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "bg-white p-2"
-      }, _react.default.createElement("input", {
+      }, _react["default"].createElement("input", {
         type: "text",
         className: "form-control",
         placeholder: "Title",
         name: "title",
         onChange: this.storeVals
-      }), _react.default.createElement("br", null), _react.default.createElement("input", {
+      }), _react["default"].createElement("br", null), _react["default"].createElement("input", {
         type: "text",
         className: "form-control",
         placeholder: "URL",
         name: "url",
         onChange: this.storeVals
-      }), _react.default.createElement("br", null), _react.default.createElement("div", {
+      }), _react["default"].createElement("br", null), _react["default"].createElement("div", {
         className: "text-right"
-      }, _react.default.createElement("button", {
+      }, _react["default"].createElement("button", {
         onClick: function onClick() {
           return _this2.addTo('append');
         },
         className: "btn btn-secondary btn-sm",
         title: "Append to Selected"
-      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      }, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
         icon: _freeSolidSvgIcons.faArrowCircleRight
-      })), " \xA0", _react.default.createElement("button", {
+      })), " \xA0", _react["default"].createElement("button", {
         onClick: function onClick() {
           return _this2.addTo('after');
         },
         className: "btn btn-secondary btn-sm",
         title: "Add After Selected"
-      }, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      }, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
         icon: _freeSolidSvgIcons.faArrowAltCircleDown
       }))));
     }

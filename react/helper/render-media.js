@@ -13,9 +13,9 @@ var _pdf = _interopRequireDefault(require("./img/pdf.png"));
 
 var _default = _interopRequireDefault(require("./img/default.png"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -36,9 +36,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var files_icons = {
-  '.zip': _zip.default,
-  '.pdf': _pdf.default,
-  'unsupported': _default.default
+  '.zip': _zip["default"],
+  '.pdf': _pdf["default"],
+  'unsupported': _default["default"]
 };
 
 var RenderMediaFile =
@@ -73,38 +73,38 @@ function (_Component) {
       var resp = null;
 
       if (imgs.indexOf(extension) > -1) {
-        resp = _react.default.createElement("img", {
+        resp = _react["default"].createElement("img", {
           "data-attachment_id": attachmentId,
           src: url,
           style: style
         });
       } else if (vids.indexOf(extension) > -1) {
-        resp = _react.default.createElement("video", {
+        resp = _react["default"].createElement("video", {
           controls: "controls",
           style: style
-        }, _react.default.createElement("source", {
+        }, _react["default"].createElement("source", {
           "data-attachment_id": attachmentId,
           src: url,
           type: mime
         }), "Unsupported Media");
       } else if (auds.indexOf(extension) > -1) {
-        resp = _react.default.createElement("audio", {
+        resp = _react["default"].createElement("audio", {
           controls: "controls",
           style: style
-        }, _react.default.createElement("source", {
+        }, _react["default"].createElement("source", {
           "data-attachment_id": attachmentId,
           src: url,
           type: mime
         }), "Unsupported Media");
       } else {
         if (linkIfNonMedia == true) {
-          resp = _react.default.createElement("a", {
+          resp = _react["default"].createElement("a", {
             "data-attachment_id": attachmentId,
             href: url
           }, url);
         } else {
           var icon = files_icons[extension] ? files_icons[extension] : files_icons.unsupported;
-          resp = _react.default.createElement("img", {
+          resp = _react["default"].createElement("img", {
             "data-attachment_id": attachmentId,
             src: icon,
             style: style

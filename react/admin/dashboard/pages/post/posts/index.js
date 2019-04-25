@@ -17,9 +17,9 @@ var _react2 = require("nodereactor/react");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -64,7 +64,8 @@ function (_Component) {
       'posts': resp.posts,
       'pagination': resp.pagination,
       'taxonomies': resp.taxonomies || [],
-      'loading_icon': false
+      'loading_icon': false,
+      'checked_posts': []
     };
     _this.deletePost = _this.deletePost.bind(_assertThisInitialized(_this));
     _this.toggleCheck = _this.toggleCheck.bind(_assertThisInitialized(_this));
@@ -74,16 +75,21 @@ function (_Component) {
 
   _createClass(PostProcess, [{
     key: "toggleCheck",
-    value: function toggleCheck(e, post_name) {
+    value: function toggleCheck(e, post_id) {
       var el = e.currentTarget;
-      var posts = this.state.posts;
+      var checked = this.state.checked_posts;
 
-      if (post_name && posts[post_name]) {
-        posts[post_name].checked_input = el.checked;
-        this.setState({
-          'posts': posts
-        });
+      if (el.checked) {
+        if (checked.indexOf(post_id) == -1) {
+          checked.push(post_id);
+        }
+      } else if (checked.indexOf(post_id) > -1) {
+        checked.splice(checked.indexOf(post_id), 1);
       }
+
+      this.setState({
+        'checked_posts': checked
+      });
     }
   }, {
     key: "deletePost",
@@ -96,17 +102,8 @@ function (_Component) {
       if (action !== 'delete') {
         return;
       }
-      /* Store unselected posts in this array */
 
-
-      var new_posts = [];
-      var posts = this.state.posts;
-      var to_delete = [];
-      /* Filter post based on checkbox checked */
-
-      for (var k in posts) {
-        posts[k].checked_input ? to_delete.push(posts[k].post_id) : new_posts.push(posts[k]);
-      }
+      var to_delete = this.state.checked_posts;
 
       if (to_delete.length == 0) {
         return;
@@ -114,7 +111,7 @@ function (_Component) {
       /* Ask confirmation */
 
 
-      _sweetalert.default.fire({
+      _sweetalert["default"].fire({
         title: 'Sure to delete permanently?',
         text: "You won't be able to revert this!",
         type: 'warning',
@@ -130,7 +127,7 @@ function (_Component) {
           loading_icon: true
         });
 
-        (0, _axios.default)({
+        (0, _axios["default"])({
           method: 'post',
           url: _react2.ajax_url,
           data: {
@@ -138,23 +135,30 @@ function (_Component) {
             'post_id': to_delete
           }
         }).then(function (r) {
-          var ob = {
-            loading_icon: false
-          };
-
           if (r.data && r.data.status == 'done') {
-            ob.posts = new_posts;
+            var ob = {
+              'to_delete': []
+            };
+            var _this2$state$posts = _this2.state.posts,
+                posts = _this2$state$posts === void 0 ? [] : _this2$state$posts;
+            ob.posts = posts.filter(function (p) {
+              return to_delete.indexOf(p.post_id) == -1;
+            });
+
+            _this2.setState(ob);
           } else {
-            _sweetalert.default.fire('Something went wrong.');
+            _sweetalert["default"].fire('Error', 'Something went wrong.', 'error');
           }
 
-          _this2.setState(ob);
-        }).catch(function (e) {
+          _this2.setState({
+            'loading_icon': false
+          });
+        })["catch"](function (e) {
           _this2.setState({
             loading_icon: false
           });
 
-          _sweetalert.default.fire('Request Error');
+          _sweetalert["default"].fire('Error', 'Request Error', 'error');
         });
       });
     }
@@ -164,7 +168,7 @@ function (_Component) {
       var _this3 = this;
 
       if (!this.filter_container) {
-        _sweetalert.default.fire('Something is not working.');
+        _sweetalert["default"].fire('Something is not working.');
 
         return;
       }
@@ -184,7 +188,7 @@ function (_Component) {
       this.setState({
         loading_icon: true
       });
-      (0, _axios.default)({
+      (0, _axios["default"])({
         method: 'post',
         data: {
           'action': 'nr_get_post_list',
@@ -203,12 +207,12 @@ function (_Component) {
         _this3.setState({
           loading_icon: false
         });
-      }).catch(function (r) {
+      })["catch"](function (r) {
         _this3.setState({
           loading_icon: false
         });
 
-        _sweetalert.default.fire('Request Error');
+        _sweetalert["default"].fire('Request Error');
       });
     }
   }, {
@@ -219,47 +223,47 @@ function (_Component) {
       var post_type = this.props.post_type;
       var st_posts = this.state.posts;
       st_posts = (0, _react2.get_hierarchy)(st_posts, 'post_parent', 'post_id');
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         id: "post_list_container"
-      }, _react.default.createElement("h4", null, "All Posts ", this.state.loading_icon ? _react.default.createElement(_reactSvgSpinner.default, {
+      }, _react["default"].createElement("h4", null, "All Posts ", this.state.loading_icon ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null), _react.default.createElement("div", null, _react.default.createElement("div", {
+      }) : null), _react["default"].createElement("div", null, _react["default"].createElement("div", {
         className: "d-inline-block form-group form-inline mr-2 mb-1"
-      }, _react.default.createElement("select", {
+      }, _react["default"].createElement("select", {
         className: "form-control form-control-sm float-left"
-      }, _react.default.createElement("option", {
+      }, _react["default"].createElement("option", {
         value: ""
-      }, "Bulk Action"), _react.default.createElement("option", {
+      }, "Bulk Action"), _react["default"].createElement("option", {
         value: "delete"
-      }, "Delete Permanently")), _react.default.createElement("button", {
+      }, "Delete Permanently")), _react["default"].createElement("button", {
         className: "btn btn-sm btn-outline-secondary",
         onClick: this.deletePost,
         title: "Click to apply action"
-      }, "Apply")), _react.default.createElement("div", {
+      }, "Apply")), _react["default"].createElement("div", {
         className: "d-inline-block form-group form-inline mb-1",
         ref: function ref(el) {
           return _this4.filter_container = el;
         }
-      }, _react.default.createElement("input", {
+      }, _react["default"].createElement("input", {
         type: "hidden",
         name: "post_type",
         defaultValue: post_type
-      }), _react.default.createElement("select", {
+      }), _react["default"].createElement("select", {
         className: "form-control form-control-sm float-left",
         name: "post_status",
         defaultValue: "publish",
         title: "Post Status"
-      }, _react.default.createElement("option", {
+      }, _react["default"].createElement("option", {
         value: "publish"
-      }, "Publish"), _react.default.createElement("option", {
+      }, "Publish"), _react["default"].createElement("option", {
         value: "draft"
-      }, "Draft")), _react.default.createElement("input", {
+      }, "Draft")), _react["default"].createElement("input", {
         name: "keyword",
         type: "text",
         placeholder: "Search",
         className: "form-control form-control-sm float-left",
         title: "Search by keyword"
-      }), _react.default.createElement("input", {
+      }), _react["default"].createElement("input", {
         name: "page",
         type: "number",
         min: "1",
@@ -270,7 +274,7 @@ function (_Component) {
         ref: function ref(el) {
           return _this4.page_number = el;
         }
-      }), _react.default.createElement("input", {
+      }), _react["default"].createElement("input", {
         name: "posts_per_page",
         type: "number",
         min: "1",
@@ -278,39 +282,39 @@ function (_Component) {
         placeholder: "Posts Per Page",
         className: "form-control form-control-sm float-left",
         title: "How many posts you'd like to see in a single page"
-      }), _react.default.createElement("button", {
+      }), _react["default"].createElement("button", {
         className: "btn btn-sm btn-outline-secondary",
         onClick: this.filterPost,
         title: "Press to filter"
-      }, "Filter"))), _react.default.createElement("table", {
+      }, "Filter"))), _react["default"].createElement("table", {
         className: "table table-bordered"
-      }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null), _react.default.createElement("th", null, "Title"), _react.default.createElement("th", null, "Author"), _react.default.createElement("th", null, "Status"), this.state.taxonomies.map(function (t) {
-        return _react.default.createElement("th", {
+      }, _react["default"].createElement("thead", null, _react["default"].createElement("tr", null, _react["default"].createElement("th", null), _react["default"].createElement("th", null, "Title"), _react["default"].createElement("th", null, "Author"), _react["default"].createElement("th", null, "Status"), this.state.taxonomies.map(function (t) {
+        return _react["default"].createElement("th", {
           key: t
         }, t);
-      }), _react.default.createElement("th", null, "Posted"))), _react.default.createElement("tbody", null, st_posts.map(function (item) {
-        return _react.default.createElement("tr", {
-          key: item.post_name
-        }, _react.default.createElement("td", null, _react.default.createElement("input", {
+      }), _react["default"].createElement("th", null, "Posted"))), _react["default"].createElement("tbody", null, st_posts.map(function (item) {
+        return _react["default"].createElement("tr", {
+          key: item.post_id
+        }, _react["default"].createElement("td", null, _react["default"].createElement("input", {
           type: "checkbox",
           defaultChecked: item.checked_input,
           onChange: function onChange(e) {
-            return _this4.toggleCheck(e, item.post_name);
+            return _this4.toggleCheck(e, item.post_id);
           }
-        })), _react.default.createElement("td", null, _react.default.createElement("p", null, '-'.repeat(item.nest_level), item.post_title), _react.default.createElement("a", {
+        })), _react["default"].createElement("td", null, _react["default"].createElement("p", null, '-'.repeat(item.nest_level), item.post_title), _react["default"].createElement("a", {
           href: item.post_url,
           className: "text-info"
-        }, "View"), " - ", _react.default.createElement("a", {
+        }, "View"), " - ", _react["default"].createElement("a", {
           className: "text-info",
           href: item.post_edit_link
-        }, "Edit")), _react.default.createElement("td", null, item.display_name), _react.default.createElement("td", null, item.post_status), _this4.state.taxonomies.map(function (t) {
-          return _react.default.createElement("td", {
+        }, "Edit")), _react["default"].createElement("td", null, item.display_name), _react["default"].createElement("td", null, item.post_status), _this4.state.taxonomies.map(function (t) {
+          return _react["default"].createElement("td", {
             key: t
           }, item.terms && item.terms[t] ? item.terms[t].join(', ') : null);
-        }), _react.default.createElement("td", null, item.post_date));
-      }))), Object.keys(this.state.posts).length == 0 ? _react.default.createElement("span", null, "No Post Found") : null, _react.default.createElement("div", {
+        }), _react["default"].createElement("td", null, item.post_date));
+      }))), Object.keys(this.state.posts).length == 0 ? _react["default"].createElement("span", null, "No Post Found") : null, _react["default"].createElement("div", {
         className: "text-center"
-      }, _react.default.createElement(_react2.Pagination, {
+      }, _react["default"].createElement(_react2.Pagination, {
         pgn: this.state.pagination,
         activeClass: "btn btn-outline-secondary btn-sm ml-1 mr-1",
         clickEvent: this.filterPost,
@@ -335,7 +339,7 @@ var PostList = function PostList() {
     'page': page
   };
   w = JSON.stringify(w);
-  return _react.default.createElement(_react2.Placeholder, {
+  return _react["default"].createElement(_react2.Placeholder, {
     Data: {
       'action': 'nr_get_post_list',
       'query': w

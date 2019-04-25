@@ -13,9 +13,9 @@ var _react2 = require("nodereactor/react");
 
 require("./style.scss");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -70,36 +70,36 @@ function (_Component) {
       var _this2 = this;
 
       var themes = this.props.ResponseData;
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "row",
         id: "theme_list_cont"
       }, Object.keys(themes).map(function (k) {
         var item = themes[k];
         var ind_theme = _this2.state.themes[k] ? _this2.state.themes[k] : {};
-        return _react.default.createElement("div", {
+        return _react["default"].createElement("div", {
           key: k,
           className: "data_el col-12 col-md-6 col-xl-3 mb-4" + (ind_theme.activated ? ' activated_theme' : '')
-        }, _react.default.createElement("div", {
+        }, _react["default"].createElement("div", {
           className: "theme_thumb_cont"
-        }, _react.default.createElement("div", {
+        }, _react["default"].createElement("div", {
           className: "background_thumb",
           style: {
             'backgroundImage': 'url(' + item.thumbnail + ')'
           }
-        }), _react.default.createElement("div", {
+        }), _react["default"].createElement("div", {
           className: "details_overlay"
-        }, _react.default.createElement("div", {
+        }, _react["default"].createElement("div", {
           className: "theme_detail_btn"
-        }, _react.default.createElement("div", null, _react.default.createElement("span", null, "Theme Details"), _react.default.createElement("br", null), _react.default.createElement("br", null)))), _react.default.createElement("div", {
+        }, _react["default"].createElement("div", null, _react["default"].createElement("span", null, "Theme Details"), _react["default"].createElement("br", null), _react["default"].createElement("br", null)))), _react["default"].createElement("div", {
           className: "button_container"
-        }, _react.default.createElement("span", {
+        }, _react["default"].createElement("span", {
           style: {
             "float": "left",
             "padding": "6px 0px"
           }
-        }, k), _react.default.createElement("span", {
+        }, k), _react["default"].createElement("span", {
           className: "theme_action"
-        }, _react.default.createElement("button", {
+        }, _react["default"].createElement("button", {
           className: "btn btn-info btn-sm",
           onClick: _this2.activateTheme
         }, "Activate")))));
@@ -111,7 +111,7 @@ function (_Component) {
 }(_react.Component);
 
 var InstalledThemes = function InstalledThemes() {
-  return _react.default.createElement(_react2.Placeholder, {
+  return _react["default"].createElement(_react2.Placeholder, {
     Data: {
       'action': 'nr_get_installed_themes'
     },

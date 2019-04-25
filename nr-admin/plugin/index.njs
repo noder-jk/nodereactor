@@ -1,18 +1,5 @@
 module.exports.run=function($,next)
 {
-	$=add_action($,'widgets_init', function($, next)
-	{
-		$=register_sidebar($, {'title':'Right Panel core', 'id':'right_sidcore'});
-		next($);
-	});
-	
-		
-	$=add_action($,'widgets_init', function($, next)
-	{
-		$=register_sidebar($, {'title':'Right Panel core 2', 'id':'right_side_panel_core_2'});
-		next($);
-	});
-
 	$=add_action($,'register_custom_templates',function($, next)
 	{
 		var ob=
@@ -27,18 +14,13 @@ module.exports.run=function($,next)
 		next($);
 	});
 
-
-
 	$=add_action($, 'socket_connected', function($, next)
 	{
-		console.log('plug resp: -> hi socket connected', $.nr_socket.id);
-		console.log(is_user_logged_in($));
 		next($);
 	});
 
 	$=add_action($, 'socket_disconnected', function($, next)
 	{
-		console.log('plug resp: -> hi socket has been disconnected', $.nr_socket.id);
 		next($);
 	});
 

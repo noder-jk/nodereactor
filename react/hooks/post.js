@@ -11,12 +11,12 @@ var _hookFinder = require("../helper/hook-finder");
 
 var _momentTimezone = _interopRequireDefault(require("moment-timezone"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var the_title = function the_title(item) {
-  return _react.default.createElement(_hookFinder.FindActionHook, {
+  return _react["default"].createElement(_hookFinder.FindActionHook, {
     hook: "the_title",
     value: item.post_title,
     properties: {
@@ -28,7 +28,7 @@ var the_title = function the_title(item) {
 exports.the_title = the_title;
 
 var the_content = function the_content(item) {
-  return _react.default.createElement(_hookFinder.FindActionHook, {
+  return _react["default"].createElement(_hookFinder.FindActionHook, {
     hook: "the_content",
     value: item.post_content,
     danger: true,
@@ -41,7 +41,7 @@ var the_content = function the_content(item) {
 exports.the_content = the_content;
 
 var the_author = function the_author(item) {
-  return _react.default.createElement(_hookFinder.FindActionHook, {
+  return _react["default"].createElement(_hookFinder.FindActionHook, {
     hook: "the_author",
     value: item.display_name,
     properties: {
@@ -84,8 +84,8 @@ var the_previous_url = function the_previous_url(pagination) {
 exports.the_previous_url = the_previous_url;
 
 var the_date = function the_date(item, format) {
-  var date = (0, _momentTimezone.default)(item.post_date).tz(window.nr_configs.time_zone).format(format ? format : 'YYYY-MM-DD HH:mma z');
-  return _react.default.createElement(_hookFinder.FindActionHook, {
+  var date = (0, _momentTimezone["default"])(item.post_date).tz(window.nr_configs.time_zone).format(format ? format : 'YYYY-MM-DD HH:mma z');
+  return _react["default"].createElement(_hookFinder.FindActionHook, {
     hook: "the_date",
     value: date,
     properties: {
@@ -97,7 +97,7 @@ var the_date = function the_date(item, format) {
 exports.the_date = the_date;
 
 var the_excerpt = function the_excerpt(item) {
-  return _react.default.createElement(_hookFinder.FindActionHook, {
+  return _react["default"].createElement(_hookFinder.FindActionHook, {
     hook: "the_excerpt",
     value: item.post_excerpt,
     properties: {
