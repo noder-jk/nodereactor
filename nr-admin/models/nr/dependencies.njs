@@ -193,7 +193,6 @@ module.exports.deploy_vendor_scripts=function()
     [
         'jsdom',
         'html-entities',
-        'chokidar',
         'express',
         'http',
         'socket.io',

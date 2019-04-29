@@ -1,8 +1,10 @@
+const nr_path_mod=require('path');
+
 const get_nodes_path=function(nodes)
 {
-	var path=require('path');
+    var resp={};
 
-	var n_paths=nodes.map(item=>
+	nodes.forEach(item=>
 	{
 		try
 		{
@@ -10,32 +12,20 @@ const get_nodes_path=function(nodes)
 
 			var pk=require(item+'/package.json');
 
-			var resp=
-			{
-				[item]:
-				{
-					'dir':path.dirname(pt), 
-					'package':pk
-				}
-			}
-
-			return resp;
+            resp[item]=
+            {
+                'dir':nr_path_mod.dirname(pt), 
+                'package':pk
+            }
 		}
-		catch(e)
-		{
+        catch(e){}
 
-		}
-		return false;
-		
-	}).filter(item=>
-	{
-		return item!==false;
-	});
-
-	return Object.assign({}, ...n_paths);
+    });
+    
+    return resp;
 }
 
-module.exports=function(project_root)
+module.exports=function(project_root, extensions)
 {
 	console.log('');
 	console.log('https://github.com/noder-jk/nodereactor');
@@ -75,12 +65,9 @@ module.exports=function(project_root)
 		nr_port			: pack.nr_configs.port,
 		nr_home_url		: pack.nr_configs.url,
 		nr_project_root	: project_root,
-		nr_plugins		: Array.isArray(pack.plugins)? pack.plugins.filter(item=>typeof item=='string') : [],
-		nr_themes		: Array.isArray(pack.themes) ? pack.themes.filter(item=>typeof item=='string') 	: []
+		nr_plugins		: [],
+		nr_themes		: ['semplicemente']
 	}
-
-	/* Set default themes and plugins */
-	data_ob.nr_themes.indexOf('semplicemente')==-1 	 ? 	data_ob.nr_themes.push('semplicemente') : null;
 
 	global.nr_port					= data_ob.nr_port;
 
@@ -117,8 +104,8 @@ module.exports=function(project_root)
 
 	global.nr_configs		= data_ob.nr_project_root+'/nr-content/configs/';
 	
-	global.nr_themes		= get_nodes_path(data_ob.nr_themes);
-	global.nr_plugins		= get_nodes_path(data_ob.nr_plugins);
+	global.nr_themes		= Object.assign(extensions.themes, get_nodes_path(data_ob.nr_themes));
+	global.nr_plugins		= Object.assign(extensions.plugins, get_nodes_path(data_ob.nr_plugins)) ;
 
 	global.nr_contents		= data_ob.nr_project_root+'/nr-content/';
 	global.nr_uploads		= data_ob.nr_project_root+'/nr-content/uploads/';
@@ -187,23 +174,5 @@ module.exports=function(project_root)
 		console.log('-> NodeReactor listening '+nr_server.address().port);
 		console.log('-> Defined home url is '+nr_home_url);
 		console.log('');
-	});
-
-	
-	/* Watch file change in theme and plugin directory, un-require modified files to be required again updated file. */
-	var theme_dirs	= Object.keys(nr_themes).map(item=>nr_themes[item].dir);
-
-	var plugin_dirs	= Object.keys(nr_plugins).map(item=>nr_plugins[item].dir);
-
-	var watch_dirs	= theme_dirs.concat(plugin_dirs);
-
-	var watch_config= {ignored: /(^|[\/\\])\../, persistent:true};
-
-	node_modules.chokidar.watch(watch_dirs, watch_config).on('all', function(event, path)
-	{
-		if(node_modules.path.extname(path)=='.njs')
-		{
-			uninclude(path);
-		}
 	});
 }

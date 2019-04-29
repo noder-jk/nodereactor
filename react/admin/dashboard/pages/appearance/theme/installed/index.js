@@ -9,6 +9,10 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _axios = _interopRequireDefault(require("axios"));
 
+var _sweetalert = _interopRequireDefault(require("sweetalert2"));
+
+var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
+
 var _react2 = require("nodereactor/react");
 
 require("./style.scss");
@@ -35,47 +39,105 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var ProcessTheme =
+var InstalledThemes =
 /*#__PURE__*/
 function (_Component) {
-  _inherits(ProcessTheme, _Component);
+  _inherits(InstalledThemes, _Component);
 
-  function ProcessTheme(props) {
+  function InstalledThemes(props) {
     var _this;
 
-    _classCallCheck(this, ProcessTheme);
+    _classCallCheck(this, InstalledThemes);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ProcessTheme).call(this, props));
-    var ob = {};
-
-    for (var k in _this.props.ResponseData) {
-      ob[k] = {
-        'activated': _this.props.ResponseData[k].activated
-      };
-    }
-
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(InstalledThemes).call(this, props));
     _this.state = {
-      'themes': ob
+      'themes': {},
+      'loading': false
     };
     _this.activateTheme = _this.activateTheme.bind(_assertThisInitialized(_this));
+    _this.fetchThemes = _this.fetchThemes.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(ProcessTheme, [{
+  _createClass(InstalledThemes, [{
+    key: "fetchThemes",
+    value: function fetchThemes() {
+      var _this2 = this;
+
+      this.setState({
+        'loading': true
+      });
+      (0, _axios["default"])({
+        'method': 'post',
+        'url': _react2.ajax_url,
+        'data': {
+          'action': 'nr_get_installed_themes'
+        }
+      }).then(function (r) {
+        var ob = {
+          'loading': false
+        };
+
+        if (r.data.themes) {
+          ob.themes = r.data.themes;
+        }
+
+        _this2.setState(ob);
+      })["catch"](function (e) {
+        _this2.setState({
+          'loading': false
+        });
+      });
+    }
+  }, {
     key: "activateTheme",
-    value: function activateTheme() {}
+    value: function activateTheme(pkg) {
+      var _this3 = this;
+
+      var dt = {
+        type: 'theme',
+        action: 'nr_theme_plugin_action',
+        to_do: 'activate',
+        node_package: pkg
+      };
+      this.setState({
+        'loading': true
+      });
+      (0, _axios["default"])({
+        'method': 'post',
+        'url': _react2.ajax_url,
+        'data': dt
+      }).then(function (r) {
+        _this3.fetchThemes();
+      })["catch"](function (e) {
+        _this3.setState({
+          'loading': false
+        });
+
+        _sweetalert["default"].fire('Error', 'Request Failed. Something went wrong.', 'error');
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.fetchThemes();
+    }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this4 = this;
 
-      var themes = this.props.ResponseData;
+      var themes = this.state.themes;
       return _react["default"].createElement("div", {
         className: "row",
         id: "theme_list_cont"
-      }, Object.keys(themes).map(function (k) {
+      }, _react["default"].createElement("div", {
+        className: "col-12"
+      }, _react["default"].createElement("h3", null, "Installed Themes ", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
+        size: "15px"
+      }) : null)), Object.keys(themes).map(function (k) {
         var item = themes[k];
-        var ind_theme = _this2.state.themes[k] ? _this2.state.themes[k] : {};
+        var ind_theme = _this4.state.themes[k] ? _this4.state.themes[k] : {};
         return _react["default"].createElement("div", {
           key: k,
           className: "data_el col-12 col-md-6 col-xl-3 mb-4" + (ind_theme.activated ? ' activated_theme' : '')
@@ -97,26 +159,21 @@ function (_Component) {
             "float": "left",
             "padding": "6px 0px"
           }
-        }, k), _react["default"].createElement("span", {
+        }, k, "\xA0"), _react["default"].createElement("span", {
           className: "theme_action"
         }, _react["default"].createElement("button", {
-          className: "btn btn-info btn-sm",
-          onClick: _this2.activateTheme
-        }, "Activate")))));
+          className: "btn btn-info btn-sm float-right",
+          onClick: function onClick() {
+            return _this4.activateTheme(k);
+          }
+        }, "Activate \xA0", _this4.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
+          size: "15px"
+        }) : null)))));
       }));
     }
   }]);
 
-  return ProcessTheme;
+  return InstalledThemes;
 }(_react.Component);
-
-var InstalledThemes = function InstalledThemes() {
-  return _react["default"].createElement(_react2.Placeholder, {
-    Data: {
-      'action': 'nr_get_installed_themes'
-    },
-    Component: ProcessTheme
-  });
-};
 
 exports.InstalledThemes = InstalledThemes;

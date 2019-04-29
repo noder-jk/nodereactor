@@ -1,6 +1,6 @@
 {
   "name": "nodereactor",
-  "version": "1.0.8",
+  "version": "1.0.7",
   "description": "Nodejs and reactjs based Content Management System (CMS), influenced by wordpress.",
   "main": "index.njs",
   "dependencies": {
@@ -16,7 +16,6 @@
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^4.3.1",
-    "chokidar": "^2.1.1",
     "concurrently": "^4.1.0",
     "cookie": "^0.3.1",
     "deepcopy": "^1.0.0",
@@ -42,7 +41,7 @@
     "react-router-dom": "^4.3.1",
     "react-svg-spinner": "^1.0.4",
     "resolve": "^1.8.1",
-    "semplicemente": "^1.0.5",
+    "semplicemente": "^1.0.6",
     "socket.io": "^2.1.1",
     "sweetalert2": "^7.18.0",
     "sweetalert2-react-content": "^1.0.3",
@@ -64,6 +63,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/noder-jk/nodereactor.git"
-  }
+    "url": "git+https://github.com/noder-jk/nodereactor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/noder-jk/nodereactor/issues"
+  },
+  "homepage": "https://github.com/noder-jk/nodereactor#readme"
 }

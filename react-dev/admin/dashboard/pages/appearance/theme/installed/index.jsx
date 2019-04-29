@@ -1,37 +1,91 @@
 import React, {Component} from "react";
 import axios from 'axios';
-import {ajax_url ,Loading,Placeholder} from 'nodereactor/react';
+import Swal from 'sweetalert2';
+import Spinner from 'react-svg-spinner';
+
+import {ajax_url} from 'nodereactor/react';
 
 import './style.scss';
 
-class ProcessTheme extends Component
+class InstalledThemes extends Component
 {
     constructor(props)
     {
         super(props);
         
-        let ob={}
-        for(let k in this.props.ResponseData)
+        this.state=
         {
-            ob[k]={'activated':this.props.ResponseData[k].activated}
-        }
-
-        this.state={'themes':ob};
+            'themes':{},
+            'loading':false
+        };
 
         this.activateTheme=this.activateTheme.bind(this);
+        this.fetchThemes=this.fetchThemes.bind(this);
     }
     
-    activateTheme()
+    fetchThemes()
     {
+        this.setState({'loading':true});
+        axios({
+            'method':'post',
+            'url':ajax_url,
+            'data':{'action':'nr_get_installed_themes'}
+        }).then(r=>
+        {
+            let ob={'loading':false};
 
+            if(r.data.themes)
+            {
+                ob.themes=r.data.themes;
+            }
+
+            this.setState(ob);
+
+        }).catch(e=>
+        {
+            this.setState({'loading':false});
+        })
+    }
+
+    activateTheme(pkg)
+    {
+        let dt=
+        {
+            type:'theme',
+            action:'nr_theme_plugin_action',
+            to_do:'activate',
+            node_package:pkg
+        }
+
+        this.setState({'loading':true});
+        axios({
+            'method':'post',
+            'url':ajax_url,
+            'data':dt
+        }).then(r=>
+        {
+            this.fetchThemes();
+        }).catch(e=>
+        {
+            this.setState({'loading':false});
+            Swal.fire('Error', 'Request Failed. Something went wrong.', 'error');
+        });
+    }
+
+    componentDidMount()
+    {
+        this.fetchThemes();
     }
 
     render()
     {
-        const themes=this.props.ResponseData;
+        let {themes}=this.state;
 
         return(
             <div className="row" id="theme_list_cont">
+                <div className="col-12">
+                    <h3>Installed Themes {this.state.loading ? <Spinner size="15px"/> : null}</h3>
+                </div>
                 {
                     Object.keys(themes).map(k=>
                     {
@@ -53,9 +107,12 @@ class ProcessTheme extends Component
                                     </div>
                                         
                                     <div className="button_container">
-                                        <span style={{"float":"left","padding":"6px 0px"}}>{k}</span>
+                                        <span style={{"float":"left","padding":"6px 0px"}}>{k}&nbsp;</span>
                                         <span className="theme_action">
-                                            <button className="btn btn-info btn-sm" onClick={this.activateTheme}>Activate</button>
+                                            <button className="btn btn-info btn-sm float-right" onClick={()=>this.activateTheme(k)}>
+                                                Activate &nbsp;
+                                                {this.state.loading ? <Spinner size="15px"/> : null}
+                                            </button>
                                         </span>
                                     </div>
                                 </div>
@@ -66,11 +123,6 @@ class ProcessTheme extends Component
             </div>
         )
     }
-}
-
-const InstalledThemes=()=>
-{
-    return <Placeholder Data={{'action':'nr_get_installed_themes'}} Component={ProcessTheme}/>
 }
 
 export {InstalledThemes}
