@@ -1,29 +1,8 @@
-global.echo=function()
+global.echo=function($, str)
 {
-	/* Only two type response can be echoed. Either json or string. */
-	
-	$=arguments[0];
-	for(var nr_int=1; nr_int<arguments.length; nr_int++)
+	if(typeof str=='object' && !Array.isArray(str))
 	{
-		str=arguments[nr_int];
-		
-		typeof str=='number' ? str=str.toString() : '';
-		
-		if(typeof $.nr_response_queue=='string' && typeof str=='string')
-		{
-			$.nr_response_queue+=str;
-		}
-		else if($.nr_response_queue=='' && typeof str=='object')
-		{
-			$.nr_response_queue=str;
-		}
-		else if(typeof $.nr_response_queue=='object' && typeof str=='object')
-		{
-			for(var k in str)
-			{
-				$.nr_response_queue[k]=str[k];
-			}
-		}
+		$.nr_response_queue=Object.assign($.nr_response_queue, str);
 	}
 	
 	return $;
@@ -108,10 +87,10 @@ global.exit=function ($,resp)
 			return;
 		}
 		
-		/* Send json or text based response */
-		$.nr_response.set('Content-Type', (typeof $.nr_response_queue=='string' ? 'text/html' : 'application/json'));
+		/* Send json response */
+		$.nr_response.set('Content-Type', 'application/json');
 
-		$.nr_response.status($.nr_response_code).end(typeof $.nr_response_queue=='string' ? $.nr_response_queue : JSON.stringify($.nr_response_queue));
+		$.nr_response.status($.nr_response_code).end(JSON.stringify($.nr_response_queue));
 	};
 
 	series_fire($, [real_set_option, real_set_session, send_resp_now]);

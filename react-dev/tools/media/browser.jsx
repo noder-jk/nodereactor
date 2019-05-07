@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 
-import {ajax_url ,RenderMediaFile, Pagination, socket_channel} from 'nodereactor/react';
+import {ajax_url ,RenderMediaFile, Pagination} from 'nodereactor/react';
 
 const FileDetails=(props)=>
 {
@@ -274,16 +274,8 @@ class Browser extends Component
 
     componentDidMount()
     {
-        window.nr_socket_client.on('my_own_handler', (msg)=>
-        {   
-            
-        });
-
-        window.nr_socket_client.emit(socket_channel, {'action':'nr_test_socket', 'hi':'some dt'});
-
         this.getMedia();
     }
-
 
     render()
     {

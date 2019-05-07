@@ -178,7 +178,7 @@ var NodeReactor_blue_print=
 								
 	nr_request					: {},
 	nr_response					: {},
-	nr_response_queue			: '',
+	nr_response_queue			: {},
 	nr_file_to_transfer			: false,
 	
 	nr_pathname					: '',

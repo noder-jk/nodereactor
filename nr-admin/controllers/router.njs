@@ -182,7 +182,10 @@ module.exports.run=($)=>
 
 				if(typeof methd=='function')
 				{
-					methd($, k, exit);
+					var args=get_args(methd);
+
+					/* Ensure core ajax requests gets handler key too as these are registered through loop. Three args indicates it is core. */
+					args.length==3 ? methd($, k, exit) : methd($, exit);
 					
 					found=true;
 					

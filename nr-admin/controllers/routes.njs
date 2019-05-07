@@ -48,10 +48,7 @@ module.exports.run=function($, next)
 		'nr_ajax_nr_get_menu_items'					:{'path':'ajax/admin/menu.njs', 					'method':'get_for_admin'},
 		'nr_ajax_nr_save_menu'						:{'path':'ajax/admin/menu.njs', 					'method':'save_menus'},
 		'nr_ajax_nr_delete_menu'					:{'path':'ajax/admin/menu.njs', 					'method':'del_menu'},
-		'nr_ajax_nopriv_nr_get_menu_for_visitor'	:{'path':'ajax/admin/menu.njs', 					'method':'get_menu_for_visitor'},
-
-
-		'nr_socket_nopriv_nr_test_socket'			:{'path':'ajax/admin/socket.njs', 					'method':'test_socket'}
+		'nr_ajax_nopriv_nr_get_menu_for_visitor'	:{'path':'ajax/admin/menu.njs', 					'method':'get_menu_for_visitor'}
 	};
 
 	for(var k in routes)

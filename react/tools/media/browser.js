@@ -296,11 +296,6 @@ function (_Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      window.nr_socket_client.on('my_own_handler', function (msg) {});
-      window.nr_socket_client.emit(_react2.socket_channel, {
-        'action': 'nr_test_socket',
-        'hi': 'some dt'
-      });
       this.getMedia();
     }
   }, {

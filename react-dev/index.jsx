@@ -18,8 +18,8 @@ import * as SidebarHooks from './hooks/sidebar';
 
 const hooks=[PostHooks, SidebarHooks, MenuHooks];
 
-const ajax_url          = '/admin-ajax';
-const socket_channel    = 'nr-socket-io-core-channel';
+const ajax_url      = '/admin-ajax';
+const socket_url    = 'nr-socket-io-core-channel';
 
 export  {
             ajax_url , 
@@ -29,7 +29,7 @@ export  {
             array_pull_down,
             array_pull_up, 
 
-            socket_channel,
+            socket_url,
 
             LoginRegistration, 
             Placeholder,

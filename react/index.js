@@ -75,7 +75,7 @@ Object.defineProperty(exports, "array_pull_up", {
     return _array.array_pull_up;
   }
 });
-exports.socket_channel = exports.ajax_url = void 0;
+exports.socket_url = exports.ajax_url = void 0;
 
 var _compPlaceholder = require("./helper/comp-placeholder");
 
@@ -106,8 +106,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var hooks = [PostHooks, SidebarHooks, MenuHooks];
 var ajax_url = '/admin-ajax';
 exports.ajax_url = ajax_url;
-var socket_channel = 'nr-socket-io-core-channel';
-exports.socket_channel = socket_channel;
+var socket_url = 'nr-socket-io-core-channel';
+exports.socket_url = socket_url;
 
 /* Export various hooks dynamically */
 for (var i = 0; i < hooks.length; i++) {
