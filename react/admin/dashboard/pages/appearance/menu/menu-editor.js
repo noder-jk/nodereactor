@@ -356,7 +356,13 @@ function (_Component) {
       return _react["default"].createElement("div", null, _react["default"].createElement("input", {
         type: "text",
         className: "form-control",
-        defaultValue: this.state.menu_name
+        name: "menu_name",
+        defaultValue: this.state.menu_name,
+        onChange: function onChange(e) {
+          return _this4.setState({
+            'menu_name': e.currentTarget.value
+          });
+        }
       }), _react["default"].createElement("small", null, _react["default"].createElement("i", null, "Existing menu that matches this name will be replaced, if any.")), _react["default"].createElement("br", null), _react["default"].createElement("div", null, _react["default"].createElement("b", null, "Menu Items"), this.renderItems()), _react["default"].createElement("div", null, _react["default"].createElement("div", {
         className: "text-right"
       }, _react["default"].createElement("i", {

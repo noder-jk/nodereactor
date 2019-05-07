@@ -301,7 +301,7 @@ class MenuEditor extends Component
         let {locations={}}=this.state;
 
         return  <div>
-                    <input type="text" className="form-control" defaultValue={this.state.menu_name}/>
+                    <input type="text" className="form-control" name="menu_name" defaultValue={this.state.menu_name} onChange={(e)=>this.setState({'menu_name':e.currentTarget.value})}/>
                     <small><i>Existing menu that matches this name will be replaced, if any.</i></small>
                     <br/>
                     <div>
