@@ -10,9 +10,9 @@ global.register_taxonomy=function($, ob)
 
 global.use_taxonomy=function($, ob)
 {
-    if(!ob.post_type || !ob.taxonomies){return $;}
+    if(!ob.post_type || !ob.taxonomy){return $;}
 
-	var tx=get_array(ob.taxonomies);
+	var tx=get_array(ob.taxonomy);
 	var pt=get_array(ob.post_type); 
 
 	/* Loop through all provided post types */

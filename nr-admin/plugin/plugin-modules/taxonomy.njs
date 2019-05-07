@@ -29,7 +29,7 @@ module.exports.run=function($, next)
         var lnk=
         {
 			'post_type':'post', 
-			"taxonomies":
+			"taxonomy":
 			[
 				"category",
 				"tag"

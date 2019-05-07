@@ -15,9 +15,9 @@ global.meta_processor=function ($, mets, result, next)
 
 global.use_post_module=function($,ob)
 {
-	if(!ob.post_type || !ob.modules){return $;}
+	if(!ob.post_type || !ob.module){return $;}
 
-	var mb=get_array(ob.modules);
+	var mb=get_array(ob.module);
 	var pt=get_array(ob.post_type); 
 
 	/* Loop through all provided post types */

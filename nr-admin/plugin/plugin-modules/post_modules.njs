@@ -52,7 +52,7 @@ module.exports.run=function($,next)
 		$=use_post_module($, 
 		{
 			'post_type':'post', 
-			"modules":
+			"module":
             [
                 "title",
                 "media",
@@ -67,7 +67,7 @@ module.exports.run=function($,next)
 		$=use_post_module($, 
 		{
 			'post_type':'page', 
-			"modules":
+			"module":
             [
                 "title",
                 "media",
@@ -82,7 +82,7 @@ module.exports.run=function($,next)
 		$=use_post_module($, 
 		{
 			'post_type':'attachment', 
-			"modules":
+			"module":
 			[
 				"title",
 				"editor",
