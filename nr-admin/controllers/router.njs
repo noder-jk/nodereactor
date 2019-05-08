@@ -87,9 +87,7 @@ module.exports.run=($)=>
 			{
 				var def_resp=data || 'Sorry! <br/>"'+p+'" not found. <br/>You must build react app for static serve.';
 				
-				$=echo($, def_resp);
-
-				exit($);
+				exit($, def_resp);
 			});
 
 			return;

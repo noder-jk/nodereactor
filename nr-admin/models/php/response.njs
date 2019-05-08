@@ -43,9 +43,14 @@ global.http_response_code=function($, code)
 
 
 /* This function remove temporary scripts from cache. */
-global.exit=function ($,resp)
+global.exit=function ($, resp)
 {
-	resp ? $=echo($, resp) : 0;
+	var send_str=false;
+
+	if(resp)
+	{
+		typeof resp=='string' ? send_str=resp : $=echo($, resp);
+	}
 	
 	/* It's impossible to save session and option and session if NR is not installed yet. */
 	if(!nr_db_config)
@@ -87,10 +92,13 @@ global.exit=function ($,resp)
 			return;
 		}
 		
-		/* Send json response */
-		$.nr_response.set('Content-Type', 'application/json');
+		var c_type	=	send_str ? 'text/html' : 'application/json';
+		var rsp_t	=	send_str || JSON.stringify($.nr_response_queue);
 
-		$.nr_response.status($.nr_response_code).end(JSON.stringify($.nr_response_queue));
+		/* Send json response */
+		$.nr_response.set('Content-Type', c_type);
+
+		$.nr_response.status($.nr_response_code).end(rsp_t);
 	};
 
 	series_fire($, [real_set_option, real_set_session, send_resp_now]);
