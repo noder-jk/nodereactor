@@ -1,5 +1,5 @@
 /* This function get cookie name and data to enqueue. These will be transferred to browser at the end of response. */
-global.set_cookie=function($, name, value, maxAge, path, domain, secure, samesite, httpOnly)
+module.exports.set_cookie=function(name, value, maxAge, path, domain, secure, samesite, httpOnly)
 {
 	var meta		= {};
 
@@ -11,10 +11,8 @@ global.set_cookie=function($, name, value, maxAge, path, domain, secure, samesit
 	meta.path		= path || '/';
 	meta.secure		= secure || false;
 	
-	$.nr_cookie_queue[name] = node_modules.cookie.serialize(name, value, meta);
-	$._COOKIE[name]			= value;
-
-	return $;
+	this.nr_cookie_queue[name] = node_modules.cookie.serialize(name, value, meta);
+	this._COOKIE[name]			= value;
 }
 
 global.real_set_cookie=function($)
@@ -23,9 +21,18 @@ global.real_set_cookie=function($)
 	var t=[];
 
 	/* Keep only those cookie that still in both of cookie queue and variable */
+	for(var k in $._COOKIE_ORIGINAL)
+	{
+		if($.nr_cookie_queue[k]!==undefined || $._COOKIE[k]!==undefined){continue;}
+		
+		var ck=node_modules.cookie.serialize(k, '', {maxAge:-3600});
+
+		t.push(ck);
+	}
+
 	for(var k in $.nr_cookie_queue)
 	{
-		$._COOKIE[k] ? t.push($.nr_cookie_queue[k]) : 0;
+		t.push($.nr_cookie_queue[k]);
 	}
 	
 	/* Send cookie through socket if it is socket request */

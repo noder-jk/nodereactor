@@ -1,5 +1,5 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~Widget and sidebar related functions.~~~~~~~~~~~~~~~~~~~~~~ */
-global.register_sidebar=function($,sidebar)
+module.exports.register_sidebar=function(sidebar)
 {
 	if(typeof sidebar=='object')
 	{
@@ -15,16 +15,15 @@ global.register_sidebar=function($,sidebar)
 		/* Keep Only Necessary Properties */
 		if(sidebar.title && sidebar.id)
 		{
-			ob=	{
-					'title':sidebar.title,
-					'id':sidebar.id
-				}
+			var ob=	
+			{
+				'title':sidebar.title,
+				'id':sidebar.id
+			}
 
-			$.nr_registered_sidebar[sidebar.id]=ob;
+			this.nr_registered_sidebar[sidebar.id]=ob;
 		}
 	}
-	
-	return $;
 }
 
 
@@ -41,7 +40,7 @@ function unique_key()
 	return text;
 }
 
-global.register_widget=function($, widget)
+module.exports.register_widget=function(widget)
 {
 	if(widget.id && widget.title)
 	{
@@ -50,7 +49,7 @@ global.register_widget=function($, widget)
 		
 		if(!type)
 		{
-			return $;
+			return;
 		}
 
 		widget.node_type=type.node_type;
@@ -58,8 +57,6 @@ global.register_widget=function($, widget)
 		widget.unique_key=unique_key();
 		delete widget.package;
 		
-		$.nr_widgets_runtime.push(widget);
+		this.nr_widgets_runtime.push(widget);
 	}
-	
-	return $;
 }

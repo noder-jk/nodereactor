@@ -24,7 +24,7 @@ function move_to_uploads($, oldpath, new_path, fname, real_pth, m_callback)
                 mime_type	: node_modules['mime-types'].lookup(node_modules.path.extname(real_pth))
             }
             
-            nr_insert_post($, media_post, function($, attachment_id)
+            $.nr_insert_post( media_post, function($, attachment_id)
             {
                 m_callback($, attachment_id);
             })
@@ -130,7 +130,7 @@ module.exports.gallery=function($)
         'keyword'       :   $._POST['keyword'] || ''
     }
 
-    get_posts($, query_param, function($, r)
+    $.get_posts(query_param, function($, r)
     {
         get_pagination($,query_param, function($, pgn)
         {
@@ -189,7 +189,7 @@ module.exports.gallery=function($)
             {
                 var resp={'pagination':pgn, 'files':media_files};
 
-                $=echo($, resp);
+                $.echo(resp);
                 
                 exit($);
             });

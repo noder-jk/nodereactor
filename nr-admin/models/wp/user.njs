@@ -89,7 +89,7 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 				next
 			];
 			
-			series_fire($, funcs);
+			$.series_fire( funcs);
 		});
 	}
 
@@ -124,7 +124,7 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 		next
 	];
 
-	series_fire($, funcs);
+	$.series_fire( funcs);
 }
 
 global.delete_user_meta=function($, user_id, meta_key, next)

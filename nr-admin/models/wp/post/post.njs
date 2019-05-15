@@ -21,16 +21,16 @@ global.get_post_types=function($, condition)
 	return resp;
 }
 
-global.get_post_by=function($, by, arg, next)
+module.exports.get_post_by=function(by, arg, next)
 {
-	get_posts($, {'intersect':{[by]:arg}}, next);
+	this.get_posts({'intersect':{[by]:arg}}, next);
 }
 
 /* ~~~~~~~~~~~~~~~~Core post processor functions~~~~~~~~~~~~~~~~ */
-global.get_posts=function($,nr_condition,get_p_n)
+module.exports.get_posts=function(nr_condition,get_p_n)
 {
 	/* Get query object, that will come through registered hooks too. [Oh god! what a complicated function. Need refactoring.] */
-	pre_get_posts($, nr_condition, function($)
+	pre_get_posts(this, nr_condition, function($)
 	{
 		typeof nr_condition!=='object' ? nr_condition={} : 0;
 
@@ -150,23 +150,23 @@ global.get_posts=function($,nr_condition,get_p_n)
 				($,content,next)=>{get_p_n($, content)}
 			];
 					
-			series_fire($, stack);
+			$.series_fire( stack);
 		});
 	});
 }
 
-global.nr_insert_post=function($, fields, save_post_callback)
+module.exports.nr_insert_post=function(fields, save_post_callback)
 {
-	if(!is_user_logged_in($))
+	if(!is_user_logged_in(this))
 	{
-		save_post_callback ? save_post_callback($, false) : 0;
+		save_post_callback ? save_post_callback(this, false) : 0;
 		return;
 	}
 
 	/* Generate columns and values */
 	var cols				= {};
 	cols.post_id			= fields.post_id 			? fields.post_id			: 0;
-	cols.owner_user_id		= fields.user_id 			? fields.user_id 			: get_current_user_id($);
+	cols.owner_user_id		= fields.user_id 			? fields.user_id 			: get_current_user_id(this);
 	cols.post_title			= fields.post_title 		? fields.post_title 		: '';
 	cols.post_content		= fields.post_content		? fields.post_content		: '';
 	cols.post_excerpt		= fields.post_excerpt		? fields.post_excerpt		: '';
@@ -185,7 +185,7 @@ global.nr_insert_post=function($, fields, save_post_callback)
 	var post_action 		= (cols.post_id && cols.post_id>0)	? 'update' 			: 'create';
 	
 	/* Firstly get the slug and then save/update */
-	get_available_slug($, {post_name:cols.post_name,post_id:cols.post_id}, function($,slug)
+	get_available_slug(this, {post_name:cols.post_name,post_id:cols.post_id}, function($,slug)
 	{
 		cols.post_name=slug;
 		cols.post_content=exclude_post_media(cols.post_content,cols.post_type);
@@ -314,18 +314,17 @@ global.nr_delete_post=function($, post_id, next)
 		next
 	];
 
-	series_fire($, funcs);
+	$.series_fire( funcs);
 }
 
-global.register_post_type=function($, ob)
+module.exports.register_post_type=function(ob)
 {
 	var id=ob.id;
-	if(id && !$.registered_post_types[id])
+
+	if(id && !this.registered_post_types[id])
 	{
-		$.registered_post_types[id]=ob;
+		this.registered_post_types[id]=ob;
 	}
-	
-	return $;
 }
 
 global.register_custom_template=function($, ob)

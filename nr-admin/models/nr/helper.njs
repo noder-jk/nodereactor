@@ -1,6 +1,6 @@
 global.nr_local_time=function($, dt, format)
 {
-	var z=get_option($, 'time_zone', 0);
+	var z=$.get_option( 'time_zone', 0);
 
 	var zone=z || 'UTC';
 	
@@ -57,8 +57,10 @@ global.get_array=function(param)
 	return resp.filter(item=>{return (typeof item!=='object' && !Array.isArray(item));});;
 }
 
-global.series_fire=function($, functions)
+module.exports.series_fire=function(functions)
 {
+	var $=this;
+
 	if(!Array.isArray(functions)){return;}
 	
 	var num=0;

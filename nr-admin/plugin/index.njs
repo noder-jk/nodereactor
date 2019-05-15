@@ -1,6 +1,6 @@
 module.exports.run=function($,next)
 {
-	$=add_action($,'register_custom_templates',function($, next)
+	$.add_action('register_custom_templates',function($, next)
 	{
 		var ob=
 		{
@@ -14,15 +14,15 @@ module.exports.run=function($,next)
 		next($);
 	});
 
-	$=add_action($, 'socket_connected', function($, next)
+	/* $.add_action('socket_connected', function($, next)
 	{
 		next($);
 	});
 
-	$=add_action($, 'socket_disconnected', function($, next)
+	$.add_action('socket_disconnected', function($, next)
 	{
 		next($);
-	});
+	}); */
 
 
 	var meta_box_file	= require(nr_admin+'plugin/plugin-modules/post_modules.njs').run;
@@ -32,5 +32,5 @@ module.exports.run=function($,next)
 	
 	var methods=[meta_box_file, widget_file, post_type, taxonomy, next];
 
-	series_fire($, methods);
+	$.series_fire( methods);
 }

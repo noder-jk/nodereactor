@@ -11,7 +11,7 @@ module.exports.get=function($)
             resp.sidebars=$.nr_registered_sidebar;
             resp.widget_in_sidebar=$.nr_widget_linked_to_sidebar;
 
-            $=echo($, resp);
+            $.echo(resp);
             exit($);
         }
     );
@@ -25,7 +25,7 @@ module.exports.save=function($)
     {
         var w=fields.widget_and_areas;
 
-        $=add_option($,{'area_widget_linking':w}, $.nr_active_theme);
+        $.add_option({'area_widget_linking':w}, $.nr_active_theme);
     }
     
     exit($);

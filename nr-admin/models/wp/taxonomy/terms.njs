@@ -1,16 +1,14 @@
-global.register_taxonomy=function($, ob)
+module.exports.register_taxonomy=function(ob)
 {
     if(ob.taxonomy && ob.title)
     {
-        $.nr_registered_taxonomies[ob.taxonomy]=ob;
+        this.nr_registered_taxonomies[ob.taxonomy]=ob;
     }
-    
-    return $;
 }
 
-global.use_taxonomy=function($, ob)
+module.exports.use_taxonomy=function(ob)
 {
-    if(!ob.post_type || !ob.taxonomy){return $;}
+    if(!ob.post_type || !ob.taxonomy){return;}
 
 	var tx=get_array(ob.taxonomy);
 	var pt=get_array(ob.post_type); 
@@ -19,9 +17,9 @@ global.use_taxonomy=function($, ob)
 	for(var n=0; n<pt.length; n++)
 	{
 		/* Create array in register list if not exist already. */
-		if(!$.registered_taxonomies_to_post[pt[n]])
+		if(!this.registered_taxonomies_to_post[pt[n]])
 		{
-			$.registered_taxonomies_to_post[pt[n]]=[];
+			this.registered_taxonomies_to_post[pt[n]]=[];
 		}
 
 		/* Loop through all meta box id */
@@ -30,13 +28,12 @@ global.use_taxonomy=function($, ob)
 			var a=tx[i];
 
 			/* Insert the meta box id if already not inserted by other plugin or theme. */
-			if($.registered_taxonomies_to_post[pt[n]].indexOf(a)==-1)
+			if(this.registered_taxonomies_to_post[pt[n]].indexOf(a)==-1)
 			{
-				$.registered_taxonomies_to_post[pt[n]].push(a);
+				this.registered_taxonomies_to_post[pt[n]].push(a);
 			}
 		}
     }
-	return $;
 }
 
 global.nr_delete_term=function($, term_ids, next)
@@ -73,7 +70,7 @@ global.nr_delete_term=function($, term_ids, next)
 			$.nr_db.query(q, e=>{next($)});
 		}
 
-		series_fire($, [delete_meta, delete_rel, set_parent, delete_term, next]);
+		$.series_fire( [delete_meta, delete_rel, set_parent, delete_term, next]);
 	})
 }
 
@@ -146,7 +143,7 @@ global.nr_set_post_terms=function($, post_id, term_id, taxonomy, append, next)
 
 	append!==true ? funcs.unshift(del_abandoned) : null;
 
-	series_fire($, funcs);
+	$.series_fire( funcs);
 }
 
 global.nr_insert_term=function($, term, taxonomy, args, next)
@@ -213,17 +210,17 @@ global.nr_insert_term=function($, term, taxonomy, args, next)
 	funcs.push(!term_id ? insert_term : update_term);
 	funcs.push(next);
 
-	series_fire($, funcs);
+	$.series_fire( funcs);
 }
 
-global.get_term_link=function($, by, arg, taxonomy, t_next)
+module.exports.get_term_link=function(by, arg, taxonomy, t_next)
 {
 	var perm_urls={};
 	var url_base='';
 
 	var ob={'intersect':{[by]:arg}};
 
-	var term_structure=bloginfo($, 'term_permalink', 'tt');
+	var term_structure=bloginfo(this, 'term_permalink', 'tt');
 	
 	if(term_structure=='tt' && taxonomy)
 	{
@@ -232,7 +229,7 @@ global.get_term_link=function($, by, arg, taxonomy, t_next)
 	}
 	
 	/* Firstly get the term that should pass url */
-	get_terms($, ob, function($, terms)
+	this.get_terms(ob, function($, terms)
 	{
 		var all_tax=get_taxonomies($);
 		
@@ -265,7 +262,7 @@ global.get_term_link=function($, by, arg, taxonomy, t_next)
 				/* Get ancestors post names through hierarchy function */
 				var get_nest=(term_item)=>
 				{
-					get_term_by($, 'term_id', term_item.parent, function($, r)
+					$.get_term_by('term_id', term_item.parent, function($, r)
 					{
 						if(Array.isArray(r) && r.length>0)
 						{
@@ -298,13 +295,13 @@ global.get_term_link=function($, by, arg, taxonomy, t_next)
 			t_next($, perm_urls);
 		});
 
-		series_fire($, funcs);
+		$.series_fire( funcs);
 	});
 }
 
-global.get_term_by=function($, by, arg, next)
+module.exports.get_term_by=function(by, arg, next)
 {
-	get_terms($, {'intersect':{[by]:arg}}, next);
+	this.get_terms({'intersect':{[by]:arg}}, next);
 }
 
 global.get_term_meta=function($, term_id, meta_k, meta_v, next)
@@ -338,10 +335,10 @@ const meta_processor=function ($, mets, result, next)
 	next($, result);
 }
 
-global.get_terms=function($, nr_condition, get_p_n)
+module.exports.get_terms=function(nr_condition, get_p_n)
 {
 	/* Get query object, that will come through registered hooks too. [Oh god! what a complicated function. Need refactoring.] */
-	pre_get_terms($, function($)
+	pre_get_terms(this, function($)
 	{
 		typeof nr_condition!=='object' ? nr_condition={} : 0;
 
@@ -408,7 +405,7 @@ global.get_terms=function($, nr_condition, get_p_n)
 				($,content,next)=>{get_p_n($, content)}
 			];
 			
-			series_fire($, stack);
+			$.series_fire( stack);
 		});
 	});
 }

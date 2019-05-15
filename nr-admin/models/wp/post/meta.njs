@@ -13,9 +13,9 @@ global.meta_processor=function ($, mets, result, next)
 	next($, result);
 }
 
-global.use_post_module=function($,ob)
+module.exports.use_post_module=function(ob)
 {
-	if(!ob.post_type || !ob.module){return $;}
+	if(!ob.post_type || !ob.module){return;}
 
 	var mb=get_array(ob.module);
 	var pt=get_array(ob.post_type); 
@@ -24,9 +24,9 @@ global.use_post_module=function($,ob)
 	for(var n=0; n<pt.length; n++)
 	{
 		/* Create array in register list if not exist already. */
-		if(!$.registered_meta_box_to_post[pt[n]])
+		if(!this.registered_meta_box_to_post[pt[n]])
 		{
-			$.registered_meta_box_to_post[pt[n]]=[];
+			this.registered_meta_box_to_post[pt[n]]=[];
 		}
 
 		/* Loop through all meta box id */
@@ -35,34 +35,31 @@ global.use_post_module=function($,ob)
 			var a=mb[i];
 
 			/* Insert the meta box id if already not inserted by other plugin or theme. */
-			if($.registered_meta_box_to_post[pt[n]].indexOf(a)==-1)
+			if(this.registered_meta_box_to_post[pt[n]].indexOf(a)==-1)
 			{
-				$.registered_meta_box_to_post[pt[n]].push(a);
+				this.registered_meta_box_to_post[pt[n]].push(a);
 			}
 		}
 	}
-	
-	return $;
 }
 
-global.register_post_module=function($,meta_ob)
+module.exports.register_post_module=function(meta_ob)
 {
-	if(meta_ob.id && meta_ob.title && meta_ob.component && !$.nr_registered_meta_boxes[meta_ob.id])
+	if(meta_ob.id && meta_ob.title && meta_ob.component && !this.nr_registered_meta_boxes[meta_ob.id])
 	{
 		if(meta_ob.package!==undefined)
 		{
 			var n_type=parse_node_type(meta_ob.package);
 			delete meta_ob.package;
 			
-			if(!n_type){return $;}
+			if(!n_type){return;}
 
 			meta_ob.node_type=n_type.node_type;
 			meta_ob.nr_package=n_type.nr_package;
 		}
 
-		$.nr_registered_meta_boxes[meta_ob.id]=meta_ob;
+		this.nr_registered_meta_boxes[meta_ob.id]=meta_ob;
 	}
-	return $;
 }
 
 
@@ -123,7 +120,7 @@ global.update_post_meta=function($, post_id, meta_ob, next)
 		});
 	}
 
-	series_fire($, [del_first, insert_now, next]);
+	$.series_fire( [del_first, insert_now, next]);
 }
 
 

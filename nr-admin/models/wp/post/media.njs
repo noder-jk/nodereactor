@@ -2,7 +2,7 @@ global.wp_get_attachment_url=function($, post_id, next)
 {
 	var ob={'intersect':{'post_id':post_id}};
 
-	get_posts($, ob, function($, r)
+	$.get_posts(ob, function($, r)
 	{
 		var urls={};
 		
@@ -127,7 +127,7 @@ global.nr_delete_attachment=function($, post_ids, next)
 		$.delete_attachment_post_too=true;
 
 		/* Then delete the attachment post from database. */
-		series_fire($, [[nr_delete_post, post_id], next]);
+		$.series_fire( [[nr_delete_post, post_id], next]);
 	});
 }
 

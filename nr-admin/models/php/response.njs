@@ -1,11 +1,9 @@
-global.echo=function($, str)
+module.exports.echo=function(str)
 {
 	if(typeof str=='object' && !Array.isArray(str))
 	{
-		$.nr_response_queue=Object.assign($.nr_response_queue, str);
+		this.nr_response_queue=Object.assign(this.nr_response_queue, str);
 	}
-	
-	return $;
 }
 
 
@@ -49,7 +47,7 @@ global.exit=function ($, resp)
 
 	if(resp)
 	{
-		typeof resp=='string' ? send_str=resp : $=echo($, resp);
+		typeof resp=='string' ? send_str=resp : $.echo(resp);
 	}
 	
 	/* It's impossible to save session and option and session if NR is not installed yet. */
@@ -101,5 +99,5 @@ global.exit=function ($, resp)
 		$.nr_response.status($.nr_response_code).end(rsp_t);
 	};
 
-	series_fire($, [real_set_option, real_set_session, send_resp_now]);
+	$.series_fire( [real_set_option, real_set_session, send_resp_now]);
 }

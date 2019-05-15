@@ -75,7 +75,7 @@ module.exports.get_taxonomy=function($)
         exit($, resp);
     }
 
-    series_fire($, [ret_taxonomy, fetch_taxs, final_resp]);
+    $.series_fire( [ret_taxonomy, fetch_taxs, final_resp]);
 }
 
 module.exports.delete=function($)
@@ -151,7 +151,7 @@ module.exports.get_for_editor=function($)
         });
     }
 
-    series_fire($, [register_taxonomies, check_exist, get_all, get_of_post, resp]);
+    $.series_fire( [register_taxonomies, check_exist, get_all, get_of_post, resp]);
 }
 
 module.exports.save_from_editor=function($)
@@ -168,7 +168,7 @@ module.exports.save_from_editor=function($)
 
 module.exports.t_for_nav=function($)
 {
-    get_terms($, false, function($, trms)
+    $.get_terms(false, function($, trms)
     {
         var tts={};
 

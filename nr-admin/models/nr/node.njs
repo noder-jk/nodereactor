@@ -18,7 +18,7 @@ global.nr_get_node_active=function($,call_back)
 					case 'theme'	:	$.nr_active_theme=result[i].nr_package;	
 										result[i].options ? $.nr_set_option_queue.theme[result[i].nr_package] = JSON.parse(result[i].options) : 0;
 										
-										var l=get_option($,'area_widget_linking', $.nr_active_theme);
+										var l=$.get_option('area_widget_linking', $.nr_active_theme);
 										$.nr_widget_linked_to_sidebar= l==false ? {} : l;
 										
 										active_nodes.themes.push(result[i].nr_package);

@@ -53,7 +53,7 @@ module.exports.run=function($, next)
 
 	for(var k in routes)
 	{
-		$=add_action($, k, ($, key, next)=>
+		$.add_action(k, ($, key, next)=>
 		{
 			routes[key] ? require(normalize_path(nr_controllers+ routes[key].path))[routes[key].method]($, next) : null;
 		});

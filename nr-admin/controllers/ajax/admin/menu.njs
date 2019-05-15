@@ -2,7 +2,7 @@ module.exports.get_for_admin=function($)
 {
     register_nav_menus($, function($)
     {
-        var nr_menus=get_option($, 'nr_nav_menus', 0);
+        var nr_menus=$.get_option( 'nr_nav_menus', 0);
     
         var locations=$.nr_menu_locations;
         
@@ -14,12 +14,12 @@ module.exports.save_menus=function($)
 {
     if(typeof $._POST.menus=='object')
     {
-        var cur_menus=get_option($, 'nr_nav_menus', 0);
+        var cur_menus=$.get_option( 'nr_nav_menus', 0);
         typeof cur_menus!=='object' ? cur_menus={} : null;
 
         cur_menus=Object.assign(cur_menus, $._POST.menus);
         
-        $=add_option($, {'nr_nav_menus':cur_menus}, 0);
+        $.add_option({'nr_nav_menus':cur_menus}, 0);
     }
     
     exit($);
@@ -27,7 +27,7 @@ module.exports.save_menus=function($)
 
 module.exports.get_menu_for_visitor=function($)
 {
-    var cr_menus=get_option($, 'nr_nav_menus', 0);
+    var cr_menus=$.get_option( 'nr_nav_menus', 0);
 
     var cur_menus = (!cr_menus || cr_menus==0) ? {} : node_modules.deepcopy(cr_menus);
 
@@ -56,9 +56,9 @@ module.exports.get_menu_for_visitor=function($)
     }
     
     /* Now get permalink of all that posts and terms */
-    get_permalink($, 'post_id', post_ids, function($, p_urls)
+    $.get_permalink( 'post_id', post_ids, function($, p_urls)
     {
-        get_term_link($, 'term_id', term_ids, false, function($, t_urls)
+        $.get_term_link( 'term_id', term_ids, false, function($, t_urls)
         {
             var cm={};
 
@@ -94,11 +94,11 @@ module.exports.del_menu=function()
 {
     if($._POST.menu_name && typeof $._POST.menu_name=='string')
     {
-        var cur_menus=get_option($, 'nr_nav_menus', 0);
+        var cur_menus=$.get_option( 'nr_nav_menus', 0);
         
         delete cur_menus[$._POST.menu_name];
 
-        $=add_option($, {'nr_nav_menus':cur_menus}, 0);
+        $.add_option({'nr_nav_menus':cur_menus}, 0);
     }
 
     exit($);

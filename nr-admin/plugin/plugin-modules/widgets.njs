@@ -12,7 +12,7 @@ module.exports.run=function($,next)
 			'package':false
 		}
 		
-		$=register_widget($, widget_object);
+		$.register_widget(widget_object);
 		next($);
 	}
 	
@@ -26,7 +26,7 @@ module.exports.run=function($,next)
 			'output_component':'ArbitraryTextOutput',
 			'package':false
 		}
-		$=register_widget($, arbit_obj);
+		$.register_widget(arbit_obj);
 		next($);
 	}
 	
@@ -40,7 +40,7 @@ module.exports.run=function($,next)
 			'output_component':'CustomHtmlOutput',
 			'package':false
 		}
-		$=register_widget($, cust_obj);
+		$.register_widget(cust_obj);
 		next($);
 	}
 
@@ -54,7 +54,7 @@ module.exports.run=function($,next)
 			'output_component':'RecentPostOutput',
 			'package':false
 		}
-		$=register_widget($, widget_object);
+		$.register_widget(widget_object);
 		next($);
 	}
 
@@ -68,15 +68,15 @@ module.exports.run=function($,next)
 			'output_component':'MenuWidgetOutput',
 			'package':false
 		}
-		$=register_widget($, widget_object);
+		$.register_widget(widget_object);
 		next($);
 	}
 	
-	$=add_action($, 'widgets_init',	custom_html_widget);
-	$=add_action($, 'widgets_init',	arbitrary_text_widget);
-	$=add_action($, 'widgets_init',	recent_post_widget);
-	$=add_action($, 'widgets_init',	search_widget_reg);
-	$=add_action($, 'widgets_init',	menu_widget);
+	$.add_action('widgets_init',	custom_html_widget);
+	$.add_action('widgets_init',	arbitrary_text_widget);
+	$.add_action('widgets_init',	recent_post_widget);
+	$.add_action('widgets_init',	search_widget_reg);
+	$.add_action('widgets_init',	menu_widget);
 	
 	next($);
 }

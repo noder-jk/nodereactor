@@ -173,6 +173,7 @@ var NodeReactor_blue_print=
 	_POST						: {},
 	_FILES						: {},
 	_SESSION					: {},
+	_COOKIE_ORIGINAL			: {},
 	_COOKIE						: {},
 	_SERVER						: {},
 								
@@ -225,16 +226,62 @@ var NodeReactor_blue_print=
     registered_taxonomies_to_post:{}
 }
 
+var nr_funcs={};
+
+var mods=
+[
+    'wp/hook.njs',
+    'wp/taxonomy/terms.njs',
+    'wp/dashboard.njs',
+    'wp/sidebar.njs',
+    'wp/menu.njs',
+    'php/cookie.njs',
+    'php/session.njs',
+    'wp/post/meta.njs',
+    'wp/option.njs',
+    'php/response.njs',
+    'wp/post/post.njs',
+    'wp/post/helper.njs',
+    'wp/taxonomy/terms.njs',
+    'wp/post/permalink.njs',
+    'nr/helper.njs',
+];
+
+mods.forEach(element => 
+{
+    var m=require(normalize_path(nr_models+element));
+
+    for(k in m)
+    {
+        if(typeof m[k]=='function')
+        {
+            nr_funcs[k]=m[k];
+        }
+    }
+});
+
+
+function gob()
+{
+    var $                   = node_modules.deepcopy(NodeReactor_blue_print);
+    
+    return Object.assign($, nr_funcs);
+}
+
 global.get_nr_blueprint=function(request, response, max_s)
 {
-	url_data				= node_modules.url.parse(request.url,true);
+	var url_data			= node_modules.url.parse(request.url,true);
 		
-	$						= node_modules.deepcopy(NodeReactor_blue_print);
+	var $					= gob();
 	
 	$.nr_max_upload_size	= max_s;
 	
-	$._GET					= url_data.query;
-	$._COOKIE				= request.headers.cookie==undefined ? {} : node_modules.cookie.parse(request.headers.cookie);
+    $._GET					= url_data.query;
+    
+    var ckk                 = request.headers.cookie==undefined ? {} : node_modules.cookie.parse(request.headers.cookie);
+    $._COOKIE_ORIGINAL		= node_modules.deepcopy(ckk);
+    $._COOKIE				= node_modules.deepcopy(ckk);
+    
 	$._SERVER				= {
 								'SERVER_PORT'		: nr_port,
 								'REQUEST_METHOD'	: request.method,
@@ -264,11 +311,13 @@ global.get_socket_blueprint=function(request, socket)
 {
     url_data				= node_modules.url.parse(request.url, true);
     
-    $						= node_modules.deepcopy(NodeReactor_blue_print);
+	var $					= gob();
 
     $.nr_socket             = socket;
 
-    $._COOKIE				= request.headers.cookie==undefined ? {} : node_modules.cookie.parse(request.headers.cookie);
+    var ckk                 = request.headers.cookie==undefined ? {} : node_modules.cookie.parse(request.headers.cookie);
+    $._COOKIE_ORIGINAL		= node_modules.deepcopy(ckk);
+    $._COOKIE				= node_modules.deepcopy(ckk);
     
 	$._SERVER				= {
                                 'SERVER_PORT'	: nr_port,

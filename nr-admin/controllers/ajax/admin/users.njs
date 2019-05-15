@@ -15,7 +15,7 @@ module.exports.get=function($)
 			'users':r
 		}
 
-		$=echo($, resp);
+		$.echo(resp);
 		
 		exit($);
 	});
@@ -67,8 +67,8 @@ module.exports.login=function($)
 			if(valid==true)
 			{
 				$.nr_current_user=result[0];
-				$=set_session($,'user_id', result[0].user_id, nr_login_expiry);
-				$=set_session($,'user_login', result[0].user_login, nr_login_expiry);
+				$.set_session('user_id', result[0].user_id, nr_login_expiry);
+				$.set_session('user_login', result[0].user_login, nr_login_expiry);
 				
 				resp={'status':'done','go_to':'/nr-admin'};
 			}

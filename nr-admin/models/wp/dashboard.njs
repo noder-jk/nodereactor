@@ -1,11 +1,10 @@
 /* ~~~~~~~~~~~Dashboard menu page~~~~~~~~~~~ */
-global.add_submenu_page=function($, params)
+module.exports.add_submenu_page=function(params)
 { 
-	$.nr_admin_submenus_runtime.push(params);
-	return $;
+	this.nr_admin_submenus_runtime.push(params);
 }
 
-global.add_menu_page=function($,params,parent_slug)
+module.exports.add_menu_page=function(params,parent_slug)
 {
 	typeof params!=='object' ? params={} : 0;
 	
@@ -15,7 +14,7 @@ global.add_menu_page=function($,params,parent_slug)
 	{
 		if(!params[req_key[i]])
 		{
-			return $;
+			return;
 		}
 	}
 	
@@ -25,19 +24,17 @@ global.add_menu_page=function($,params,parent_slug)
 	params.nr_package=ntype.nr_package;
 	delete params.package;
 
-	if(parent_slug && $.nr_admin_menus_runtime[parent_slug])
+	if(parent_slug && this.nr_admin_menus_runtime[parent_slug])
 	{
-		if(!$.nr_admin_menus_runtime[parent_slug].sub)
+		if(!this.nr_admin_menus_runtime[parent_slug].sub)
 		{
-			$.nr_admin_menus_runtime[parent_slug].sub=[];
+			this.nr_admin_menus_runtime[parent_slug].sub=[];
 		}
 
-		$.nr_admin_menus_runtime[parent_slug].sub.push(params);
+		this.nr_admin_menus_runtime[parent_slug].sub.push(params);
 	}
 	else
 	{
-		$.nr_admin_menus_runtime[params.slug]={'main':params, 'sub':[]}
+		this.nr_admin_menus_runtime[params.slug]={'main':params, 'sub':[]}
 	}
-
-	return $;
 }

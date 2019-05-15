@@ -34,7 +34,7 @@ global.get_user_sessions=function($, call_backk)
 						else
 						{
 							/* Set the sessions to session variable */
-							$=set_session($, k, json[k].value);
+							$.set_session( k, json[k].value);
 						}
 					}
 
@@ -58,15 +58,13 @@ global.get_user_sessions=function($, call_backk)
 }
 
 /* Enqueue sessions to be saved in database. */
-global.set_session=function($, key, value, expiry)
+module.exports.set_session=function(key, value, expiry)
 {
-	var ex=$.nr_unix_timestamp+(expiry ? expiry : nr_session_expiry);
+	var ex=this.nr_unix_timestamp+(expiry ? expiry : 86400);
 	
-	$.nr_session_queue[key]={'value':value,'expiry':ex};
+	this.nr_session_queue[key]={'value':value,'expiry':ex};
 	
-	$._SESSION[key]=value;
-	
-	return $;
+	this._SESSION[key]=value;
 }
 
 /* now at the end of response, save sessions in database. */
@@ -114,8 +112,8 @@ global.real_set_session=function($, call_back)
 			{
 				if(!e)
 				{
-					$=set_cookie($, nr_session_cookie_name, r.insertId, nr_cookie_expiry);
-					$=set_cookie($, nr_session_cookie_pass, p, nr_cookie_expiry);
+					$.set_cookie(nr_session_cookie_name, r.insertId, nr_cookie_expiry);
+					$.set_cookie(nr_session_cookie_pass, p, nr_cookie_expiry);
 				}
 				
 				call_back($);

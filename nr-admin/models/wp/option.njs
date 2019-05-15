@@ -15,45 +15,43 @@ const get_node_type=function(nr_package)
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~get option and set option~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-global.add_option=function($, option, nr_package)
+module.exports.add_option=function(option, nr_package)
 {
 	/* to_set parameter is json, key value paired data. */
 	if(nr_package===0)
 	{
 		for(var k in option)
 		{
-			$.nr_set_option_queue.core.c[k]=option[k];
+			this.nr_set_option_queue.core.c[k]=option[k];
 		}
-		return $;
+		return;
 	}
 	
 	var type=get_node_type(nr_package);
 	
 	if(type!==false)
 	{
-		$.nr_set_option_queue[type][nr_package]==undefined ? $.nr_set_option_queue[type][nr_package]={} : 0;
+		this.nr_set_option_queue[type][nr_package]==undefined ? this.nr_set_option_queue[type][nr_package]={} : 0;
 		
 		for(var k in option)
 		{
-			$.nr_set_option_queue[type][nr_package][k]=option[k];
+			this.nr_set_option_queue[type][nr_package][k]=option[k];
 		}
 	}
-	
-	return $;
 }
 
-global.get_option=function($, key, nr_package)
+module.exports.get_option=function(key, nr_package)
 {
 	if(nr_package===0)
 	{
-		return $.nr_set_option_queue.core.c[key]==undefined ? false : $.nr_set_option_queue.core.c[key];
+		return this.nr_set_option_queue.core.c[key]==undefined ? false : this.nr_set_option_queue.core.c[key];
 	}
 	
 	var type=get_node_type(nr_package);
 	
-	if(type!==false && $.nr_set_option_queue[type] && $.nr_set_option_queue[type][nr_package])
+	if(type!==false && this.nr_set_option_queue[type] && this.nr_set_option_queue[type][nr_package])
 	{
-		return $.nr_set_option_queue[type][nr_package][key]==undefined ? false : $.nr_set_option_queue[type][nr_package][key];
+		return this.nr_set_option_queue[type][nr_package][key]==undefined ? false : this.nr_set_option_queue[type][nr_package][key];
 	}
 
 	return false;
@@ -123,7 +121,7 @@ global.real_set_option=function($, resp_next)
 
 	op_funcs.push(resp_next);
 
-	series_fire($, op_funcs);
+	$.series_fire( op_funcs);
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Other necessary functions.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

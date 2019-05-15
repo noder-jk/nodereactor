@@ -128,7 +128,7 @@ module.exports.run=($)=>
 
 		include_funcs.push(next);
 		
-		series_fire($,include_funcs);
+		$.series_fire(include_funcs);
 	}
 	
 	/* Handle socket event */
@@ -222,5 +222,5 @@ module.exports.run=($)=>
 		ajax_router
 	];
 
-	series_fire($, nr_db_config ? funcs : funcs2);
+	$.series_fire( nr_db_config ? funcs : funcs2);
 }

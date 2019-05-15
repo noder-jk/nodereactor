@@ -1,4 +1,4 @@
-const get_commons=function()
+const get_commons=function($)
 {
 	/* Define table name using prefix */
 	var terms			=	nr_db_config.tb_prefix+'terms';
@@ -32,7 +32,7 @@ const get_commons=function()
 
 global.pre_get_terms=function($, callback)
 {
-	var commons=get_commons();
+	var commons=get_commons($);
 	
 	$.query=commons;
 

@@ -1,5 +1,5 @@
 
-global.get_permalink=function($, by, arg, p_next)
+module.exports.get_permalink=function(by, arg, p_next)
 {
 	var process_url=($)=>
 	{
@@ -9,7 +9,7 @@ global.get_permalink=function($, by, arg, p_next)
 		/* Firstly check if the post exists */
 		var fetch_posts=($, next)=>
 		{
-			get_post_by($, by, arg, function($, r)
+			$.get_post_by( by, arg, function($, r)
 			{
 				if(Array.isArray(r) && r.length>0)
 				{
@@ -64,7 +64,7 @@ global.get_permalink=function($, by, arg, p_next)
 						/* Get ancestors post names through recursive function */
 						var get_nest=(post_item)=>
 						{
-                            get_post_by($, 'post_id', post_item.post_parent, function($, r)
+                            $.get_post_by( 'post_id', post_item.post_parent, function($, r)
                             {
                                 if(Array.isArray(r) && r.length>0)
                                 {
@@ -114,7 +114,7 @@ global.get_permalink=function($, by, arg, p_next)
 
 								if(t_id)
 								{
-									get_term_link($, 'term_id', t_id, false, function($, urls)
+									$.get_term_link( 'term_id', t_id, false, function($, urls)
 									{
 										var url_base='';
 										structure=='ttn' ? url_base='/'+taxo : 0; // prepend taxonomy if it is taxonomy/terms/post_name
@@ -145,12 +145,12 @@ global.get_permalink=function($, by, arg, p_next)
 				p_next($, perm_urls);
 			});
 
-			series_fire($, funcs);
+			$.series_fire( funcs);
 		}
 
-		series_fire($, [fetch_posts, permalink_mode]);
+		$.series_fire( [fetch_posts, permalink_mode]);
 	}
 
 	/* Firstly initialize hooks, and then process url */
-	series_fire($, [register_post_types, register_taxonomies, use_taxonomies, process_url])
+	this.series_fire([register_post_types, register_taxonomies, use_taxonomies, process_url])
 }

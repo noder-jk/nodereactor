@@ -12,7 +12,7 @@ global.get_pagination=function($, pgn_condition, next)
 	typeof pgn_condition!=='object' ? pgn_condition={} : null;
 	pgn_condition.paginator_call=true;
 	
-	get_posts($, pgn_condition, function($, r)
+	$.get_posts(pgn_condition, function($, r)
 	{
 		var posts	= r.posts;
 		var args	= r.args;

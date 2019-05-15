@@ -10,7 +10,8 @@ module.exports.run=function($,next)
 					'package':false
 				}
 
-		$=register_post_module($,box);
+		$.register_post_module(box);
+
 		next($);
 	}
 
@@ -24,7 +25,7 @@ module.exports.run=function($,next)
 					'package':false
 				}
 
-		$=register_post_module($,box);
+		$.register_post_module(box);
 		next($);
 	}
 
@@ -39,18 +40,20 @@ module.exports.run=function($,next)
 			'package':false
 		}
 
-		$=register_post_module($,box);
+		$.register_post_module(box);
+		
 		next($);
 	}
-	$=add_action($, 'register_post_modules', featured_image_metabox);
-	$=add_action($, 'register_post_modules', custom_template_meta_field);
-	$=add_action($, 'register_post_modules', post_parent);
+
+	$.add_action('register_post_modules', featured_image_metabox);
+	$.add_action('register_post_modules', custom_template_meta_field);
+	$.add_action('register_post_modules', post_parent);
 	
 
 	function register_meta($, next)
 	{
-		$=use_post_module($, 
-		{
+		$.use_post_module
+		({
 			'post_type':'post', 
 			"module":
             [
@@ -64,8 +67,8 @@ module.exports.run=function($,next)
 		});
 
 
-		$=use_post_module($, 
-		{
+		$.use_post_module
+		({
 			'post_type':'page', 
 			"module":
             [
@@ -79,8 +82,8 @@ module.exports.run=function($,next)
             ]
 		});
 
-		$=use_post_module($, 
-		{
+		$.use_post_module
+		({
 			'post_type':'attachment', 
 			"module":
 			[
@@ -94,7 +97,7 @@ module.exports.run=function($,next)
 		next($);
 	}
 
-	$=add_action($, 'use_post_modules', register_meta);
+	$.add_action('use_post_modules', register_meta);
 
 
 	next($);

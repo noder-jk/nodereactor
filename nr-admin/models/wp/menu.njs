@@ -1,6 +1,4 @@
-global.register_nav_menu=function($, ob)
+module.exports.register_nav_menu=function(ob)
 {
-    $.nr_menu_locations[ob.id]=ob;
-
-    return $;
+    this.nr_menu_locations[ob.id]=ob;
 }

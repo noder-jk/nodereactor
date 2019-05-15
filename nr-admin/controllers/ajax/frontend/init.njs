@@ -37,7 +37,7 @@ module.exports.init=function($)
 	/* Retrieve posts based on accessed page */
 	var send_resp=($)=>
 	{
-		get_posts($, p_query, ($, posts_for_theme)=>
+		$.get_posts(p_query, ($, posts_for_theme)=>
 		{
 			/* Now get pagination */
 			get_pagination($, p_query, ($, pagination)=>
@@ -46,7 +46,7 @@ module.exports.init=function($)
 
 				var post_ids=posts_for_theme.map(item=>item.post_id);
 
-				get_permalink($, 'post_id', post_ids, function($, urls)
+				$.get_permalink( 'post_id', post_ids, function($, urls)
 				{
 					var psts=posts_for_theme.map(item=>
 					{
@@ -115,7 +115,7 @@ module.exports.init=function($)
 	/* otherwise it might be individual post */
 	var check_post=($, next)=>
 	{
-		get_permalink($, 'post_name', object_, function($, url)
+		$.get_permalink( 'post_name', object_, function($, url)
 		{
 			/* url exist means the url is valid */
 			if(url[object_])
@@ -155,7 +155,7 @@ module.exports.init=function($)
 
 		term_structure=='tt' ? taxonomy=paths[0] : 0;
 
-		get_term_link($, 'slug', object_, taxonomy, function($, url)
+		$.get_term_link( 'slug', object_, taxonomy, function($, url)
 		{
 			if(url[object_])
 			{
@@ -182,5 +182,5 @@ module.exports.init=function($)
 		exit($, nr_resp);
 	}
 
-	series_fire($, [register_post_types, set_post_types, check_home, check_logout, check_post, check_term, eventually]);
+	$.series_fire( [register_post_types, set_post_types, check_home, check_logout, check_post, check_term, eventually]);
 }

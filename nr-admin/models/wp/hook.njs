@@ -1,17 +1,15 @@
 /* --------------Registrar functions that register hooks, filters and do action.-------------- */
-global.add_action=function($, hook, callback)
+module.exports.add_action=function(hook, callback)
 {
 	if(hook && (hook.indexOf('nr_ajax_')===0 || hook.indexOf('nr_socket_')===0))
 	{
-		$.nr_registered_ajax[hook]=callback;
-		return $;
+		this.nr_registered_ajax[hook]=callback;
+		return;
 	}
 	
-	!$.nr_hooks[hook] ? $.nr_hooks[hook]=[] : 0;
+	!this.nr_hooks[hook] ? this.nr_hooks[hook]=[] : 0;
 	
-	$.nr_hooks[hook].push(callback);
-	
-	return $;
+	this.nr_hooks[hook].push(callback);
 }
 
 global.remove_action=function($, hook)
@@ -42,7 +40,7 @@ global.do_action=function($,hook,params,callback)
 		hks.push(next);
 		
 		/* Finally call all that in series mode */
-		series_fire($, hks);
+		$.series_fire( hks);
 	}
 	else if(typeof next=='function')
 	{
@@ -51,7 +49,7 @@ global.do_action=function($,hook,params,callback)
 }
 
 /* --------------post hooks-------------- */
-global.use_post_modules=function($,callback)
+global.use_post_modules=function($, callback)
 {
 	do_action($,'use_post_modules',callback);
 }

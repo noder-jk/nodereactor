@@ -1,6 +1,6 @@
 module.exports.run=function($, next)
 {
-    $=add_action($, 'register_taxonomies', function($, next)
+    $.add_action('register_taxonomies', function($, next)
     {
         var tax=
         {
@@ -18,13 +18,13 @@ module.exports.run=function($, next)
             'multiple':true
         }
 
-        $=register_taxonomy($, tax);
-        $=register_taxonomy($, tag);
+        $.register_taxonomy(tax);
+        $.register_taxonomy(tag);
 
         next($);
     });
 
-    $=add_action($, 'use_taxonomies', function($, next)
+    $.add_action('use_taxonomies', function($, next)
     {
         var lnk=
         {
@@ -36,7 +36,7 @@ module.exports.run=function($, next)
 			]
         };
 
-		$=use_taxonomy($, lnk);
+		$.use_taxonomy(lnk);
 
         next($);
     });

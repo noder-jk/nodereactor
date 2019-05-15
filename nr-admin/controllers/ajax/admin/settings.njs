@@ -25,17 +25,17 @@ module.exports.get=function($)
         resp.values[k]=$.nr_set_option_queue.core.c[k];
     }
 
-    resp.values.time_zone       = get_option($,'time_zone',0)==false ? 'UTC' : get_option($,'time_zone',0);
+    resp.values.time_zone       = $.get_option('time_zone',0)==false ? 'UTC' : $.get_option('time_zone',0);
 
-    $=echo($,resp);	
+    $.echo(resp);	
 
     exit($);				
 }
 
 module.exports.save=function($)
 {
-    $=add_option($, $._POST, 0);
-    $=echo($,{'status':'done'});
+    $.add_option($._POST, 0);
+    $.echo({'status':'done'});
 	exit($);
 }
 
@@ -53,5 +53,5 @@ module.exports.permalink_page=function($)
         exit($, resp);
     }
 
-    series_fire($, [register_post_types, register_taxonomies, use_taxonomies, send_perm]);
+    $.series_fire( [register_post_types, register_taxonomies, use_taxonomies, send_perm]);
 }

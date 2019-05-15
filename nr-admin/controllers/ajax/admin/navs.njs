@@ -89,14 +89,14 @@ module.exports.navs=function($)
                 var parent_slug=params.parent_slug;
                 delete params.parent_slug;
 
-                $=add_menu_page($, params, parent_slug);
+                $.add_menu_page(params, parent_slug);
             }
         }
 
         /* Finally send the menus to the react as json */
-        $=echo($, {'nr_admin_navs':$.nr_admin_menus_runtime});
+        $.echo({'nr_admin_navs':$.nr_admin_menus_runtime});
         exit($);
     }
     
-    series_fire($, [admin_menu, register_post_types, register_taxonomies, use_taxonomies, init_nav_render]);
+    $.series_fire( [admin_menu, register_post_types, register_taxonomies, use_taxonomies, init_nav_render]);
 }

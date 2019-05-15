@@ -39,7 +39,7 @@ global.nr_fill_post_cond=function(nr_cond, args)
 	return nr_cond;
 }
 
-const get_commons=function()
+const get_commons=function($)
 {
 	/* Define table name using prefix */
 	var posts			=	nr_db_config.tb_prefix+'posts';
@@ -121,7 +121,7 @@ const get_commons=function()
 
 global.pre_get_posts=function($, condition, callback)
 {
-	var commons=get_commons();
+	var commons=get_commons($);
 	
 	/* Set search keyword */
 	if(condition && typeof condition=='object')

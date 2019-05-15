@@ -8,7 +8,7 @@ module.exports.dispatch=function($)
 
     usr.gravatar=get_avatar_url(user.user_email, {s: '32', r: 'g', d: 'mm'});
 
-	var z=get_option($, 'time_zone', 0);
+	var z=$.get_option( 'time_zone', 0);
     var zz=z || 'UTC';
 
     var resp=

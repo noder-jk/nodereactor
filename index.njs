@@ -81,7 +81,6 @@ module.exports=function(project_root, extensions)
 	global.nr_session_cookie_pass	= data_ob.nr_session_cookie_pass ? data_ob.nr_session_cookie_pass : 'sess_pass';
 
 
-	global.nr_session_expiry		= data_ob.nr_session_expiry ? data_ob.nr_session_expiry : 3600; // Second
 	global.nr_cookie_expiry			= data_ob.nr_cookie_expiry ? data_ob.nr_cookie_expiry : (60*60*24); // Second
 	global.nr_login_expiry			= data_ob.nr_login_expiry ? data_ob.nr_login_expiry : (60*60*24); // Second
 
@@ -146,7 +145,7 @@ module.exports=function(project_root, extensions)
 
 		$.socket_event='connected';
 		
-		$=set_cookie($, 'socketCookie', 'socket cookie value', 3600);
+		$.set_cookie( 'socketCookie', 'socket cookie value', 3600);
 
 		deps.handle_route($);
 

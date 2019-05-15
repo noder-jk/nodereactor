@@ -63,19 +63,19 @@ module.exports.get=function($)
 		{
 			var ob={'intersect':{'post_id':$._POST.post_id, 'post_type':$._POST['post_type']}};
 
-			get_posts($, ob, function($, r)
+			$.get_posts(ob, function($, r)
 			{
 				r=r[0] ? r[0] : 'not_found';
 
 				editor_resp.post=r;
 
-				$=echo($, editor_resp);
+				$.echo(editor_resp);
 				exit($);
 			})
 		}
 		else
 		{
-			$=echo($, editor_resp);
+			$.echo(editor_resp);
 			exit($);
 		}
 	}
@@ -96,7 +96,7 @@ module.exports.get=function($)
 		init_post_response
 	];
 	
-	series_fire($, funcs);
+	$.series_fire( funcs);
 }
 
 module.exports.get_post_list=function($)
@@ -156,7 +156,7 @@ module.exports.get_post_list=function($)
 	var process_list=($, next)=>
 	{
 		/* Now get posts and send to browser. */
-		get_posts($, q_ob, function($, post_ob)
+		$.get_posts(q_ob, function($, post_ob)
 		{
 			get_pagination($, q_ob, function($, pgn)
 			{
@@ -178,7 +178,7 @@ module.exports.get_post_list=function($)
 				
 				var get_perms=($, next)=>
 				{
-					get_permalink($, 'post_id', post_ids, function($, urls)
+					$.get_permalink( 'post_id', post_ids, function($, urls)
 					{
 						for(var i=0; i<post_ob.length; i++)
 						{
@@ -223,18 +223,18 @@ module.exports.get_post_list=function($)
 
 				var resp_now=($, next)=>
 				{
-					$=echo($, {'posts':post_ob, 'pagination':pgn, 'taxonomies':txes});
+					$.echo({'posts':post_ob, 'pagination':pgn, 'taxonomies':txes});
 
 					exit($);
 				}
 
-				series_fire($, [get_perms, get_taxs, resp_now]);
+				$.series_fire( [get_perms, get_taxs, resp_now]);
 			});
 		});
 	}
 	
 
-	series_fire($, [register_post_types, register_taxonomies, use_taxonomies, process_list]);
+	$.series_fire( [register_post_types, register_taxonomies, use_taxonomies, process_list]);
 }
 
 module.exports.delete_media=function($)
@@ -289,7 +289,7 @@ module.exports.save=function($)
 		delete fields.post_meta.nr_post_parent;
 	}
 	
-	nr_insert_post($, fields, function($, r)
+	$.nr_insert_post( fields, function($, r)
 	{
 		if(!r)
 		{
@@ -325,7 +325,7 @@ module.exports.get_hierarchy=function($)
 		'posts_per_page':-1
 	}
 
-	get_posts($, q_ob, function($, r)
+	$.get_posts(q_ob, function($, r)
 	{
 		exit($,{'posts':r});
 	});
@@ -353,7 +353,7 @@ module.exports.p_for_nav=function($)
 		}
 	}
 
-	get_posts($, ob, function($, pst)
+	$.get_posts(ob, function($, pst)
 	{
 		var posts={};
 
