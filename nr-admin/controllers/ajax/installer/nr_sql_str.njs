@@ -2,7 +2,7 @@ module.exports=function(connection, nr_data)
 {
 	var default_core_options={"nr_nav_menus":{"Sample Menu Name":{"items":[{"post_id":"2","title":"Auto generated page","key":"v4zjhybyz7ffbgle3h8yw"},{"term_id":"1","title":"Programming","key":"a6nac3gyszqtmmsrq3l3","children":[{"term_id":"4","title":"Android","key":"9klfbg9x0ofs9a8w0rs6"},{"term_id":"3","title":"Web","key":"n8ckglaaxqf2w6h9nr797"}]},{"url":"https://web.facebook.com/NodeReactorCMS/","title":"FB","key":"5siluhvtpe509e9zi3d32qj"}],"association":["semp_nav_menu"]}},"post_post_permalink":"ttn","post_post_taxonomy":"category","term_permalink":"tt"};
 
-	var default_theme_option={"area_widget_linking":{"right_side_panel_theme":[{"key":"0.5pzlws0ui4x","widget_id":"custom_html_widget_handler","properties":{"nr_widget_title":"Sample Widget","custom_code":"<iframe style=\"max-width:100%\" src=\"https://www.youtube.com/embed/rN6nlNC9WQA\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"},"node_type":true,"nr_package":false}]}};
+	var default_theme_option={"area_widget_linking":{"right_side_panel_theme":[{"key":"0.5pzlws0ui4x","widget_id":"custom_html_widget_handler","properties":{"nr_widget_title":"Sample Widget","custom_code":"<iframe style=\"max-width:100%\" src=\"https://www.youtube.com/embed/rN6nlNC9WQA\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"},"nr_package":true}]}};
 	
 	return	"\
 	SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\

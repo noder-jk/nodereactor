@@ -19,8 +19,7 @@ module.exports.navs=function($)
                 'menu_icon':pt[k].icon,
                 'slug':'all',
                 'component':'PostList',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             }
 
             var sb_pages=[];
@@ -31,8 +30,7 @@ module.exports.navs=function($)
                 'menu_title':'Create',
                 'slug':'create',
                 'component':'InitPostEditor',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             });
             
             sb_pages.push
@@ -42,8 +40,7 @@ module.exports.navs=function($)
                 'slug':'edit',
                 'component':'InitPostEditor',
                 'hide_if_not':'/nr-admin/'+key+'/edit',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             });
 
             /* Set taxonomy menu to post type menu */
@@ -61,8 +58,7 @@ module.exports.navs=function($)
                             'menu_title':rtx.title,
                             'slug':'taxonomy_'+rtx.taxonomy,
                             'component':'TaxonomyPage',
-                            'node_type':true,
-                            'nr_package':false
+                            'nr_package':true
                         })
                     }
                 });

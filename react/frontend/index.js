@@ -94,7 +94,6 @@ function (_Component) {
           /* Parameters to pass to theme component finder. */
 
           var find_params = {
-            'node_type': 'themes',
             'nr_package': nr_package,
             'component': component,
             'fallback_component': 'Index'

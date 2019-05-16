@@ -9,8 +9,7 @@ const nr_n_menus=
             'menu_icon':'faPager',
             'slug':'dashboard',
             'component':'MainDashboard',
-            'node_type':true,
-            'nr_package':false
+            'nr_package':true
         },
         'sub':[]
     },
@@ -23,8 +22,7 @@ const nr_n_menus=
             'menu_icon':'faFileImage',
             'slug':'explorer',
             'component':'MediaPage',
-            'node_type':true,
-            'nr_package':false
+            'nr_package':true
         },
         'sub':[]
     },
@@ -37,8 +35,7 @@ const nr_n_menus=
             'menu_icon':'faPaintBrush',
             'slug':'themes',
             'component':'InstalledThemes',
-            'node_type':true,
-            'nr_package':false
+            'nr_package':true
         },
         'sub':
         [
@@ -47,24 +44,21 @@ const nr_n_menus=
                 'menu_title':'Theme Directory',
                 'slug':'theme-directory',
                 'component':'ThemeDirectory',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             },
             {
                 'page_title':'Widgets',
                 'menu_title':'Widgets',
                 'slug':'widgets',
                 'component':'AdminWidget',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             },
             {
                 'page_title':'Menus',
                 'menu_title':'Menus',
                 'slug':'menus',
                 'component':'MenuPage',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             }
         ]
     },
@@ -77,8 +71,7 @@ const nr_n_menus=
             'menu_icon':'faPlug',
             'slug':'all',
             'component':'InstalledPlugins',
-            'node_type':true,
-            'nr_package':false
+            'nr_package':true
         },
         'sub':
         [
@@ -87,8 +80,7 @@ const nr_n_menus=
                 'menu_title':'Plugin Directory',
                 'slug':'plugin-directory',
                 'component':'PluginDirectory',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             }
         ]
     },
@@ -101,8 +93,7 @@ const nr_n_menus=
             'menu_icon':'faUser',
             'slug':'all',
             'component':'Users',
-            'node_type':true,
-            'nr_package':false
+            'nr_package':true
         },
         'sub':
         [
@@ -111,8 +102,7 @@ const nr_n_menus=
                 'menu_title':'Create User',
                 'slug':'create',
                 'component':'UserCreate',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             },
             {
                 'page_title':'Edit User',
@@ -120,16 +110,14 @@ const nr_n_menus=
                 'slug':'edit',
                 'hide_if_not':'/nr-admin/users/edit',
                 'component':'EditUser',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             },
             {
                 'page_title':'My Profile',
                 'menu_title':'My Profile',
                 'slug':'my-profile',
                 'component':'MyProfile',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             }
         ]
     },
@@ -142,8 +130,7 @@ const nr_n_menus=
             'menu_icon':'faCog',
             'slug':'general',
             'component':'GeneralSetting',
-            'node_type':true,
-            'nr_package':false
+            'nr_package':true
         },
         'sub':
         [
@@ -152,16 +139,14 @@ const nr_n_menus=
                 'menu_title':'Permalink',
                 'slug':'permalink',
                 'component':'PermalinkSetting',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             },
             {
                 'page_title':'Reading Setting',
                 'menu_title':'Reading',
                 'slug':'reading',
                 'component':'ReadingSetting',
-                'node_type':true,
-                'nr_package':false
+                'nr_package':true
             }
         ]
     }
@@ -226,7 +211,6 @@ var NodeReactor_blue_print=
     registered_taxonomies_to_post:{}
 }
 
-var nr_funcs={};
 
 var mods=
 [
@@ -247,6 +231,7 @@ var mods=
     'nr/helper.njs',
 ];
 
+var nr_funcs={};
 mods.forEach(element => 
 {
     var m=require(normalize_path(nr_models+element));
@@ -268,7 +253,7 @@ function gob()
     return Object.assign($, nr_funcs);
 }
 
-global.get_nr_blueprint=function(request, response, max_s)
+module.exports.get_nr_blueprint=function(request, response, max_s)
 {
 	var url_data			= node_modules.url.parse(request.url,true);
 		
@@ -307,7 +292,7 @@ global.get_nr_blueprint=function(request, response, max_s)
 	return $;
 }
 
-global.get_socket_blueprint=function(request, socket)
+module.exports.get_socket_blueprint=function(request, socket)
 {
     url_data				= node_modules.url.parse(request.url, true);
     

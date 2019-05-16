@@ -12,11 +12,18 @@ import {RenderMediaFile} from './helper/render-media';
 
 import {array_pull_down, array_pull_up} from './helper/array';
 
+import * as ScodeHooks from './hooks/shortcode';
 import * as MenuHooks from './hooks/menu';
 import * as PostHooks from './hooks/post';
 import * as SidebarHooks from './hooks/sidebar';
 
-const hooks=[PostHooks, SidebarHooks, MenuHooks];
+const hooks=
+[
+    PostHooks, 
+    SidebarHooks, 
+    MenuHooks,
+    ScodeHooks
+];
 
 const ajax_url      = '/admin-ajax';
 const socket_url    = 'nr-socket-io-core-channel';

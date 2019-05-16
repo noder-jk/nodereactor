@@ -1,5 +1,6 @@
 import React from "react";
 
+import {do_shortcodes} from 'nodereactor/react';
 
 const FindActionHook=(props)=>
 {
@@ -9,7 +10,7 @@ const FindActionHook=(props)=>
 
     let {value='', properties={}}=props;
 
-    value=danger==true ? [<div className="nr-dangerous-html" key={"danger_html_"+hook} dangerouslySetInnerHTML={{__html:value}}></div>] : [value];
+    value = danger==true ? [do_shortcodes(value)] : [value];
 
     /* Loop through all node type, theme and plugin to find hook */
     for(let k in comps)

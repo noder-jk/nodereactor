@@ -336,7 +336,6 @@ global.register_custom_template=function($, ob)
 		
 		if(!n_type){return $;}
 
-		ob.node_type=n_type.node_type;
 		ob.nr_package=n_type.nr_package;
 
 		$.nr_custom_templates[ob.component]=ob.title;

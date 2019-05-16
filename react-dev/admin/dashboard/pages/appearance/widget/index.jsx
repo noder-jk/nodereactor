@@ -37,12 +37,12 @@ const LoadInputComponent=(props)=>
             /* Loop through all widget to match current widget using nr_package and node type. */
             for(let n=0; n<widgets.length; n++)
             {
-                if(widgets[n].node_type==l.node_type && widgets[n].nr_package==l.nr_package && widgets[n].id==l.widget_id)
+                if(widgets[n].nr_package==l.nr_package && widgets[n].id==l.widget_id)
                 {
                     let component=widgets[n].input_component;
                     
                     ret.push(
-                        <div key={l.key} className="widget_form mb-4" data-widget_id={l.widget_id} data-node_type={l.node_type} data-nr_package={l.nr_package}>
+                        <div key={l.key} className="widget_form mb-4" data-widget_id={l.widget_id} data-nr_package={l.nr_package}>
                             <b>
                                 <span style={{"float":"left"}}>{widgets[n].title}</span>
                                 <i className="widget_action_i fa fa-trash" onClick={()=>widget_action('delete', area, i)}></i>
@@ -53,7 +53,7 @@ const LoadInputComponent=(props)=>
                                 <form>
                                     Widget Title
                                     <input name="nr_widget_title" className="form-control mb-3" defaultValue={l.properties.nr_widget_title || widgets[n].title}/>
-                                    <FindComp comp_props={{'component':component, 'node_type':widgets[n].node_type, 'nr_package':widgets[n].nr_package}} {...l.properties}/>
+                                    <FindComp comp_props={{'component':component, 'nr_package':widgets[n].nr_package}} {...l.properties}/>
                                 </form>
                             </div>
                         </div>
@@ -120,11 +120,8 @@ class WidgetProcess extends Component
             {
                 let widget_id=widget[n].dataset.widget_id;
 
-                let node_type=widget[n].dataset.node_type; 
-                node_type=node_type=='true' ? true : node_type;
-
                 let pkg=widget[n].dataset.nr_package; 
-                pkg=pkg=='false' ? false : pkg;
+                pkg=pkg=='true' ? true : pkg;
 
                 let properties=parse_form(widget[n])
 
@@ -133,7 +130,6 @@ class WidgetProcess extends Component
                     'key':Math.random().toString(36), 
                     'widget_id':widget_id, 
                     'properties':properties, 
-                    'node_type':node_type, 
                     'nr_package':pkg
                 });
             }
@@ -181,7 +177,6 @@ class WidgetProcess extends Component
                         'key':Math.random().toString(36), 
                         'widget_id':widgets[i].id, 
                         'properties':{}, 
-                        'node_type':widgets[i].node_type, 
                         'nr_package': widgets[i].nr_package
                     });
 

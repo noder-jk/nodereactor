@@ -95,6 +95,8 @@ var _renderMedia = require("./helper/render-media");
 
 var _array = require("./helper/array");
 
+var ScodeHooks = _interopRequireWildcard(require("./hooks/shortcode"));
+
 var MenuHooks = _interopRequireWildcard(require("./hooks/menu"));
 
 var PostHooks = _interopRequireWildcard(require("./hooks/post"));
@@ -103,7 +105,7 @@ var SidebarHooks = _interopRequireWildcard(require("./hooks/sidebar"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
-var hooks = [PostHooks, SidebarHooks, MenuHooks];
+var hooks = [PostHooks, SidebarHooks, MenuHooks, ScodeHooks];
 var ajax_url = '/admin-ajax';
 exports.ajax_url = ajax_url;
 var socket_url = 'nr-socket-io-core-channel';

@@ -52,7 +52,6 @@ module.exports.register_widget=function(widget)
 			return;
 		}
 
-		widget.node_type=type.node_type;
 		widget.nr_package=type.nr_package;
 		widget.unique_key=unique_key();
 		delete widget.package;

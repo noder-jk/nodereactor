@@ -20,7 +20,6 @@ module.exports.add_menu_page=function(params,parent_slug)
 	
 	var ntype=parse_node_type(params.package);
 
-	params.node_type=ntype.node_type;
 	params.nr_package=ntype.nr_package;
 	delete params.package;
 

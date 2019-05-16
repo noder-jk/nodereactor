@@ -44,7 +44,6 @@ class InitFrontEnd extends Component
                 /* Parameters to pass to theme component finder. */
                 let find_params=
                 {
-                    'node_type':'themes',
                     'nr_package':nr_package, 
                     'component':component, 
                     'fallback_component':'Index'

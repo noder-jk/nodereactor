@@ -222,7 +222,6 @@ var LoadMetaBox = function LoadMetaBox(props) {
       }, _react["default"].createElement("h4", null, item.title), _react["default"].createElement("div", null, _react["default"].createElement(_compFinder.FindComp, _extends({
         comp_props: {
           'component': item.component,
-          'node_type': item.node_type,
           'nr_package': item.nr_package
         }
       }, params, {

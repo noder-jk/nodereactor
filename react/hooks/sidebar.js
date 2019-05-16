@@ -51,14 +51,13 @@ var SidebarProcessor = function SidebarProcessor(props) {
         var w = widgets[n];
         /* Now load the component to render actual widget */
 
-        if (w.node_type == s.node_type && w.nr_package == s.nr_package && w.id == s.widget_id) {
+        if (w.nr_package == s.nr_package && w.id == s.widget_id) {
           comps.push(_react["default"].createElement(WidgetContainer, {
             key: s.key,
             title: s.properties.nr_widget_title
           }, _react["default"].createElement(_compFinder.FindComp, _extends({
             comp_props: {
               'component': w.output_component,
-              'node_type': s.node_type,
               'nr_package': s.nr_package
             }
           }, s.properties))));

@@ -7,6 +7,8 @@ exports.FindActionHook = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _react2 = require("nodereactor/react");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -21,13 +23,7 @@ var FindActionHook = function FindActionHook(props) {
       value = _props$value === void 0 ? '' : _props$value,
       _props$properties = props.properties,
       properties = _props$properties === void 0 ? {} : _props$properties;
-  value = danger == true ? [_react["default"].createElement("div", {
-    className: "nr-dangerous-html",
-    key: "danger_html_" + hook,
-    dangerouslySetInnerHTML: {
-      __html: value
-    }
-  })] : [value];
+  value = danger == true ? [(0, _react2.do_shortcodes)(value)] : [value];
   /* Loop through all node type, theme and plugin to find hook */
 
   for (var k in comps) {

@@ -43,11 +43,11 @@ global.nr_get_node_active=function($,call_back)
 
 global.parse_node_type=function(p)
 {
-	if(p===false){return {'node_type':true, 'nr_package':false}}
+	if(p===false){return {'nr_package':true}}
 
-	if(nr_themes[p]){return {'node_type':'themes', 'nr_package': p}}
+	if(nr_themes[p]){return {'nr_package': p}}
 
-	if(nr_plugins[p]){return {'node_type':'plugins', 'nr_package': p}}
+	if(nr_plugins[p]){return {'nr_package': p}}
 
 	return false;
 }

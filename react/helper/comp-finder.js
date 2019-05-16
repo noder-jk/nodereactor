@@ -17,21 +17,21 @@ var FindComp = function FindComp(props) {
   var vendor_comps = window.nr_vendor_comps;
   var _props$comp_props = props.comp_props,
       comp_props = _props$comp_props === void 0 ? {} : _props$comp_props;
-  var _comp_props$node_type = comp_props.node_type,
-      node_type = _comp_props$node_type === void 0 ? false : _comp_props$node_type,
-      _comp_props$nr_packag = comp_props.nr_package,
+  var _comp_props$nr_packag = comp_props.nr_package,
       nr_package = _comp_props$nr_packag === void 0 ? false : _comp_props$nr_packag,
       component = comp_props.component,
       _comp_props$fallback_ = comp_props.fallback_component,
-      fallback_component = _comp_props$fallback_ === void 0 ? false : _comp_props$fallback_;
+      fallback_component = _comp_props$fallback_ === void 0 ? false : _comp_props$fallback_,
+      _comp_props$fallback_2 = comp_props.fallback_content,
+      fallback_content = _comp_props$fallback_2 === void 0 ? false : _comp_props$fallback_2;
   var params = Object.assign({}, props);
   delete params.comp_props;
 
-  var default_resp = _react["default"].createElement("small", {
+  var default_resp = fallback_content || _react["default"].createElement("small", {
     className: "text-danger"
   }, _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, component))), " not found.");
 
-  if (node_type === true) {
+  if (nr_package === true) {
     if (AdminComps[component]) {
       /* If it's admin component */
       var Cmp = {
@@ -39,17 +39,19 @@ var FindComp = function FindComp(props) {
       };
       return _react["default"].createElement(Cmp.c, params);
     }
-  } else if (typeof node_type == 'string' && vendor_comps[node_type] && nr_package !== false) {
+  } else {
     var ret = function ret(component) {
       /* Find in third party components, theme and plugins. */
-      for (var i = 0; i < vendor_comps[node_type].length; i++) {
-        var node = vendor_comps[node_type][i];
+      for (var node_type in vendor_comps) {
+        for (var i = 0; i < vendor_comps[node_type].length; i++) {
+          var node = vendor_comps[node_type][i];
 
-        if (node.component && node.nr_package == nr_package && node.component[component]) {
-          var Cmpc = {
-            c: node.component[component]
-          };
-          return _react["default"].createElement(Cmpc.c, params);
+          if (node.component && node.nr_package == nr_package && node.component[component]) {
+            var Cmpc = {
+              c: node.component[component]
+            };
+            return _react["default"].createElement(Cmpc.c, params);
+          }
         }
       }
 

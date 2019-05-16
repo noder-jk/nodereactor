@@ -70,13 +70,12 @@ var LoadInputComponent = function LoadInputComponent(props) {
       /* Loop through all widget to match current widget using nr_package and node type. */
 
       for (var n = 0; n < widgets.length; n++) {
-        if (widgets[n].node_type == l.node_type && widgets[n].nr_package == l.nr_package && widgets[n].id == l.widget_id) {
+        if (widgets[n].nr_package == l.nr_package && widgets[n].id == l.widget_id) {
           var component = widgets[n].input_component;
           ret.push(_react["default"].createElement("div", {
             key: l.key,
             className: "widget_form mb-4",
             "data-widget_id": l.widget_id,
-            "data-node_type": l.node_type,
             "data-nr_package": l.nr_package
           }, _react["default"].createElement("b", null, _react["default"].createElement("span", {
             style: {
@@ -104,7 +103,6 @@ var LoadInputComponent = function LoadInputComponent(props) {
           }), _react["default"].createElement(_compFinder.FindComp, _extends({
             comp_props: {
               'component': component,
-              'node_type': widgets[n].node_type,
               'nr_package': widgets[n].nr_package
             }
           }, l.properties))))));
@@ -185,16 +183,13 @@ function (_Component) {
 
         for (var n = 0; n < widget.length; n++) {
           var widget_id = widget[n].dataset.widget_id;
-          var node_type = widget[n].dataset.node_type;
-          node_type = node_type == 'true' ? true : node_type;
           var pkg = widget[n].dataset.nr_package;
-          pkg = pkg == 'false' ? false : pkg;
+          pkg = pkg == 'true' ? true : pkg;
           var properties = (0, _react2.parse_form)(widget[n]);
           widget_value_array.push({
             'key': Math.random().toString(36),
             'widget_id': widget_id,
             'properties': properties,
-            'node_type': node_type,
             'nr_package': pkg
           });
         }
@@ -247,7 +242,6 @@ function (_Component) {
               'key': Math.random().toString(36),
               'widget_id': widgets[i].id,
               'properties': {},
-              'node_type': widgets[i].node_type,
               'nr_package': widgets[i].nr_package
             });
             this.setState({

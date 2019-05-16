@@ -149,7 +149,6 @@ module.exports.deploy_custom_scripts=function()
     var models= 
     [
         'nr/helper.njs',
-        'nr/blueprint.njs',
         'nr/node.njs',
         'nr/timezones.njs',
         'nr/wpdb.njs',

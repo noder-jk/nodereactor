@@ -58,6 +58,7 @@ class InitApp extends Component
                     for(let i=0; i<window.nr_vendor_comps[k].length; i++)
                     {
                         let pkg=window.nr_vendor_comps[k][i].nr_package;
+                        
                         if(pkg && configs.active_nodes[k].indexOf(pkg)>-1 && Array.isArray(new_vendors[k]))
                         {
                             new_vendors[k].push(window.nr_vendor_comps[k][i]);

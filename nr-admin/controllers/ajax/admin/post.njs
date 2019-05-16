@@ -44,8 +44,7 @@ module.exports.get=function($)
 						'title':rtx.title,
 						'component':'PostTaxonomy',
 						'position':'right',
-						'node_type':true,
-						'nr_package':false
+						'nr_package':true
 					});
 				}
 			});

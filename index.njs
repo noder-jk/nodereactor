@@ -120,6 +120,8 @@ module.exports=function(project_root, extensions)
 	deps.deploy_custom_scripts();
 	deps.deploy_src(data_ob);
 	deps.deploy_db();
+	
+	var blues=require(node_modules.path.normalize(nr_models+'nr/blueprint.njs'));
 
 	/* Load server modules and initialize */
 	var nr_app				= node_modules.express();
@@ -133,7 +135,7 @@ module.exports=function(project_root, extensions)
 
 	nr_app.all('/*', function(request, response) 
 	{
-		var $=get_nr_blueprint(request, response, nr_formidable.maxFileSize);
+		var $=blues.get_nr_blueprint(request, response, nr_formidable.maxFileSize);
 		
 		deps.handle_route($);
 	});
@@ -141,7 +143,7 @@ module.exports=function(project_root, extensions)
 	/* Set router for all the socket activity.  */
 	nr_socket.on('connection', function(socket)
 	{
-		var $=get_socket_blueprint(socket.request, socket);
+		var $=blues.get_socket_blueprint(socket.request, socket);
 
 		$.socket_event='connected';
 		

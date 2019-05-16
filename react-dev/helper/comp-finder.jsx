@@ -7,14 +7,19 @@ const FindComp=(props)=>
     
     const {comp_props={}}=props;
     
-    const {node_type=false, nr_package=false, component, fallback_component=false}=comp_props;
+    const   {
+                nr_package=false, 
+                component, 
+                fallback_component=false, 
+                fallback_content=false
+            }=comp_props;
 
     let params=Object.assign({},props);
     delete params.comp_props;
 
-    const default_resp=<small className="text-danger"><u><b><i>{component}</i></b></u> not found.</small>
+    const default_resp=fallback_content || <small className="text-danger"><u><b><i>{component}</i></b></u> not found.</small>
 
-    if(node_type===true)
+    if(nr_package===true)
     {
         if(AdminComps[component])
         {
@@ -23,21 +28,25 @@ const FindComp=(props)=>
             return <Cmp.c {...params}/>;
         }
     }
-    else if(typeof node_type=='string' && vendor_comps[node_type] && nr_package!==false)
+    else
     {
         let ret=(component)=>
         {
             /* Find in third party components, theme and plugins. */
-            for(let i=0; i<vendor_comps[node_type].length; i++)
+            for(var node_type in vendor_comps)
             {
-                let node=vendor_comps[node_type][i];
-
-                if(node.component && node.nr_package==nr_package && node.component[component])
+                for(let i=0; i<vendor_comps[node_type].length; i++)
                 {
-                    let Cmpc={c:node.component[component]}
-                    return <Cmpc.c {...params}/>
+                    let node=vendor_comps[node_type][i];
+
+                    if(node.component && node.nr_package==nr_package && node.component[component])
+                    {
+                        let Cmpc={c:node.component[component]}
+                        return <Cmpc.c {...params}/>
+                    }
                 }
             }
+            
             return false;
         }
         

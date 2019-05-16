@@ -54,7 +54,6 @@ module.exports.register_post_module=function(meta_ob)
 			
 			if(!n_type){return;}
 
-			meta_ob.node_type=n_type.node_type;
 			meta_ob.nr_package=n_type.nr_package;
 		}
 

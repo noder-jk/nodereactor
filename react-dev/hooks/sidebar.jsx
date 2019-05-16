@@ -41,12 +41,12 @@ const SidebarProcessor=(props)=>
                 let w=widgets[n];
 
                 /* Now load the component to render actual widget */
-                if(w.node_type==s.node_type && w.nr_package==s.nr_package && w.id==s.widget_id)
+                if(w.nr_package==s.nr_package && w.id==s.widget_id)
                 {
                     comps.push
                     (
                         <WidgetContainer key={s.key} title={s.properties.nr_widget_title}>
-                            <FindComp comp_props={{'component':w.output_component, 'node_type':s.node_type, 'nr_package':s.nr_package}} {...s.properties}/>
+                            <FindComp comp_props={{'component':w.output_component, 'nr_package':s.nr_package}} {...s.properties}/>
                         </WidgetContainer>
                     )
                 }

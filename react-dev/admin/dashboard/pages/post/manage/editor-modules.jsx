@@ -141,7 +141,7 @@ const LoadMetaBox=(props)=>
             return <div key={item.key} className="nr_meta_box nr_custom_meta_boxes">
                 <h4>{item.title}</h4>
                 <div>	
-                    <FindComp comp_props={{'component':item.component, 'node_type':item.node_type, 'nr_package':item.nr_package}} {...params} meta_box_id={item.id}/>
+                    <FindComp comp_props={{'component':item.component, 'nr_package':item.nr_package}} {...params} meta_box_id={item.id}/>
                 </div>
             </div> 
         }
