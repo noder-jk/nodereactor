@@ -60,19 +60,26 @@ const is_it_file_request=($, f_next)=>
 
 module.exports.run=($)=>
 {
-	var check_if_file=($, after_filter, inc_next)=>
+	var check_if_file=($, inc_next)=>
 	{
 		is_it_file_request($, ($, f)=>
 		{
-			if(f!==false && (!nr_db_config || !nr_use_file_hook | after_filter))
-			{
-				$ = readfile($, f);
-				exit($);
-				return;
-			}
-
+			$.requested_file_path=f;
+			
 			inc_next($);
 		});
+	}
+
+	var send_if_file=($, after_filter, inc_next)=>
+	{
+		if($.requested_file_path && (!nr_db_config || !nr_use_file_hook || after_filter==true))
+		{
+			$ = readfile($, $.requested_file_path);
+			exit($);
+			return;
+		}
+
+		inc_next($);
 	}
 
 	var load_static=($, next)=>
@@ -200,13 +207,14 @@ module.exports.run=($)=>
 	/* These for if NR is installed already */
 	var funcs=
 	[
-		[check_if_file, false], 
+		check_if_file,
+		[send_if_file, false], 
 		nr_get_node_active, 
 		get_user_sessions, 
 		nr_get_user, 
 		include_nodes, 
 		nodes_init, 
-		[check_if_file, true], 
+		[send_if_file, true], 
 		load_static, 
 		socket_event,
 		ajax_router
@@ -215,7 +223,8 @@ module.exports.run=($)=>
 	/* If not installed yet */
 	var funcs2=
 	[
-		[check_if_file,false],
+		check_if_file,
+		[send_if_file,false],
 		load_static,
 		include_nodes,
 		socket_event,

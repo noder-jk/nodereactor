@@ -83,7 +83,7 @@ class ProcessPlugins extends Component
                                 let ind_p=this.state.plugins[k] || {};
                                
                                 let {author={}}=plugins[k];
-                                let {name='', url=''}=author;
+                                let {name='', url=false}=author;
 
                                 return(
                                     <tr key={k} className={ind_p.activated ? 'activated_plugin' : 'deactivated_plugin'}>
@@ -95,7 +95,9 @@ class ProcessPlugins extends Component
                                                 <a className="deactivate_plugin text-danger" onClick={(e)=>this.activateDeactivate(e, k,'deactivate')}>Deactivate</a>
                                             </div>
                                         </td>
-                                        <td><a href={url} target="_blank">{name}</a></td>
+                                        <td>
+                                            {!url ? name : <a href={url} target="_blank">{name}</a>}
+                                        </td>
                                         <td>{plugins[k].description}</td>
                                         <td>{plugins[k].version}</td>
                                         <td>{plugins[k].license}</td>

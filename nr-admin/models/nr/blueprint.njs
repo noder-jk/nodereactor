@@ -267,6 +267,7 @@ module.exports.get_nr_blueprint=function(request, response, max_s)
     $._COOKIE_ORIGINAL		= node_modules.deepcopy(ckk);
     $._COOKIE				= node_modules.deepcopy(ckk);
     
+    
 	$._SERVER				= {
 								'SERVER_PORT'		: nr_port,
 								'REQUEST_METHOD'	: request.method,
@@ -274,7 +275,8 @@ module.exports.get_nr_blueprint=function(request, response, max_s)
 								'SERVER_PROTOCOL'	: request.protocol,
 								'HTTP_REFERER'		: request.headers.referer,
 								'QUERY_STRING'		: decodeURIComponent(request.originalUrl),
-								'REQUEST_HEADERS'	: request.headers,
+                                'REQUEST_HEADERS'	: request.headers,
+                                'HTTP_USER_AGENT'   : request.headers['user-agent'],
 								'CURRENT_URL'		: request.protocol + '://' + request.get('host') + decodeURIComponent(request.originalUrl),
 							  };
 								

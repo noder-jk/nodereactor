@@ -9,6 +9,8 @@ module.exports.get=function($)
 		var dt			= {};
 
 		dt.author		= p.author || {};
+		typeof dt.author=='string' ? dt.author={'name':dt.author, 'url':false} : 0;
+
 		dt.description	= p.description || '';
 		dt.license		= p.license || '';
 		dt.tags			= p.tags || '';

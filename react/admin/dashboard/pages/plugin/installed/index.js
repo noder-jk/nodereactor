@@ -110,7 +110,7 @@ function (_Component) {
         var _author$name = author.name,
             name = _author$name === void 0 ? '' : _author$name,
             _author$url = author.url,
-            url = _author$url === void 0 ? '' : _author$url;
+            url = _author$url === void 0 ? false : _author$url;
         return _react["default"].createElement("tr", {
           key: k,
           className: ind_p.activated ? 'activated_plugin' : 'deactivated_plugin'
@@ -126,7 +126,7 @@ function (_Component) {
           onClick: function onClick(e) {
             return _this3.activateDeactivate(e, k, 'deactivate');
           }
-        }, "Deactivate"))), _react["default"].createElement("td", null, _react["default"].createElement("a", {
+        }, "Deactivate"))), _react["default"].createElement("td", null, !url ? name : _react["default"].createElement("a", {
           href: url,
           target: "_blank"
         }, name)), _react["default"].createElement("td", null, plugins[k].description), _react["default"].createElement("td", null, plugins[k].version), _react["default"].createElement("td", null, plugins[k].license));
