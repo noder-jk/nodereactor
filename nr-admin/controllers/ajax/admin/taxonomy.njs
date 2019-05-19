@@ -22,7 +22,7 @@ module.exports.save=function($)
         }
     }
 
-    nr_insert_term($, name, taxonomy, args, function($, done, next)
+    $.nr_insert_term(name, taxonomy, args, function($, done, next)
     {
         exit($, {'status':(done ? 'done' : 'error'), 'message':'Check if the slug exist in same level already.'});
     });
@@ -82,7 +82,7 @@ module.exports.delete=function($)
 {
     if($._POST.term_ids)
     {
-        nr_delete_term($, $._POST.term_ids, function($, next)
+        $.nr_delete_term($._POST.term_ids, function($, next)
         {
             exit($, {'status':'done'});
         });
@@ -160,7 +160,7 @@ module.exports.save_from_editor=function($)
     var taxonomy=$._POST.taxonomy || '';
     var post_id=$._POST.post_id || 0;
 
-    nr_set_post_terms($, post_id, term_ids, taxonomy, false, function($)
+    $.nr_set_post_terms(post_id, term_ids, taxonomy, false, function($)
     {
         exit($);
     });

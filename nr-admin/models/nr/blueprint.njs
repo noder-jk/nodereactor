@@ -214,8 +214,7 @@ var NodeReactor_blue_print=
 
 var mods=
 [
-    'wp/hook.njs',
-    'wp/taxonomy/terms.njs',
+    'wp/hook/manager.njs',
     'wp/dashboard.njs',
     'wp/sidebar.njs',
     'wp/menu.njs',

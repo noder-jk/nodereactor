@@ -163,7 +163,7 @@ module.exports.deploy_custom_scripts=function()
         'php/loader.njs',
 
         'wp/dashboard.njs',
-        'wp/hook.njs',
+        'wp/hook/hooks.njs',
         'wp/option.njs',
         'wp/plugin.njs',
         'wp/menu.njs',
@@ -176,8 +176,7 @@ module.exports.deploy_custom_scripts=function()
         'wp/post/permalink.njs',
 
         'wp/taxonomy/helper.njs',
-        'wp/taxonomy/terms.njs',
-
+        
         'wp/sidebar.njs',
         'wp/theme.njs',
         'wp/user.njs'

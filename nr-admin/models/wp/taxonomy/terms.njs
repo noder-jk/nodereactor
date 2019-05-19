@@ -36,9 +36,9 @@ module.exports.use_taxonomy=function(ob)
     }
 }
 
-global.nr_delete_term=function($, term_ids, next)
+module.exports.nr_delete_term=function(term_ids, next)
 {
-	do_action($, 'pre_delete_term', term_ids, function($)
+	this.do_action('pre_delete_term', term_ids, function($)
 	{
 		term_ids=term_ids.join(',');
 
@@ -70,11 +70,11 @@ global.nr_delete_term=function($, term_ids, next)
 			$.nr_db.query(q, e=>{next($)});
 		}
 
-		$.series_fire( [delete_meta, delete_rel, set_parent, delete_term, next]);
-	})
+		$.series_fire([delete_meta, delete_rel, set_parent, delete_term, next]);
+	});
 }
 
-global.nr_set_post_terms=function($, post_id, term_id, taxonomy, append, next)
+module.exports.nr_set_post_terms=function(post_id, term_id, taxonomy, append, next)
 {
 	term_id=get_array(term_id);
 	term_id.push(0); // zero to avoid error if no term id assigned.
@@ -143,10 +143,10 @@ global.nr_set_post_terms=function($, post_id, term_id, taxonomy, append, next)
 
 	append!==true ? funcs.unshift(del_abandoned) : null;
 
-	$.series_fire( funcs);
+	this.series_fire(funcs);
 }
 
-global.nr_insert_term=function($, term, taxonomy, args, next)
+module.exports.nr_insert_term=function(term, taxonomy, args, next)
 {
 	/* Store values firstly */
 	var slug		= args.slug || term;
@@ -210,7 +210,7 @@ global.nr_insert_term=function($, term, taxonomy, args, next)
 	funcs.push(!term_id ? insert_term : update_term);
 	funcs.push(next);
 
-	$.series_fire( funcs);
+	this.series_fire(funcs);
 }
 
 module.exports.get_term_link=function(by, arg, taxonomy, t_next)
@@ -231,7 +231,7 @@ module.exports.get_term_link=function(by, arg, taxonomy, t_next)
 	/* Firstly get the term that should pass url */
 	this.get_terms(ob, function($, terms)
 	{
-		var all_tax=get_taxonomies($);
+		var all_tax=$.get_taxonomies();
 		
 		!Array.isArray(terms) ? terms=[] : 0;
 		
@@ -304,14 +304,16 @@ module.exports.get_term_by=function(by, arg, next)
 	this.get_terms({'intersect':{[by]:arg}}, next);
 }
 
-global.get_term_meta=function($, term_id, meta_k, meta_v, next)
+module.exports.get_term_meta=function(term_id, meta_k, meta_v, next)
 {
 	term_id			= get_array(term_id);
 
-	var meta_key 	= meta_k 	? " AND meta_key="+$.nr_db.escape(meta_k) : '';
-	var meta_value	= meta_v	? " AND meta_value="+$.nr_db.escape(meta_v) : "";
+	var meta_key 	= meta_k 	? " AND meta_key="+this.nr_db.escape(meta_k) : '';
+	var meta_value	= meta_v	? " AND meta_value="+this.nr_db.escape(meta_v) : "";
 	
 	var q="SELECT * FROM "+nr_db_config.tb_prefix+"termmeta WHERE owner_term_id IN ("+term_id.join(',')+")" + meta_key + meta_value;
+	
+	var $=this;
 	
 	$.nr_db.query(q, function(e,r)
 	{
@@ -321,7 +323,7 @@ global.get_term_meta=function($, term_id, meta_k, meta_v, next)
 	});
 }
 
-const meta_processor=function ($, mets, result, next)
+const meta_processor=function (mets, result)
 {
 	/* This function simply assign meta to post using post id. */
 	for(var i=0; i<mets.length; i++)
@@ -332,19 +334,21 @@ const meta_processor=function ($, mets, result, next)
 		}
 	}
 	
-	next($, result);
+	return result;
 }
 
 module.exports.get_terms=function(nr_condition, get_p_n)
 {
+	var helper=require('./helper.njs');
+	
 	/* Get query object, that will come through registered hooks too. [Oh god! what a complicated function. Need refactoring.] */
 	pre_get_terms(this, function($)
 	{
 		typeof nr_condition!=='object' ? nr_condition={} : 0;
 
-		nr_condition			= nr_fill_term_cond(nr_condition, $.query);
+		nr_condition			= helper.nr_fill_term_cond(nr_condition, $.query);
 		
-		var processed_condition	= nr_term_condition_processor($.query,nr_condition);
+		var processed_condition	= helper.nr_term_condition_processor($.query,nr_condition);
 		var args				= processed_condition.args;
 		var where_clause		= processed_condition.clause;
 		
@@ -397,15 +401,19 @@ module.exports.get_terms=function(nr_condition, get_p_n)
 				result[i].termmeta={};
 			}
 			
-			/* Now run multiple helper functions to process other things one after another through series function */
-			var stack=	
-			[
-				[get_term_meta, all_term_id, false, false], 
-				[($, r, res,nxt)=>{meta_processor($, r, res, nxt);}, result], 
-				($,content,next)=>{get_p_n($, content)}
-			];
-			
-			$.series_fire( stack);
+
+			/* get term meta and attach to terms list */
+			$.get_term_meta(all_term_id, false, false, function($, mets)
+			{
+				var attached=meta_processor(mets, result);
+				
+				get_p_n($, attached);
+			});
 		});
 	});
+}
+
+module.exports.get_taxonomies=function()
+{
+	return this.nr_registered_taxonomies;
 }

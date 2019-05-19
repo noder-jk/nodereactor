@@ -141,7 +141,7 @@ global.pre_get_posts=function($, condition, callback)
 
 	$.query=commons;
 
-	do_action($, 'pre_get_posts', callback);
+	$.do_action('pre_get_posts', callback);
 }
 
 global.nr_condition_processor=function(args,condition)

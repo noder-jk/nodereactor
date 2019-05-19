@@ -36,11 +36,10 @@ global.pre_get_terms=function($, callback)
 	
 	$.query=commons;
 
-	do_action($, 'pre_get_terms', callback);
+	$.do_action('pre_get_terms', callback);
 }
 
-
-global.nr_fill_term_cond=function(nr_cond, args)
+module.exports.nr_fill_term_cond=function(nr_cond, args)
 {
 	/* Loop through all hook and pre_get provided params, and fill the condition */
 	for(var k in args)
@@ -61,7 +60,7 @@ global.nr_fill_term_cond=function(nr_cond, args)
 	return nr_cond;
 }
 
-global.nr_term_condition_processor=function(args,condition)
+module.exports.nr_term_condition_processor=function(args,condition)
 {
 	/* Define table name using prefix */
 	var pst=nr_db_config.tb_prefix+'posts';
@@ -113,9 +112,4 @@ global.nr_term_condition_processor=function(args,condition)
 	}
 
 	return {'args':args, 'clause':clause};
-}
-
-global.get_taxonomies=function($)
-{
-	return $.nr_registered_taxonomies;
 }
