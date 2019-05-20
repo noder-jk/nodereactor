@@ -47,7 +47,9 @@ module.exports=function(project_root, extensions)
 
 	!pack.nr_configs 			? pack.nr_configs={} : null;
 
-	!pack.nr_configs.port 		? ini_errors.push('Port is required.') : null;
+	pack.nr_configs.port 		= process.env.PORT || pack.nr_configs.port;
+	!pack.nr_configs.port 		? ini_errors.push('Dynamic port is not available. Explicit one also omitted.') : null;
+
 	!pack.nr_configs.url 		? ini_errors.push('Home URL is required.') : null;
 
 	if(ini_errors.length>0)
