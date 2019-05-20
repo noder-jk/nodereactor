@@ -280,7 +280,7 @@ global.get_available_slug=function($,fields,get_slug_call_back)
 	get_slug_inner($,s,get_slug_call_back);
 }
 
-global.nr_delete_post=function($, post_id, next)
+module.exports.nr_delete_post=function(post_id, next)
 {
 	var post_ids=get_array(post_id);
 	
@@ -314,7 +314,7 @@ global.nr_delete_post=function($, post_id, next)
 		next
 	];
 
-	$.series_fire( funcs);
+	this.series_fire(funcs);
 }
 
 module.exports.register_post_type=function(ob)

@@ -228,6 +228,7 @@ var mods=
     'wp/taxonomy/terms.njs',
     'wp/post/permalink.njs',
     'nr/helper.njs',
+    'wp/post/media.njs'
 ];
 
 var nr_funcs={};

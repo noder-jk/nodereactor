@@ -52,6 +52,8 @@ class PostTaxonomy extends Component
             let hierarchical=r.data.hierarchical || false;
             let multiple=r.data.multiple==true;
 
+            current_terms=current_terms.map(item=>parseInt(item)).filter(item=>Number.isInteger(item));
+
             this.setState
             ({
                 'loading':false, 
@@ -83,7 +85,7 @@ class PostTaxonomy extends Component
     {
         let el=e.currentTarget;
 
-        let val=el.value;
+        let val=parseInt(el.value);
 
         let ct=this.state.current_terms;
 
@@ -199,8 +201,9 @@ class PostTaxonomy extends Component
                                     </td>
                                     <td className="text-right">
                                         {
-                                            (current_terms.indexOf(item.term_id)>-1 || current_terms.indexOf(item.term_id.toString())>-1) ?
-                                            <input type="radio" title="Select Primary Term" name={this.state.primary_term_key} value={item.term_id} defaultChecked={this.state.primary_term==item.term_id} onChange={this.setPrimaryTerm}/> : null
+                                            current_terms.indexOf(item.term_id)>-1 ?
+                                            <input type="radio" title="Select Primary Term" name={this.state.primary_term_key} value={item.term_id} defaultChecked={this.state.primary_term==item.term_id} onChange={this.setPrimaryTerm}/> 
+                                            : null
                                         }
                                     </td>
                                 </tr>

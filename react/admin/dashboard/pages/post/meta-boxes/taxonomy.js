@@ -101,6 +101,11 @@ function (_Component) {
         var current_terms = r.data.current_terms || [];
         var hierarchical = r.data.hierarchical || false;
         var multiple = r.data.multiple == true;
+        current_terms = current_terms.map(function (item) {
+          return parseInt(item);
+        }).filter(function (item) {
+          return Number.isInteger(item);
+        });
 
         _this2.setState({
           'loading': false,
@@ -130,7 +135,7 @@ function (_Component) {
     key: "toggleCurrentTerms",
     value: function toggleCurrentTerms(e) {
       var el = e.currentTarget;
-      var val = el.value;
+      var val = parseInt(el.value);
       var ct = this.state.current_terms;
 
       if (el.checked == true) {
@@ -253,7 +258,7 @@ function (_Component) {
           onChange: _this4.toggleCurrentTerms
         }), " ", item.name)), _react["default"].createElement("td", {
           className: "text-right"
-        }, current_terms.indexOf(item.term_id) > -1 || current_terms.indexOf(item.term_id.toString()) > -1 ? _react["default"].createElement("input", {
+        }, current_terms.indexOf(item.term_id) > -1 ? _react["default"].createElement("input", {
           type: "radio",
           title: "Select Primary Term",
           name: _this4.state.primary_term_key,

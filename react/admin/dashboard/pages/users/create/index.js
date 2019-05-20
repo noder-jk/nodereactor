@@ -159,9 +159,10 @@ function (_Component) {
         className: "col-12 col-sm-8 col-md-6 col-lg-4"
       }, _react["default"].createElement("select", {
         className: "form-control",
-        disabled: "disabled"
+        disabled: "disabled",
+        defaultValue: "administrator"
       }, _react["default"].createElement("option", {
-        selected: "selected"
+        value: "administrator"
       }, "administrator")))), _react["default"].createElement("div", {
         className: "row mb-4"
       }, _react["default"].createElement("div", {

@@ -240,7 +240,10 @@ module.exports.delete_media=function($)
 {
 	if($._POST.post_id)
     {
-        nr_delete_attachment($, $._POST.post_id, ($)=exit($, {'status':'done'}));
+		$.nr_delete_attachment($._POST.post_id, ($)=>
+		{
+			exit($, {'status':'done'})
+		});
     }
     else
     {
@@ -252,7 +255,10 @@ module.exports.delete_posts=function($)
 {
 	if($._POST.post_id)
     {
-        nr_delete_post($, $._POST.post_id, ($)=>exit($, {'status':'done'}));
+		$.nr_delete_post($._POST.post_id, ($)=>
+		{
+			exit($, {'status':'done'});
+		});
     }
     else
     {
@@ -332,7 +338,7 @@ module.exports.get_hierarchy=function($)
 
 module.exports.get_featured_image=function($)
 {
-	wp_get_attachment_url($, $._POST.post_id, function($, url)
+	$.nr_get_attachment_url($._POST.post_id, function($, url)
 	{
 		exit($, (url ? {'url':url} : ''));
 	});

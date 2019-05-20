@@ -1,8 +1,8 @@
-global.wp_get_attachment_url=function($, post_id, next)
+module.exports.nr_get_attachment_url=function(post_id, next)
 {
 	var ob={'intersect':{'post_id':post_id}};
 
-	$.get_posts(ob, function($, r)
+	this.get_posts(ob, function($, r)
 	{
 		var urls={};
 		
@@ -107,12 +107,14 @@ global.exclude_post_media=function(content,post_type)
 }
 
 
-global.nr_delete_attachment=function($, post_ids, next)
+module.exports.nr_delete_attachment=function(post_ids, next)
 {
 	var post_id=get_array(post_ids);
 
 	var q='SELECT real_path FROM '+nr_db_config.tb_prefix+'posts WHERE post_id IN ('+post_id.join(',')+')';
 	
+	var $=this;
+
 	$.nr_db.query(q, function(e, r)
 	{
 		/* firstly delete files from file system. */
@@ -126,8 +128,7 @@ global.nr_delete_attachment=function($, post_ids, next)
 
 		$.delete_attachment_post_too=true;
 
-		/* Then delete the attachment post from database. */
-		$.series_fire( [[nr_delete_post, post_id], next]);
+		$.nr_delete_post(post_id, next);
 	});
 }
 

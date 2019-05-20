@@ -103,8 +103,8 @@ class UserCreate extends Component
                 <div className="row mb-4">
                     <div className="col-12 col-sm-4 col-md-3 col-lg-2">User Role</div>
                     <div className="col-12 col-sm-8 col-md-6 col-lg-4">
-						<select className="form-control" disabled="disabled">
-							<option selected="selected">administrator</option>
+						<select className="form-control" disabled="disabled" defaultValue="administrator">
+							<option value="administrator">administrator</option>
 						</select>
                     </div>
                 </div>

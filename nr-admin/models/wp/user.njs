@@ -61,6 +61,7 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 	/* Delete all posts of the user if no reassignment */
 	var del_posts=($, next)=>
 	{
+		/* If reassign is yes, then no need to delete post. Simply go to next function. */
 		if(is_numeric(reassign_id))
 		{
 			next($);
@@ -76,20 +77,19 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 			var attachments=[];
 			var post_ids=[];
 
+			/* Separate post id and attachment id */
 			r.forEach(item => 
 			{
 				item.post_type=='attachment' ? attachments.push(item.post_id) : post_ids.push(item.post_id);
 			});
 			
 
-			var funcs=
-			[
-				[nr_delete_attachment, attachments],
-				[nr_delete_post, post_ids],
-				next
-			];
-			
-			$.series_fire( funcs);
+			/* Firstly delete files and associated attachment posts */
+			$.nr_delete_attachment(attachments, ($)=>
+			{
+				/* Secondly delete typical post posts */
+				$.nr_delete_post(post_ids, next);
+			});
 		});
 	}
 
