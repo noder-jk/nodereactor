@@ -240,7 +240,7 @@ module.exports.delete_media=function($)
 {
 	if($._POST.post_id)
     {
-		$.nr_delete_attachment($._POST.post_id, ($)=>
+		$.delete_attachment($._POST.post_id, ($)=>
 		{
 			exit($, {'status':'done'})
 		});
@@ -255,7 +255,7 @@ module.exports.delete_posts=function($)
 {
 	if($._POST.post_id)
     {
-		$.nr_delete_post($._POST.post_id, ($)=>
+		$.delete_post($._POST.post_id, ($)=>
 		{
 			exit($, {'status':'done'});
 		});
@@ -294,7 +294,7 @@ module.exports.save=function($)
 		delete fields.post_meta.nr_post_parent;
 	}
 	
-	$.nr_insert_post( fields, function($, r)
+	$.insert_post( fields, function($, r)
 	{
 		if(!r)
 		{
@@ -338,7 +338,7 @@ module.exports.get_hierarchy=function($)
 
 module.exports.get_featured_image=function($)
 {
-	$.nr_get_attachment_url($._POST.post_id, function($, url)
+	$.get_attachment_url($._POST.post_id, function($, url)
 	{
 		exit($, (url ? {'url':url} : ''));
 	});

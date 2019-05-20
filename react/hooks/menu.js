@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.nr_nav_menu = void 0;
+exports.nav_menu = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -133,7 +133,7 @@ function (_Component) {
   return MenuProcessor;
 }(_react.Component);
 
-var nr_nav_menu = function nr_nav_menu(props) {
+var nav_menu = function nav_menu(props) {
   if (window.nr_menu_list) {
     return _react["default"].createElement(MenuProcessor, {
       ResponseData: window.nr_menu_list,
@@ -149,4 +149,4 @@ var nr_nav_menu = function nr_nav_menu(props) {
   }, props));
 };
 
-exports.nr_nav_menu = nr_nav_menu;
+exports.nav_menu = nav_menu;

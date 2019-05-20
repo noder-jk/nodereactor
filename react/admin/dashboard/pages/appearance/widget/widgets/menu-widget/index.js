@@ -72,7 +72,7 @@ var MenuWidgetOutput = function MenuWidgetOutput(props) {
   var _props$menu_names2 = props.menu_names,
       menu_names = _props$menu_names2 === void 0 ? [] : _props$menu_names2;
   return menu_names.map(function (item) {
-    return (0, _react2.nr_nav_menu)({
+    return (0, _react2.nav_menu)({
       'menu_name': item
     });
   });

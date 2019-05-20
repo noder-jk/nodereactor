@@ -1,6 +1,6 @@
 import React from "react";
 
-import {Placeholder, nr_nav_menu} from 'nodereactor/react';
+import {Placeholder, nav_menu} from 'nodereactor/react';
 
 const ProcessMenuInput=(props)=>
 {
@@ -43,7 +43,7 @@ const MenuWidgetOutput=(props)=>
     
     return menu_names.map(item=>
     {
-        return nr_nav_menu({'menu_name':item});
+        return nav_menu({'menu_name':item});
     });
 }
 

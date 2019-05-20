@@ -155,7 +155,7 @@ module.exports.get_posts=function(nr_condition,get_p_n)
 	});
 }
 
-module.exports.nr_insert_post=function(fields, save_post_callback)
+module.exports.insert_post=function(fields, save_post_callback)
 {
 	if(!is_user_logged_in(this))
 	{
@@ -280,7 +280,7 @@ global.get_available_slug=function($,fields,get_slug_call_back)
 	get_slug_inner($,s,get_slug_call_back);
 }
 
-module.exports.nr_delete_post=function(post_id, next)
+module.exports.delete_post=function(post_id, next)
 {
 	var post_ids=get_array(post_id);
 	

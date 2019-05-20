@@ -1,4 +1,4 @@
-module.exports.nr_get_attachment_url=function(post_id, next)
+module.exports.get_attachment_url=function(post_id, next)
 {
 	var ob={'intersect':{'post_id':post_id}};
 
@@ -107,7 +107,7 @@ global.exclude_post_media=function(content,post_type)
 }
 
 
-module.exports.nr_delete_attachment=function(post_ids, next)
+module.exports.delete_attachment=function(post_ids, next)
 {
 	var post_id=get_array(post_ids);
 
@@ -128,7 +128,7 @@ module.exports.nr_delete_attachment=function(post_ids, next)
 
 		$.delete_attachment_post_too=true;
 
-		$.nr_delete_post(post_id, next);
+		$.delete_post(post_id, next);
 	});
 }
 

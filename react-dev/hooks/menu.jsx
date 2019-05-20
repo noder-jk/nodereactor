@@ -90,7 +90,7 @@ class MenuProcessor extends Component
 }
 
 
-const nr_nav_menu=(props)=>
+const nav_menu=(props)=>
 {
     if(window.nr_menu_list)
     {
@@ -100,4 +100,4 @@ const nr_nav_menu=(props)=>
     return <Placeholder Data={{'action':'nr_get_menu_for_visitor'}} Component={MenuProcessor} {...props}/>
 }
 
-export {nr_nav_menu}
+export {nav_menu}

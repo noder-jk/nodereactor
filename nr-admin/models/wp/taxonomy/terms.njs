@@ -36,7 +36,7 @@ module.exports.use_taxonomy=function(ob)
     }
 }
 
-module.exports.nr_delete_term=function(term_ids, next)
+module.exports.delete_term=function(term_ids, next)
 {
 	this.do_action('pre_delete_term', term_ids, function($)
 	{
@@ -74,7 +74,7 @@ module.exports.nr_delete_term=function(term_ids, next)
 	});
 }
 
-module.exports.nr_set_post_terms=function(post_id, term_id, taxonomy, append, next)
+module.exports.set_post_terms=function(post_id, term_id, taxonomy, append, next)
 {
 	term_id=get_array(term_id);
 	term_id.push(0); // zero to avoid error if no term id assigned.
@@ -146,7 +146,7 @@ module.exports.nr_set_post_terms=function(post_id, term_id, taxonomy, append, ne
 	this.series_fire(funcs);
 }
 
-module.exports.nr_insert_term=function(term, taxonomy, args, next)
+module.exports.insert_term=function(term, taxonomy, args, next)
 {
 	/* Store values firstly */
 	var slug		= args.slug || term;

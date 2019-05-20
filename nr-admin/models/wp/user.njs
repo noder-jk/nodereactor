@@ -85,10 +85,10 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 			
 
 			/* Firstly delete files and associated attachment posts */
-			$.nr_delete_attachment(attachments, ($)=>
+			$.delete_attachment(attachments, ($)=>
 			{
 				/* Secondly delete typical post posts */
-				$.nr_delete_post(post_ids, next);
+				$.delete_post(post_ids, next);
 			});
 		});
 	}
