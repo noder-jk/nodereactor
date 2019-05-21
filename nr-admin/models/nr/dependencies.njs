@@ -119,12 +119,27 @@ module.exports.deploy_db=function()
             {
                 console.log('');
                 console.log('-> Database configs found but could not connect.');
-                console.log('-> Make sure MySQL database is running and configs are correct.');
-                console.log('-> Or if you want to re install, then simply change the database config object to \'false\' and launch again.');
-                console.log('\x1b[41m', '-> NodeReactor has been terminated.', '\x1b[0m');
                 console.log('');
 
-                process.exit(1);
+                var reinst=node_modules['readline-sync'].question('Do you want to open re-installer? y/n: ');
+                
+                if(reinst.toLowerCase()=='y')
+                {
+                    nr_db_config=false;
+
+                    console.log('');
+                    console.log('\x1b[46m', '-> Visit your specified url to get installation page.', '\x1b[0m');
+                    console.log('');
+                }
+                else
+                {
+                    console.log('');
+                    console.log('-> You can put correct configs in config file and try again to use existing NR app.');
+                    console.log('\x1b[41m', '-> For now NR has nothing to do and terminated.', '\x1b[0m');
+                    console.log('');
+
+                    process.exit(1);
+                }
             }
             else
             {
@@ -212,7 +227,8 @@ module.exports.deploy_vendor_scripts=function()
         'filesize',
         'deepcopy',
         'mime-types',
-        'moment-timezone'
+        'moment-timezone',
+        'readline-sync'
     ];
 
     mods.forEach(element=>

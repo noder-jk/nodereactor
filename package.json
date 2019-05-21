@@ -40,6 +40,7 @@
     "react-loader-spinner": "^2.3.0",
     "react-router-dom": "^4.3.1",
     "react-svg-spinner": "^1.0.4",
+    "readline-sync": "^1.4.9",
     "resolve": "^1.8.1",
     "semplicemente": "^2.0.2",
     "socket.io": "^2.1.1",
