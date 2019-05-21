@@ -8,7 +8,7 @@ global.get_pool=function()
 		user			: c.db_user || '',
 		password		: c.db_pass || '',
 		database		: c.db_name || '',
-		connectionLimit	: 100
+		connectionLimit	: max_db_connection
 	}
 	
 	return node_modules.mysql2.createPool(db);

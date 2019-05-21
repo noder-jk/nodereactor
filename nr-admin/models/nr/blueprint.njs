@@ -253,13 +253,11 @@ function gob()
     return Object.assign($, nr_funcs);
 }
 
-module.exports.get_nr_blueprint=function(request, response, max_s)
+module.exports.get_nr_blueprint=function(request, response)
 {
 	var url_data			= node_modules.url.parse(request.url,true);
 		
 	var $					= gob();
-	
-	$.nr_max_upload_size	= max_s;
 	
     $._GET					= url_data.query;
     

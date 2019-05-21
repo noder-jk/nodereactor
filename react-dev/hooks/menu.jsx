@@ -65,12 +65,15 @@ class MenuProcessor extends Component
             return <Renderer menus={render_menus}/>
         }
 
+        let nest=0;
+    
         /* Loop through all menus recursively */
         let recurs=(menu)=>
         {
             if(Array.isArray(menu))
             {
-                return  <ul key={menu.key} className={ul_class}>
+                nest++;
+                return  <ul key={'nest_'+nest} className={ul_class}>
                             {menu.map(m=>recurs(m))}
                         </ul>
             }

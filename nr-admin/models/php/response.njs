@@ -6,24 +6,12 @@ module.exports.echo=function(str)
 	}
 }
 
-
-global.header=function($, hd, resp_code)
+module.exports.header=function(hd)
 {
-	hd=hd.split(':');
-	
-	if(hd.length>=2)
+	for(var k in hd)
 	{
-		var k=hd.shift().trim();
-		var v=hd.join(':').trim();
-		
-		resp_code ? $ = http_response_code($, resp_code) : 0;
-		
-		(k.toLowerCase()=='location' && !resp_code) ? $=http_response_code($, 302) : 0;
-		
-		$.nr_send_headers[k]=v;
+		this.nr_send_headers[k]=hd[k];
 	}
-	
-	return $;
 }
 
 global.readfile=function ($, path)
@@ -32,13 +20,10 @@ global.readfile=function ($, path)
 	return $;
 }
 
-
-global.http_response_code=function($, code)
+module.exports.http_response_code=function(code)
 {
-	$.nr_response_code=code;
-	return $;
+	this.nr_response_code=code;
 }
-
 
 /* This function remove temporary scripts from cache. */
 global.exit=function ($, resp)
@@ -59,9 +44,6 @@ global.exit=function ($, resp)
 
 	var send_resp_now=($)=>
 	{
-		/* Release the database connection as it is last step */
-		$.nr_db ? nr_pool.releaseConnection($.nr_db) : null;
-
 		/* Convert cookies to response header */
 		$=real_set_cookie($);
 		
@@ -78,8 +60,7 @@ global.exit=function ($, resp)
 		}
 		
 		/* Access control should be disabled later / or have control */
-		var dev=process.argv.indexOf('mode=development')>-1;
-		dev ? $.nr_response.set('Access-Control-Allow-Origin', '*') : 0;
+		project_mode_dev ? $.nr_response.set('Access-Control-Allow-Origin', '*') : 0;
 		
 		/* Detect what type of response should be sent */
 

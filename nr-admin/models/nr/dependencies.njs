@@ -111,9 +111,9 @@ module.exports.deploy_db=function()
 
 	if(nr_db_config)
 	{
-        var nr_pool=get_pool();
+        var pool=get_pool();
 
-        nr_pool.getConnection(function(err)
+        pool.getConnection(function(err)
         {
             if(err)
             {
@@ -132,6 +132,8 @@ module.exports.deploy_db=function()
                 console.log('\x1b[42m', '-> NodeReactor is installed already, and it has been launched successfully.', '\x1b[0m');
                 console.log('');
             }
+
+            pool.end();
         });
 	}
 	else
@@ -235,17 +237,8 @@ const nr_router	= require(normalize_path(nr_controllers+'router.njs'));
 
 module.exports.handle_route=function($)
 {
-    nr_pool.getConnection(function(err, connection) 
+    var handle_req=()=>
     {
-        /* Exit if NR installed but could not connected. It means DB limit may be reached. */
-        if(err && nr_db_config)
-        {
-            exit($, 'Please try again. Database connection limit may be reached.');
-            return;
-        }
-        
-        $.nr_db=connection;
-
         if($._SERVER['REQUEST_METHOD']=='IO')
         {
             nr_router.run($);
@@ -254,9 +247,15 @@ module.exports.handle_route=function($)
             
         /* Initiate formiddable  */
         var nr_form = new node_modules.formidable.IncomingForm();
-        for(var k in nr_formidable)
+
+        var form_config=
         {
-            nr_form[k]=nr_formidable[k];
+            'maxFileSize':max_upload_size
+        }
+
+        for(var k in form_config)
+        {
+            nr_form[k]=form_config[k];
         }
 
         nr_form.parse($.nr_request, function (err, fields, files) 
@@ -266,5 +265,18 @@ module.exports.handle_route=function($)
             
             nr_router.run($);
         });
-    });
+    }
+    
+    if(nr_db_config && refresh_utility_config==true)
+    {
+        set_utility_configs(function()
+        {
+            refresh_utility_config=false;
+            handle_req();
+        });
+        
+        return;
+    }
+
+    handle_req();
 }

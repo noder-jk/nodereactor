@@ -39,7 +39,7 @@ module.exports=function(project_root, extensions)
 
 	var ini_errors=[];
 
-	/* Parse required configs from package file */
+	/* Server configs */
 	var pack=require(project_root+'/package.json');
 	
 	pack.homepage!=='/nr-react' ? ini_errors.push('You must add homepage:"/nr-react" in package.json') : null;
@@ -51,6 +51,17 @@ module.exports=function(project_root, extensions)
 	!pack.nr_configs.port 		? ini_errors.push('Dynamic port is not available. Explicit one also omitted.') : null;
 
 	!pack.nr_configs.url 		? ini_errors.push('Home URL is required.') : null;
+
+	/* Utility configs */
+	global.max_db_connection	= 50;
+	global.max_upload_size		= ((1024*1) * 1024 * 1024); // 1 GB
+	global.session_max_age		= 86400; // One Day
+	global.track_file_request	= false;
+	global.file_request_pattern	= '';
+	global.hot_linking_pattern	= '.*';
+	global.refresh_utility_config=true;
+	global.project_mode_dev		= process.argv.indexOf('mode=development')>-1;
+
 
 	if(ini_errors.length>0)
 	{
@@ -75,19 +86,12 @@ module.exports=function(project_root, extensions)
 
 	global.nr_home_url				= data_ob.nr_home_url; // including trailing slash
 
-	global.nr_use_file_hook			= true;
-
-	// cookie name of session id
-	global.nr_session_cookie_name	= data_ob.nr_session_cookie_name ? data_ob.nr_session_cookie_name : 'sess_code';
-	// cookie name of session 
-	global.nr_session_cookie_pass	= data_ob.nr_session_cookie_pass ? data_ob.nr_session_cookie_pass : 'sess_pass';
-
+	global.nr_session_cookie_name	= 'f8376410e97a1357a406';
+	global.nr_session_cookie_pass	= 'c0ae6e2891174443aeb2';
 
 	global.nr_cookie_expiry			= data_ob.nr_cookie_expiry ? data_ob.nr_cookie_expiry : (60*60*24); // Second
 	global.nr_login_expiry			= data_ob.nr_login_expiry ? data_ob.nr_login_expiry : (60*60*24); // Second
 
-	global.nr_formidable			= data_ob.nr_formidable ? data_ob.nr_formidable : {maxFileSize:((1024*10) * 1024 * 1024)}; // Byte. 10GB default.
-	
 	global.default_gallery_limit	= 25;
 	global.default_pagination		= 7;
 	
@@ -137,7 +141,7 @@ module.exports=function(project_root, extensions)
 
 	nr_app.all('/*', function(request, response) 
 	{
-		var $=blues.get_nr_blueprint(request, response, nr_formidable.maxFileSize);
+		var $=blues.get_nr_blueprint(request, response);
 		
 		deps.handle_route($);
 	});

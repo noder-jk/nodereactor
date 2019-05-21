@@ -100,7 +100,7 @@ global.real_set_option=function($, resp_next)
 		for(var k in $.nr_set_option_queue[type])
 		{
 			/* Convert to json and escape options */
-			var options=$.nr_db.escape(JSON.stringify($.nr_set_option_queue[type][k]));
+			var options=nr_pool.escape(JSON.stringify($.nr_set_option_queue[type][k]));
 			
 			var q='UPDATE '+nr_db_config.tb_prefix+'nodes SET options='+options+' WHERE type="'+type+'" AND nr_package="'+k+'"';
 			
@@ -109,7 +109,7 @@ global.real_set_option=function($, resp_next)
 			([
 				($, q, next)=>
 				{
-					$.nr_db.query(q, function(e)
+					nr_pool.query(q, function(e)
 					{
 						next($);
 					});

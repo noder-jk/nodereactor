@@ -99,13 +99,15 @@ function (_Component) {
           menus: render_menus
         });
       }
-      /* Loop through all menus recursively */
 
+      var nest = 0;
+      /* Loop through all menus recursively */
 
       var recurs = function recurs(menu) {
         if (Array.isArray(menu)) {
+          nest++;
           return _react["default"].createElement("ul", {
-            key: menu.key,
+            key: 'nest_' + nest,
             className: ul_class
           }, menu.map(function (m) {
             return recurs(m);

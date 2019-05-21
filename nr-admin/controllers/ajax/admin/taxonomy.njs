@@ -62,7 +62,7 @@ module.exports.get_taxonomy=function($)
 
         var q='SELECT DISTINCT '+terms+'.*, (SELECT COUNT(rel_id) FROM '+rel+' WHERE owner_term_id='+terms+'.term_id) As post_count FROM '+terms+' LEFT JOIN '+rel+' ON '+terms+'.term_id='+rel+'.owner_term_id WHERE '+terms+'.taxonomy="'+taxonomy+'"';
         
-        $.nr_db.query(q, function(e, r)
+        nr_pool.query(q, function(e, r)
         {
             (!e && r.length>0) ? resp.taxonomies=r : null;
 
@@ -122,7 +122,7 @@ module.exports.get_for_editor=function($)
 
     var get_all=($, next)=>
     {
-        $.nr_db.query(all_terms, function(e,r)
+        nr_pool.query(all_terms, function(e,r)
         {
             all_terms=r || [];
             next($);
@@ -131,7 +131,7 @@ module.exports.get_for_editor=function($)
 
     var get_of_post=($, next)=>
     {
-        $.nr_db.query(current_terms, function(e,r)
+        nr_pool.query(current_terms, function(e,r)
         {
             current_terms=r || [];
             current_terms=current_terms.map(item=>item.term_id);

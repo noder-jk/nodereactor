@@ -58,6 +58,69 @@ const is_it_file_request=($, f_next)=>
 	f_next($, false);
 }
 
+const get_pat_array=(str)=>
+{
+	typeof str!=='string' ? str='' : 0;
+	
+	return str.split('\n').map(item=>
+	{
+		item=item.trim();
+
+		var rg=false;
+		
+		try
+		{
+			/\S+/.test(item)==true ? rg=new RegExp(item) : 0;
+		}
+		catch(e)
+		{
+
+		}
+		return rg;
+	}).filter(item=>item!==false);
+}
+
+const is_pattern_matched=(pathname)=>
+{
+	var pats=get_pat_array(file_request_pattern);
+
+	var matched=false;
+	pats.forEach(item=>
+	{
+		item.test(pathname)==true ? matched=true : 0;
+	});
+
+	return matched;
+}
+
+const allowed_hotlinked=($)=>
+{
+	var ref=$._SERVER['HTTP_REFERER'] || '';
+
+	var host=$._SERVER['HTTP_HOST'] || '';
+	var prot=$._SERVER['SERVER_PROTOCOL'] || '';
+
+	var self_ref=prot + '://' + host;
+
+	var matched=false;
+	
+	if(!project_mode_dev && ref && ref.indexOf(self_ref)!==0)
+	{
+		var pats=get_pat_array(hot_linking_pattern);
+
+		pats.forEach(item=>
+		{
+			item.test(ref)==true ? matched=true : 0;
+		});
+	}
+	else
+	{
+		return true;
+	}
+	
+	return matched;
+}
+
 module.exports.run=($)=>
 {
 	var check_if_file=($, inc_next)=>
@@ -72,7 +135,14 @@ module.exports.run=($)=>
 
 	var send_if_file=($, after_filter, inc_next)=>
 	{
-		if($.requested_file_path && (!nr_db_config || !nr_use_file_hook || after_filter==true))
+		if($.requested_file_path && !allowed_hotlinked($))
+		{
+			$.http_response_code(403);
+			exit($, 'Access Forbidden');
+			return;
+		}
+			
+		if($.requested_file_path && (!nr_db_config || !track_file_request || after_filter || (track_file_request && !is_pattern_matched($.nr_pathname))))
 		{
 			$ = readfile($, $.requested_file_path);
 			exit($);

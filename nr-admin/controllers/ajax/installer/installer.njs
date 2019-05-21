@@ -6,7 +6,7 @@ const install_nr=function($, nr_fields, nr_data)
 		user				: nr_data.db_username,
 		password			: nr_data.db_password,
 		database			: nr_data.db_name,
-		connectionLimit		: 100,
+		connectionLimit		: 5,
 		multipleStatements	: true
 	});
 
@@ -25,13 +25,15 @@ const install_nr=function($, nr_fields, nr_data)
 		
 		connection.query(sql, function(e,r)
 		{
+			pool.end();
+
 			if(e)
 			{
-				connection ? pool.releaseConnection(connection) : null;
 				exit($, {'status':'error', 'message':'Database Import Error.'});
 				return;
 			}
 
+			/* Replace global database config container variable with new working db */
 			nr_db_config=
 			{
 				db_name		: nr_data.db_name,
@@ -40,9 +42,11 @@ const install_nr=function($, nr_fields, nr_data)
 				db_pass		: nr_data.db_password,
 				tb_prefix	: nr_data.tb_prefix
 			}
-						
+					
+			/* Put the config in config file. */
 			var nr_cstr='module.exports='+JSON.stringify(nr_db_config);
 			
+			/* Store the file in nr-content directory that resides in users project root. */
 			node_modules.fs.writeFile(normalize_path(nr_configs+'database.njs'), nr_cstr, function(e)
 			{
 				if(e)
@@ -51,14 +55,13 @@ const install_nr=function($, nr_fields, nr_data)
 					return;
 				}
 				
-				uninclude(nr_admin+'plugin/ajax/installer/',true);
+				uninclude(nr_admin+'plugin/ajax/installer/', true);
 				
+				/* So, everything okay. Now load new pool. */
 				nr_pool=get_pool();
 
 				exit($, {'status':'done'});
 			});
-		
-			connection ? pool.releaseConnection(connection) : null;
 		});
 	});
 }

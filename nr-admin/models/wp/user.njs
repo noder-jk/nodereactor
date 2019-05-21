@@ -23,9 +23,9 @@ global.nr_get_user=function($, call_back)
 {
 	if($._SESSION['user_id'] && $._SESSION['user_login'])
 	{
-		$.nr_db.query
+		nr_pool.query
 		(
-			'SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_id='+$.nr_db.escape($._SESSION['user_id'])+' AND user_login='+$.nr_db.escape($._SESSION['user_login'])+' LIMIT 1',
+			'SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_id='+nr_pool.escape($._SESSION['user_id'])+' AND user_login='+nr_pool.escape($._SESSION['user_login'])+' LIMIT 1',
 			function(e,r)
 			{
 				(!e && r.length>0) ? $.nr_current_user=r[0] : 0;
@@ -50,7 +50,7 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 		{
 			var q='UPDATE '+nr_db_config.tb_prefix+'posts SET owner_user_id='+reassign_id+' WHERE owner_user_id IN ('+user_ids.join(',')+')';
 			
-			$.nr_db.query(q,()=>next($));
+			nr_pool.query(q,()=>next($));
 			
 			return;
 		}
@@ -70,7 +70,7 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 
 		var q='SELECT post_id, post_type FROM '+nr_db_config.tb_prefix+'posts WHERE owner_user_id IN ('+user_ids.join(',')+')';
 
-		$.nr_db.query(q, function(e,r)
+		nr_pool.query(q, function(e,r)
 		{
 			(e || !Array.isArray(r)) ? r=[] : 0;
 
@@ -102,7 +102,7 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 
 		var q=del_mode=='delete' ? del : upd;
 
-		$.nr_db.query(q,(e)=>
+		nr_pool.query(q,(e)=>
 		{
 			next($);
 		});
@@ -135,5 +135,5 @@ global.delete_user_meta=function($, user_id, meta_key, next)
 
 	var q='DELETE FROM '+nr_db_config.tb_prefix+'usermeta WHERE owner_user_id IN ('+users.join(',')+')'+and_clause;
 
-	$.nr_db.query(q, (e,r)=>next($));
+	nr_pool.query(q, (e,r)=>next($));
 }

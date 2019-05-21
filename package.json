@@ -41,7 +41,7 @@
     "react-router-dom": "^4.3.1",
     "react-svg-spinner": "^1.0.4",
     "resolve": "^1.8.1",
-    "semplicemente": "^2.0.1",
+    "semplicemente": "^2.0.2",
     "socket.io": "^2.1.1",
     "sweetalert2": "^7.18.0",
     "sweetalert2-react-content": "^1.0.3",

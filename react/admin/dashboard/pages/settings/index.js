@@ -70,7 +70,7 @@ function (_Component) {
   _createClass(FormProcess, [{
     key: "storeVal",
     value: function storeVal(e) {
-      var el = e.target;
+      var el = e.currentTarget;
       var state = {};
 
       if (el.type == 'radio' && !el.checked) {

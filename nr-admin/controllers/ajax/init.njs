@@ -16,8 +16,8 @@ module.exports.dispatch=function($)
         'nr_configs':
         {
             'active_nodes'              :   $.nr_active_nodes, 
-            'max_upload_size_byte'      :   nr_formidable.maxFileSize,
-            'max_upload_size_readable'  :   node_modules.filesize(nr_formidable.maxFileSize),
+            'max_upload_size_byte'      :   max_upload_size,
+            'max_upload_size_readable'  :   node_modules.filesize(max_upload_size),
             'nr_includes_url'           :   nr_includes_url,
             'nr_home_url'               :   nr_home_url,
             'nr_installed'              :   nr_db_config,

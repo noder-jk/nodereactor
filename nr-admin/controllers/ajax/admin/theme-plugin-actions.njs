@@ -1,6 +1,6 @@
 function insert_theme_plugin($, nr_package, call_back)
 {
-	$.nr_db.query
+	nr_pool.query
 	(
 		'INSERT INTO '+nr_db_config.tb_prefix+'nodes (nr_package,type,active) VALUES ("'+nr_package+'","'+$.node_type+'",1)',
 		function(e,r)
@@ -25,7 +25,7 @@ function deactivate_other_node($, node_package)
 	
 	if(q)
 	{
-		$.nr_db.query
+		nr_pool.query
 		(
 			q,
 			function(e,r)
@@ -42,7 +42,7 @@ function deactivate_other_node($, node_package)
 
 function check_if_node_exist_in_db($, nr_package,call_back)
 {
-	$.nr_db.query
+	nr_pool.query
 	(
 		'SELECT * FROM '+nr_db_config.tb_prefix+'nodes WHERE type="'+$.node_type+'" AND nr_package="'+nr_package+'"',
 		function(e,r)
@@ -54,7 +54,7 @@ function check_if_node_exist_in_db($, nr_package,call_back)
 
 function activate_existing($, nr_package,call_back)
 {
-	$.nr_db.query
+	nr_pool.query
 	(
 		'UPDATE '+nr_db_config.tb_prefix+'nodes SET active=1 WHERE type="'+$.node_type+'" AND nr_package="'+nr_package+'"',
 		function(e,r)

@@ -34,9 +34,12 @@ module.exports.get=function($)
 
 module.exports.save=function($)
 {
+    set_utility_configs(false, $._POST);
+
     $.add_option($._POST, 0);
     $.echo({'status':'done'});
-	exit($);
+    
+    exit($);
 }
 
 module.exports.permalink_page=function($)

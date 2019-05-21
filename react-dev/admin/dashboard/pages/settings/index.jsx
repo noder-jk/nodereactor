@@ -32,7 +32,7 @@ class FormProcess extends Component
 
     storeVal(e)
     {
-        let el=e.target;
+        let el=e.currentTarget;
 
         let state={};
 

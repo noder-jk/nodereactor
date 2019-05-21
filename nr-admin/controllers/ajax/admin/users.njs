@@ -2,7 +2,7 @@ module.exports.get=function($)
 {
 	var q='SELECT * FROM '+nr_db_config.tb_prefix+'users';
 	
-	$.nr_db.query(q, function(e,r,f)
+	nr_pool.query(q, function(e,r,f)
 	{
 		for(var i=0; i<r.length; i++)
 		{
@@ -25,7 +25,7 @@ module.exports.get_to_edit=function($)
 {
 	var user_id=$._POST.user_id===true ? get_current_user_id($) : $._POST.user_id;
 	
-	$.nr_db.query
+	nr_pool.query
 	(
 		'SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_id='+user_id,
 		function(e,r)
@@ -44,9 +44,9 @@ module.exports.login=function($)
 	var pass		= fields.user_password;
 	var user_login	= fields.user_username;
 	
-	var q='SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_email='+$.nr_db.escape(email)+' OR user_login='+$.nr_db.escape(user_login)+' LIMIT 1';
+	var q='SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_email='+nr_pool.escape(email)+' OR user_login='+nr_pool.escape(user_login)+' LIMIT 1';
 	
-	$.nr_db.query(q, function(err, result)
+	nr_pool.query(q, function(err, result)
 	{
 		if(err)
 		{
@@ -119,9 +119,9 @@ module.exports.register=function($)
         return;
     }
 
-	var q='SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_login='+$.nr_db.escape(fields.user_username)+' OR user_email='+$.nr_db.escape(fields.user_email);
+	var q='SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_login='+nr_pool.escape(fields.user_username)+' OR user_email='+nr_pool.escape(fields.user_email);
 	
-	$.nr_db.query(q, function(e,r)
+	nr_pool.query(q, function(e,r)
 	{
 		if(e)
 		{	
@@ -158,10 +158,10 @@ module.exports.register=function($)
 			for(var k in values)
 			{
 				key.push(k);
-				val.push($.nr_db.escape(values[k]));
+				val.push(nr_pool.escape(values[k]));
 			}
 			
-			$.nr_db.query
+			nr_pool.query
 			(
 				'INSERT INTO '+nr_db_config.tb_prefix+'users ('+key.join(',')+') VALUES ('+val.join(',')+')',
 				function(e,r)
@@ -195,10 +195,10 @@ module.exports.update=function($)
 		var set_val=[];
 		for(var k in values)
 		{
-			set_val.push(k+'='+$.nr_db.escape(values[k]));
+			set_val.push(k+'='+nr_pool.escape(values[k]));
 		}
 
-		$.nr_db.query
+		nr_pool.query
 		(
 			'UPDATE '+nr_db_config.tb_prefix+'users SET '+set_val.join(', ')+' WHERE user_id="'+fields.user_id+'"',
 			function(e)
