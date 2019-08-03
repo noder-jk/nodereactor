@@ -1,6 +1,6 @@
 {
   "name": "nodereactor",
-  "version": "2.1.7",
+  "version": "2.2.0",
   "description": "Node.js and React.js based complete CMS, inspired by WordPress.",
   "main": "index.njs",
   "dependencies": {
