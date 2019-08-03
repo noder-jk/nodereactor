@@ -7,8 +7,6 @@ exports.PostProcess = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
@@ -140,41 +138,42 @@ function (_Component) {
       this.setState({
         'loading_icon': true
       });
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: {
-          'action': 'nr_save_post',
-          'post': post
-        }
-      }).then(function (r) {
+      (0, _react2.ajaxRequest)('nr_save_post', {
+        post: post
+      }, function (r, d, e) {
         var ob = {
-          'loading_icon': false,
-          'post_updated': true
+          loading_icon: false
         };
 
-        if (r.data && r.data.status == 'done') {
-          _sweetalert["default"].fire('Success', r.data && r.data.message ? r.data.message : 'Saved', 'success');
+        if (e) {
+          _sweetalert["default"].fire('Error', 'Request Failed', 'error');
 
-          if (r.data.post_id) {
-            /* Save the returned post id and set state */
-            ob.post_id = r.data.post_id;
-            _this2.store_vals.post_id = r.data.post_id;
-          }
+          _this2.setState(ob);
+
+          return;
+        }
+
+        var _r$status = r.status,
+            status = _r$status === void 0 ? 'failed' : _r$status,
+            _r$message = r.message,
+            message = _r$message === void 0 ? 'Action Failed' : _r$message,
+            _r$post_id = r.post_id,
+            post_id = _r$post_id === void 0 ? false : _r$post_id;
+
+        if (status == 'done' && post_id) {
+          _sweetalert["default"].fire('Success', message, 'success');
+
+          ob.post_updated = true;
+          ob.post_id = post_id;
+          _this2.store_vals.post_id = post_id;
         } else {
-          _sweetalert["default"].fire('Error', r.data && r.data.message ? r.data.message : 'Action Failed.', 'error');
+          _sweetalert["default"].fire('Error', message, 'error');
         }
 
         _this2.setState(ob, function () {
           _this2.setState({
             'post_updated': false
           });
-        });
-      })["catch"](function (r) {
-        _sweetalert["default"].fire('Error', 'Request Failed', 'error');
-
-        _this2.setState({
-          loading_icon: false
         });
       });
     }

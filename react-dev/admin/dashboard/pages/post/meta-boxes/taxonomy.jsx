@@ -1,10 +1,9 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 
 import Swal from 'sweetalert2';
 
-import {ajax_url , get_hierarchy} from 'nodereactor/react';
+import {ajaxRequest, get_hierarchy} from 'nodereactor/react';
 import {Editor as TaxonomyManager} from '../taxonomy/index';
 
 class PostTaxonomy extends Component
@@ -40,17 +39,20 @@ class PostTaxonomy extends Component
         this.setState({'loading':true});
 
         let {post_id, meta_box_id}=this.props;
-
-        axios({
-            'method':'post',
-            'url':ajax_url ,
-            'data':{'action':'nr_get_taxonomy_in_editor', 'taxonomy':meta_box_id, 'post_id':post_id}
-        }).then(r=>
+        
+        ajaxRequest('nr_get_taxonomy_in_editor', {'taxonomy':meta_box_id, post_id}, (r, d, e)=>
         {
-            let taxonomies=r.data.all_terms || [];
-            let current_terms=r.data.current_terms || [];
-            let hierarchical=r.data.hierarchical || false;
-            let multiple=r.data.multiple==true;
+            if(e)
+            {
+                this.setState({'loading':false});
+                Swal.fire('Error', 'Request Error In Taxonomy Parse', 'error');
+                return;
+            }
+
+            let taxonomies=r.all_terms || [];
+            let current_terms=r.current_terms || [];
+            let hierarchical=r.hierarchical || false;
+            let multiple=r.multiple==true;
 
             current_terms=current_terms.map(item=>parseInt(item)).filter(item=>Number.isInteger(item));
 
@@ -62,13 +64,7 @@ class PostTaxonomy extends Component
                 hierarchical,
                 multiple
             });
-
-        }).catch(e=>
-        {
-            this.setState({'loading':false});
-
-            Swal.fire('Error', 'Request Error In Taxonomy Parse', 'error')
-        })
+        });
     }
 
     setPrimaryTerm(e)
@@ -136,7 +132,6 @@ class PostTaxonomy extends Component
 
         let req_ob=
         {
-            'action'            :   'nr_save_post_editor_taxonomy', 
             'post_id'           :   post_id, 
             'current_terms'     :   current_terms,
             'taxonomy'          :   meta_box_id
@@ -144,17 +139,10 @@ class PostTaxonomy extends Component
 
         this.setState({'loading':true});
 
-        axios({
-            'method':'post',
-            'url':ajax_url ,
-            'data':req_ob
-        }).then(r=>
+        ajaxRequest('nr_save_post_editor_taxonomy', req_ob, r=>
         {
             this.setState({'loading':false});
-        }).catch(e=>
-        {
-            this.setState({'loading':false});
-        })
+        });
     }
 
     componentDidMount()

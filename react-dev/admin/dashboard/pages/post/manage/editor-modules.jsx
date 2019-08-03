@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import Spinner from 'react-svg-spinner';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 
-import {ajax_url } from 'nodereactor/react';
+import {ajaxRequest} from 'nodereactor/react';
 
 import {FindComp} from 'nodereactor/react/helper/comp-finder';
 
@@ -34,36 +33,27 @@ class Title extends Component
         }
 
         let el=element ? element : e.currentTarget;
-        let value=el.value;
+        let post_name=el.value;
 
         let {sendSlug}=this.props;
 
         this.setState({'loading_icon':true});
-        axios({
-            method:'post',
-            url:ajax_url ,
-            data:{'action':'nr_slug_check', 'post_name':value}
-        }).then(r=>
+        ajaxRequest('nr_slug_check', {post_name}, (r, d, e)=>
         {
             let ob={slug_edit_mode:false, loading_icon:false}
-
-            /* Process if slug was sent from server */
-            if(r.data && r.data.post_name)
+            if(e)
             {
-                /* Store to the object to store in state */
-                ob.slug=r.data.post_name;
-                
-                /* Pass to the root editor component */
-                sendSlug(r.data.post_name);
+                this.setState(ob);
+                Swal.fire('Slug Generate Request Error.');
+                return;
             }
+            
+            let {post_name=''}=r;
 
-            /* Now set the slug in state */
+            ob.slug=post_name;
+            sendSlug(post_name);
+
             this.setState(ob);
-        }).catch(e=>
-        {
-            this.setState({slug_edit_mode:false, loading_icon:false});
-
-            Swal.fire('Slug Generate Request Error.');
         });
     }
 

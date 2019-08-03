@@ -7,11 +7,7 @@ exports.RSetting = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
-
-var _react2 = require("nodereactor/react");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -73,34 +69,14 @@ function (_Component) {
       }
     }
   }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      /* this.setState({'loading':true});
-      axios({
-          'method':'post',
-          'url':ajax_url ,
-          'data':{'action':'get_posts_to_show_in_home'}
-      }).then(r=>
-      {
-          let set_ob={'loading':false};
-          
-          if(r.data && r.data.posts)
-          {
-              set_ob.posts=r.data.posts;
-          }
-            this.setState(set_ob);
-      }).catch(e=>
-      {
-          this.setState({'loading':false});
-          
-      }) */
-    }
-  }, {
     key: "render",
     value: function render() {
-      var onChange = this.props.onChange;
-      var _this$props$ResponseD2 = this.props.ResponseData.values,
-          values = _this$props$ResponseD2 === void 0 ? {} : _this$props$ResponseD2;
+      var _this$props = this.props,
+          onChange = _this$props.onChange,
+          _this$props$ResponseD2 = _this$props.ResponseData,
+          ResponseData = _this$props$ResponseD2 === void 0 ? {} : _this$props$ResponseD2;
+      var _ResponseData$values = ResponseData.values,
+          values = _ResponseData$values === void 0 ? {} : _ResponseData$values;
       var _values$posts_per_pag = values.posts_per_page,
           posts_per_page = _values$posts_per_pag === void 0 ? 15 : _values$posts_per_pag;
       return _react["default"].createElement("div", null, _react["default"].createElement("div", {

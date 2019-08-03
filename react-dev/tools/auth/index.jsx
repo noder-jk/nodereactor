@@ -1,9 +1,9 @@
 import React, {Component} from "react";
-import {ajax_url } from 'nodereactor/react';
 import {Helmet} from 'react-helmet';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import Spinner from 'react-svg-spinner';
+
+import {ajaxRequest} from 'nodereactor/react';
 
 import './style.css';
 
@@ -31,27 +31,28 @@ class LoginRegistration extends Component
 
     Login()
     {
-        this.setState({'loading':true})
-        axios({
-            method:'post',
-            url:ajax_url ,
-            data:Object.assign({'action':'nr_login'}, this.state)
-        }).then(r=>
+        this.setState({'loading':true});
+
+        ajaxRequest('nr_login', {...this.state}, (r, d, e)=>
         {
-            if(r.data && r.data.status=='done' && r.data.go_to)
+            this.setState({'loading':false});
+
+            if(e)
             {
-                window.location.assign(r.data.go_to);
+                Swal.fire('Error', 'Something went wrong.', 'error');
+                return;
             }
-            else
+
+            let {message='Something went wrong. Could not login.', status='failed', go_to=false}=r;
+
+            if(status=='done' && go_to)
             {
-                Swal.fire('Error', (r.data.message ?  r.data.message : 'Something went wrong. Could not login.'), 'error');
+                window.location.assign(go_to);
+                return;
             }
-            this.setState({'loading':false})
-        }).catch(r=>
-        {
-            Swal.fire('Error', 'Something went wrong.', 'error');
-            this.setState({'loading':false})
-        })
+            
+            Swal.fire('Error', message, 'error');
+        });
     }
 
     render()

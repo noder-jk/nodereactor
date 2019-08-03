@@ -17,7 +17,7 @@ module.exports.remove_action=function(hook)
 	delete this.nr_hooks[hook];
 }
 
-module.exports.do_action=function(hook,params,callback)
+module.exports.do_action=function(hook, params, callback)
 {
 	/* Determine callback and passable parameters */
 	var next=!callback ? params : callback;

@@ -9,8 +9,6 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _react2 = require("nodereactor/react");
@@ -74,44 +72,33 @@ function (_Component) {
       }
 
       var el = element ? element : e.currentTarget;
-      var value = el.value;
+      var post_name = el.value;
       var sendSlug = this.props.sendSlug;
       this.setState({
         'loading_icon': true
       });
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: {
-          'action': 'nr_slug_check',
-          'post_name': value
-        }
-      }).then(function (r) {
+      (0, _react2.ajaxRequest)('nr_slug_check', {
+        post_name: post_name
+      }, function (r, d, e) {
         var ob = {
           slug_edit_mode: false,
           loading_icon: false
-          /* Process if slug was sent from server */
-
         };
 
-        if (r.data && r.data.post_name) {
-          /* Store to the object to store in state */
-          ob.slug = r.data.post_name;
-          /* Pass to the root editor component */
+        if (e) {
+          _this2.setState(ob);
 
-          sendSlug(r.data.post_name);
+          _sweetalert["default"].fire('Slug Generate Request Error.');
+
+          return;
         }
-        /* Now set the slug in state */
 
+        var _r$post_name = r.post_name,
+            post_name = _r$post_name === void 0 ? '' : _r$post_name;
+        ob.slug = post_name;
+        sendSlug(post_name);
 
         _this2.setState(ob);
-      })["catch"](function (e) {
-        _this2.setState({
-          slug_edit_mode: false,
-          loading_icon: false
-        });
-
-        _sweetalert["default"].fire('Slug Generate Request Error.');
       });
     }
   }, {

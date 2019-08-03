@@ -7,8 +7,6 @@ exports.FeaturedImage = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _react2 = require("nodereactor/react");
@@ -100,37 +98,31 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      if (this.state.image_post_id > 0) {
-        this.setState({
-          loading_icon: true
-        });
-        (0, _axios["default"])({
-          method: 'post',
-          data: {
-            'action': 'nr_get_featured_image',
-            'post_id': this.state.image_post_id
-          },
-          url: _react2.ajax_url
-        }).then(function (r) {
-          var ob = {
-            loading_icon: false
-          };
+      var image_post_id = this.state.image_post_id;
 
-          if (r.data && r.data.url) {
-            ob.image_url = r.data.url;
-          }
-
-          _this2.setState(ob);
-        })["catch"](function (r) {
-          _this2.setState({
-            loading_icon: false
-          });
-        });
+      if (image_post_id == 0) {
+        return;
       }
+
+      this.setState({
+        loading_icon: true
+      });
+      (0, _react2.ajaxRequest)('nr_get_featured_image', {
+        'post_id': image_post_id
+      }, function (r, d, e) {
+        var _r$url = r.url,
+            url = _r$url === void 0 ? false : _r$url;
+
+        _this2.setState({
+          loading_icon: false,
+          image_url: url
+        });
+      });
     }
   }, {
     key: "render",
     value: function render() {
+      var image_url = this.state.image_url;
       return _react["default"].createElement("div", {
         id: "featured_image_container"
       }, this.state.loading_icon ? _react["default"].createElement("p", null, _react["default"].createElement(_reactSvgSpinner["default"], {
@@ -139,12 +131,12 @@ function (_Component) {
         type: "hidden",
         name: "featured_image",
         value: this.state.image_post_id
-      }), this.state.image_url ? _react["default"].createElement("img", {
+      }), image_url ? _react["default"].createElement("img", {
         src: this.state.image_url,
         style: {
           'width': '100%'
         }
-      }) : null, this.state.image_url ? _react["default"].createElement("span", {
+      }) : null, image_url ? _react["default"].createElement("span", {
         className: "text-danger",
         onClick: this.removeImage
       }, "- Remove Featured Image") : _react["default"].createElement("span", {

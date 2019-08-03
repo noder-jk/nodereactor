@@ -7,8 +7,6 @@ exports.InitFrontEnd = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _react2 = require("nodereactor/react");
@@ -66,52 +64,49 @@ function (_Component) {
       var _this2 = this;
 
       var pathname = window.location.pathname;
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url + window.location.search,
-        'data': {
-          'action': 'get_init_frontend',
-          'pathname': pathname
-        }
-      }).then(function (r) {
-        if (r.data) {
-          var _r$data$nr_configs = r.data.nr_configs,
-              nr_configs = _r$data$nr_configs === void 0 ? {} : _r$data$nr_configs;
-          var _nr_configs$nr_packag = nr_configs.nr_package,
-              nr_package = _nr_configs$nr_packag === void 0 ? ' ' : _nr_configs$nr_packag,
-              _nr_configs$component = nr_configs.component,
-              component = _nr_configs$component === void 0 ? 'Index' : _nr_configs$component,
-              _nr_configs$redirect_ = nr_configs.redirect_to,
-              redirect_to = _nr_configs$redirect_ === void 0 ? false : _nr_configs$redirect_;
-
-          if (redirect_to !== false) {
-            window.location.replace(redirect_to);
-            return;
-          }
-
-          var params = Object.assign({}, r.data);
-          delete params.nr_configs;
-          /* Parameters to pass to theme component finder. */
-
-          var find_params = {
-            'nr_package': nr_package,
-            'component': component,
-            'fallback_component': 'Index'
-            /* Now load the theme component */
-
-          };
-
+      (0, _react2.ajaxRequest)('get_init_frontend' + window.location.search, {
+        pathname: pathname
+      }, function (r, d, e) {
+        if (e) {
           _this2.setState({
-            'content': _react["default"].createElement(_compFinder.FindComp, _extends({
-              comp_props: find_params
-            }, params))
+            'content': _react["default"].createElement("p", {
+              className: "text-center text-danger"
+            }, "Request Error.")
           });
+
+          return;
         }
-      })["catch"](function (e) {
+
+        var _r$nr_configs = r.nr_configs,
+            nr_configs = _r$nr_configs === void 0 ? {} : _r$nr_configs;
+        var _nr_configs$nr_packag = nr_configs.nr_package,
+            nr_package = _nr_configs$nr_packag === void 0 ? ' ' : _nr_configs$nr_packag,
+            _nr_configs$component = nr_configs.component,
+            component = _nr_configs$component === void 0 ? 'Index' : _nr_configs$component,
+            _nr_configs$redirect_ = nr_configs.redirect_to,
+            redirect_to = _nr_configs$redirect_ === void 0 ? false : _nr_configs$redirect_;
+
+        if (redirect_to !== false) {
+          window.location.replace(redirect_to);
+          return;
+        }
+
+        var params = Object.assign({}, r);
+        delete params.nr_configs;
+        /* Parameters to pass to theme component finder. */
+
+        var find_params = {
+          'nr_package': nr_package,
+          'component': component,
+          'fallback_component': 'Index'
+          /* Now load the theme component */
+
+        };
+
         _this2.setState({
-          'content': _react["default"].createElement("p", {
-            className: "text-center text-danger"
-          }, "Request Error.")
+          'content': _react["default"].createElement(_compFinder.FindComp, _extends({
+            comp_props: find_params
+          }, params))
         });
       });
     }

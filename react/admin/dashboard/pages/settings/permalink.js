@@ -7,8 +7,6 @@ exports.PSetting = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
@@ -68,27 +66,10 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': {
-          'action': 'nr_get_permalink_settings'
-        }
-      }).then(function (r) {
-        var set_ob = {
-          'loading': false
-        };
-
-        if (r.data) {
-          set_ob.configs = r.data;
-        }
-
-        _this2.setState(set_ob);
-      })["catch"](function (e) {
-        _sweetalert["default"].fire('Error', 'Request Failed', 'error');
-
+      (0, _react2.ajaxRequest)('nr_get_permalink_settings', function (r) {
         _this2.setState({
-          'loading': false
+          'loading': false,
+          configs: r
         });
       });
     }

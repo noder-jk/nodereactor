@@ -1,12 +1,11 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 import Swal from 'sweetalert2';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 
-import {ajax_url ,RenderMediaFile, Pagination} from 'nodereactor/react';
+import {ajaxRequest, RenderMediaFile, Pagination} from 'nodereactor/react';
 
 const FileDetails=(props)=>
 {
@@ -157,59 +156,49 @@ class Browser extends Component
 
     deleteFile()
     {
-        let f=this.state.selected;
-        if(f.length==0){return;}
+        let {selected}=this.state;
         
-        Swal.fire
-        ({
+        if(selected.length==0){return;}
+        
+        let del_fnc=(result) => 
+        {
+            if(!result.value){return;}
+            
+            let post_id=selected.map(fl=>fl.post_id);
+
+            ajaxRequest('nr_delete_media', {post_id}, (r, d, e)=>
+            {
+                if(e)
+                {
+                    Swal.fire('Request Error');
+                    return;
+                }
+                
+                // Remove deleted files from state.
+                let {selected, files}=this.state;
+                let new_ar=files.map(item=>
+                {
+                    let exist=false;
+
+                    selected.forEach(item2=>item.post_id==item2.post_id ? exist=true : 0);
+
+                    return !exist ? item : false;
+
+                }).filter(el=>el!==false);
+
+                this.setState({'selected':[], 'files':new_ar});
+            });
+        }
+
+        let sob=
+        {
             title: 'Sure to delete?',
             text: "You won't be able to revert this!",
             type: 'warning',
             showCancelButton: true
-        }).then((result) => 
-        {
-            if(!result.value){return;}
-            
-            let post_ids=[];
+        };
 
-            for(let i=0; i<f.length; i++)
-            {
-                post_ids.push(f[i].post_id);
-            }
-
-            axios({
-                method:'post',
-                url:ajax_url ,
-                data:{'action':'nr_delete_media', 'post_id':post_ids}
-            }).then(r=>
-            {
-                let files=this.state.selected;
-                let new_ar=[];
-
-                this.state.files.map(item=>
-                {
-                    let exist=false;
-                    files.map(item2=>
-                    {
-                        if(item.post_id==item2.post_id)
-                        {
-                            exist=true;
-                        }
-                    })
-
-                    if(!exist)
-                    {
-                        new_ar.push(item);
-                    }
-                })
-
-                this.setState({'selected':[], 'files':new_ar});
-                
-            }).catch(r=>
-            {
-                Swal.fire('Request Error');
-            })
-        });
+        Swal.fire(sob).then(del_fnc);
     }
 
     storeFilterCriteria(e)
@@ -237,33 +226,37 @@ class Browser extends Component
 
         let {accept=[]}=this.props;
 
-        axios({
-            method:'post',
-            data:{'action':'nr_get_gallery', 'accept':JSON.stringify(accept), page, posts_per_page, keyword},
-            url:ajax_url 
-        }).then(r=>
+        let ob=
         {
-            let ob={}
+            'accept':JSON.stringify(accept), 
+            page, 
+            posts_per_page, 
+            keyword
+        }
 
-            if(r.data && r.data.files && Array.isArray(r.data.files) && r.data.files.length>0)
+        ajaxRequest('nr_get_gallery', ob, (r, d, e)=>
+        {
+            if(e)
+            {
+                this.setState({'spinner':null, 'message':<span>Request Error</span>});
+                return;
+            }
+            
+            let ob={spinner:null}
+
+            if(Array.isArray(r.files) && r.files.length>0)
             {
                 ob.message=null;
-                ob.files=r.data.files;
-                ob.pagination=r.data.pagination;
+                ob.files=r.files;
+                ob.pagination=r.pagination;
             }
             else
             {
                 ob.message=<span>No file</span>
-                
             }
-            ob.spinner=null;
-
-            this.setState(ob);
             
-        }).catch(r=>
-        {
-            this.setState({'spinner':null, 'message':<span>Request Error</span>});
-        })
+            this.setState(ob);
+        });
     }
 
     handlePaginate(e, page)

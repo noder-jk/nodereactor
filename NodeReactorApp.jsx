@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 import Socket from 'socket.io-client/dist/socket.io.js';
 
@@ -8,7 +7,7 @@ import {InitAdmin} from 'nodereactor/react/admin';
 import {InitFrontEnd} from 'nodereactor/react/frontend';
 import {NodeReactorInstaller} from 'nodereactor/react/installer';
 
-import {LoginRegistration, ajax_url} from 'nodereactor/react';
+import {LoginRegistration, ajaxRequest} from 'nodereactor/react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -28,23 +27,25 @@ class InitApp extends Component
     {
         let req_v=
         {
-            'action':'nr_get_init_component',
             'pathname':window.location.pathname,
             'search':window.location.search
         };
         
-        axios({
-            method: 'post',
-            url: ajax_url ,
-            data: req_v
-        }).then(r=>
+        ajaxRequest('nr_get_init_component', req_v, (r, x, e)=>
         {
-            /* Store configs in easy variable */
-            let configs=r.data.nr_configs;
+            if(e)
+            {
+                this.setState({'content':<p className="text-center text-danger">Request Failed.</p>});
+                return;
+            }
+
+            let {nr_configs={}}=r;
+
+            let configs=nr_configs;
 
             /* Delete deactivated theme/plugin from vendor components object */
             let new_vendors={'themes':[], 'plugins':[]};
-            if(r.data && typeof configs.active_nodes=='object')
+            if(typeof configs.active_nodes=='object')
             {
                 for(let k in window.nr_vendor_comps)
                 {
@@ -95,10 +96,7 @@ class InitApp extends Component
                 Comps.component=comps[configs.component];
             }
 
-            this.setState({'content':<Comps.component {...r.data}/>});
-        }).catch(r=>
-        {
-            this.setState({'content':<p className="text-center text-danger">Request Failed.</p>});
+            this.setState({'content':<Comps.component {...nr_configs}/>});
         });
     }
 

@@ -1,6 +1,4 @@
 import React, {Component} from "react";
-import axios from 'axios';
-import {ajax_url ,Placeholder, Loading} from 'nodereactor/react';
 
 import {Browser} from './browser';
 import {Uploader} from './uploader';

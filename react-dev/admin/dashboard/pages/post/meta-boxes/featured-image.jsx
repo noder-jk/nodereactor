@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 
-import {ajax_url ,Media} from 'nodereactor/react';
+import {ajaxRequest ,Media} from 'nodereactor/react';
 
 class FeaturedImage extends Component
 {
@@ -52,49 +51,35 @@ class FeaturedImage extends Component
 
     componentDidMount()
     {
-        if(this.state.image_post_id>0)
+        let {image_post_id}=this.state;
+
+        if(image_post_id==0){return;}
+        
+        this.setState({loading_icon:true});
+
+        ajaxRequest('nr_get_featured_image', {'post_id':image_post_id}, (r, d, e)=>
         {
-            this.setState({loading_icon:true});
+            let {url=false}=r;
 
-            axios({
-                method:'post',
-                data:{'action':'nr_get_featured_image', 'post_id':this.state.image_post_id},
-                url:ajax_url 
-            }).then(r=>
-            {
-                let ob={loading_icon:false};
-
-                if(r.data && r.data.url)
-                {
-                    ob.image_url=r.data.url;
-                }
-
-                this.setState(ob);
-            }).catch(r=>
-            {
-                this.setState({loading_icon:false});
-            })
-        }
+            this.setState({loading_icon:false, image_url:url});
+        });
     }
 
     render()
     {
-        return(
-            <div id="featured_image_container">
-                {this.state.loading_icon ? <p><Spinner size="15px"/></p> : null}
+        let {image_url}=this.state;
 
-                <input type="hidden" name="featured_image" value={this.state.image_post_id}/>
+        return <div id="featured_image_container">
+            {this.state.loading_icon ? <p><Spinner size="15px"/></p> : null}
 
-                {
-                    this.state.image_url ? <img src={this.state.image_url} style={{'width':'100%'}}/> : null
-                }
-                {
-                    this.state.image_url ? <span className="text-danger" onClick={this.removeImage}>- Remove Featured Image</span> : <span onClick={this.showMedia}>+ Add Featured Image</span>
-                }
+            <input type="hidden" name="featured_image" value={this.state.image_post_id}/>
 
-                <Media open={this.state.media_opened} onClose={this.closeMedia} onResult={this.getFiles} accept={['image/jpeg', 'image/png']}/>
-            </div>
-        )
+            {image_url ? <img src={this.state.image_url} style={{'width':'100%'}}/> : null}
+
+            {image_url ? <span className="text-danger" onClick={this.removeImage}>- Remove Featured Image</span> : <span onClick={this.showMedia}>+ Add Featured Image</span>}
+
+            <Media open={this.state.media_opened} onClose={this.closeMedia} onResult={this.getFiles} accept={['image/jpeg', 'image/png']}/>
+        </div>
     }
 }
 

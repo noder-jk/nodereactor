@@ -7,8 +7,6 @@ exports.getNavList = exports.Navigation = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
@@ -55,15 +53,17 @@ var getNavList = function getNavList(cback) {
   /* Get all admin menus and decide which component will be used to render admin page. */
 
 
-  (0, _axios["default"])({
-    method: 'post',
-    url: _react2.ajax_url,
-    data: {
-      'action': 'nr_get_admin_nav'
+  (0, _react2.ajaxRequest)('nr_get_admin_nav', function (r, d, e) {
+    if (e) {
+      cback(false, CurrentNav);
+      return;
     }
-  }).then(function (r) {
-    if (r.data && r.data.nr_admin_navs) {
-      AdminMenus = r.data.nr_admin_navs;
+
+    var _r$nr_admin_navs = r.nr_admin_navs,
+        nr_admin_navs = _r$nr_admin_navs === void 0 ? false : _r$nr_admin_navs;
+
+    if (nr_admin_navs) {
+      AdminMenus = nr_admin_navs;
       var p = window.location.pathname;
       p = p.split('/').filter(function (item) {
         return item !== '';
@@ -95,8 +95,6 @@ var getNavList = function getNavList(cback) {
     }
 
     cback(AdminMenus, CurrentNav);
-  })["catch"](function (r) {
-    cback(false, CurrentNav);
   });
 };
 

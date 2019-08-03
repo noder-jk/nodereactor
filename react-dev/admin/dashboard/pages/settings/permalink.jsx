@@ -1,10 +1,9 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from 'react-svg-spinner';
 
 import Swal from 'sweetalert2';
 
-import {ajax_url } from 'nodereactor/react';
+import {ajaxRequest} from 'nodereactor/react';
 
 class PSetting extends Component
 {
@@ -27,25 +26,10 @@ class PSetting extends Component
     {
         this.setState({'loading':true});
 
-        axios({
-            'method':'post',
-            'url':ajax_url ,
-            'data':{'action':'nr_get_permalink_settings'}
-        }).then(r=>
+        ajaxRequest('nr_get_permalink_settings', r=>
         {
-            let set_ob={'loading':false};
+            this.setState({'loading':false, configs:r});
 
-            if(r.data)
-            {
-                set_ob.configs=r.data;
-            }
-
-            this.setState(set_ob);
-
-        }).catch(e=>
-        {
-            Swal.fire('Error', 'Request Failed', 'error');
-            this.setState({'loading':false});
         });
     }
 

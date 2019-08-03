@@ -13,7 +13,7 @@ global.meta_processor=function ($, mets, result, next)
 	next($, result);
 }
 
-module.exports.use_post_module=function(ob)
+module.exports.use_meta_box=function(ob)
 {
 	if(!ob.post_type || !ob.module){return;}
 
@@ -43,7 +43,7 @@ module.exports.use_post_module=function(ob)
 	}
 }
 
-module.exports.register_post_module=function(meta_ob)
+module.exports.register_meta_box=function(meta_ob)
 {
 	if(meta_ob.id && meta_ob.title && meta_ob.component && !this.nr_registered_meta_boxes[meta_ob.id])
 	{

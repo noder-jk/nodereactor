@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import Spinner from 'react-svg-spinner';
 
 import Swal from 'sweetalert2';
 
-import {ajax_url , array_pull_down, array_pull_up} from 'nodereactor/react';
+import {ajaxRequest , array_pull_down, array_pull_up} from 'nodereactor/react';
 
 class MenuEditor extends Component
 {
@@ -160,19 +159,19 @@ class MenuEditor extends Component
         let standalone_menu={[menu_name]:{'items':this.alt_val_store, 'association':association}};
 
         this.setState({'loading':true});
-        axios({
-            'method':'post',
-            'url':ajax_url ,
-            'data':{'action':'nr_save_menu', 'menus':standalone_menu}
-        }).then(r=>
+
+        ajaxRequest('nr_save_menu', {'menus':standalone_menu}, (r, d, e)=>
         {
+            if(e)
+            {
+                this.setState({'loading':false});
+                Swal.fire('Error', 'Menu Could Not Saved', 'error');
+                return;
+            }
+
             Swal.fire('Saved');
             this.setState({'loading':false, 'saved_menu':true});
-        }).catch(e=>
-        {
-            this.setState({'loading':false});
-            Swal.fire('Error', 'Menu Could Not Saved', 'error');
-        })
+        });
     }
 
     componentDidUpdate()

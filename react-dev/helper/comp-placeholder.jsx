@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 
-import {ajax_url } from 'nodereactor/react';
+import {ajaxRequest} from 'nodereactor/react';
 
 class Placeholder extends Component
 {
@@ -25,17 +24,15 @@ class Placeholder extends Component
         delete params.Data;
         delete params.Component;
 
-        axios({
-            method:'post',
-            url:ajax_url ,
-            data:Data
-        }).then(r=>
+        let action=Data.action;
+        delete Data.action;
+
+        ajaxRequest(action, Data, (r, d, e)=>
         {
-            this.setState({content:<Component Response={r || {}} ResponseData={(r && r.data) ? r.data : {}} {...params}/>});
-        }).catch(r=>
-        {
-            this.setState({content:<span className="text-danger">Request Error.</span>})
-        })
+            let ob= e ? {content:<span className="text-danger">Request Error.</span>} : {content:<Component Response={d || {}} ResponseData={r} {...params}/>};
+
+            this.setState(ob);
+        });
     }
 
     componentDidCatch()

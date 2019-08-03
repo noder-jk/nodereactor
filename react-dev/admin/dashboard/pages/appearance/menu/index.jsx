@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import Spinner from 'react-svg-spinner';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
-import {ajax_url } from 'nodereactor/react';
+import {ajaxRequest} from 'nodereactor/react';
 
 import {ObjectContents} from './objects';
 import {CustomLink} from './custom';
@@ -44,7 +43,9 @@ class Menus extends Component
     {   
         let {lastOb=false}=this.props;
 
-        let ed=<MenuEditor lastOb={lastOb} locations={this.state.locations} menus={this.state.menus[menu]} menu_name={menu} closeMenuForm={this.closeMenuEditor}/>
+        let {locations, menus}=this.state;
+
+        let ed=<MenuEditor lastOb={lastOb} locations={locations} menus={menus[menu]} menu_name={menu} closeMenuForm={this.closeMenuEditor}/>
 
         this.setState({'editor':{'name':menu, 'component':ed},'mode':false});
     }
@@ -64,7 +65,7 @@ class Menus extends Component
         }
     }
 
-    deleteMenu(m)
+    deleteMenu(menu_name)
     {
         Swal.fire
         ({
@@ -78,18 +79,11 @@ class Menus extends Component
 
             /* Now request to server to delete. */
             this.setState({'loading':true});
-            axios({
-                method:'post',
-                data:{'action':'nr_delete_menu', 'menu_name':m},
-                url:ajax_url 
-            }).then(r=>
+            ajaxRequest('nr_delete_menu', {menu_name}, (r, d, e)=>
             {
-                this.setState({'loading':true}, this.fetchMenuContents);
-            }).catch(r=>
-            {
-                this.setState({'loading':false});
+                this.setState({'loading':false}, this.fetchMenuContents);
                 
-                Swal.fire('Request Error');   
+                e ? Swal.fire('Request Error') : 0;
             });
         });
     }
@@ -98,45 +92,32 @@ class Menus extends Component
     {
         this.setState({'loading':true});
 
-        axios({
-            'method':'post',
-            'url':ajax_url ,
-            'data':{'action':'nr_get_menu_items'}
-        }).then(r=>
+        ajaxRequest('nr_get_menu_items', r=>
         {
-            let set_ob={'loading':false}
+            let {locations={}, nr_menus={}}=r;
 
-            if(r.data)
+            let set_ob={'loading':false, locations, 'menus':nr_menus};
+
+            let recurs=(ar)=>
             {
-                set_ob.locations=r.data.locations;
-                set_ob.menus=r.data.nr_menus;
-
-                let recurs=(ar)=>
+                return Array.isArray(ar) ? ar.map(item=>
                 {
-                    return Array.isArray(ar) ? ar.map(item=>
+                    if(Array.isArray(item.children))
                     {
-                        if(Array.isArray(item.children))
-                        {
-                            item.children=recurs(item.children);
-                        } 
+                        item.children=recurs(item.children);
+                    } 
 
-                        return item;
-                    }) : [];
-                }
+                    return item;
+                }) : [];
+            }
 
-                for(let k in set_ob.menus)
-                {
-                    if(set_ob.menus[k].items)
-                    {
-                        set_ob.menus[k].items=recurs(set_ob.menus[k].items);
-                    }
-                }
-
-                set_ob.menus=set_ob.menus;
+            for(let k in set_ob.menus)
+            {
+                set_ob.menus[k].items ? set_ob.menus[k].items=recurs(set_ob.menus[k].items) : 0;
             }
 
             this.setState(set_ob);
-        })
+        });
     }
 
     componentDidMount()
@@ -148,23 +129,25 @@ class Menus extends Component
     {
         let {lastOb=false}=this.props;
 
+        let {loading, locations, menus, mode, editor}=this.state;
+
         return  <div className="col-6 col-md-7">
-            <h4>Menus {this.state.loading==true ? <Spinner size="15px"/> : null}</h4>
+            <h4>Menus {loading==true ? <Spinner size="15px"/> : null}</h4>
             {
-                this.state.mode!=='create' ? 
+                mode!=='create' ? 
                     <span onClick={this.createNew}>+ Create New</span> : 
                     <div className="menu-name-list">
-                        <MenuEditor locations={this.state.locations} closeMenuForm={this.closeMenuEditor} lastOb={lastOb}/>
+                        <MenuEditor locations={locations} closeMenuForm={this.closeMenuEditor} lastOb={lastOb}/>
                     </div>
             }
 
-            {Object.keys(this.state.menus).map(m=>
+            {Object.keys(menus).map(m=>
             {
                 return  <div className="menu-name-list" key={m}>
-                    {this.state.editor.name==m ? null : <b>{m}</b>}
+                    {editor.name==m ? null : <b>{m}</b>}
 
                     {
-                        this.state.editor.name==m ? null :
+                        editor.name==m ? null :
                         <span>
                             <FontAwesomeIcon icon={faEdit} onClick={()=>this.openEditor(m)}/> &nbsp;
                             <FontAwesomeIcon icon={faTrashAlt} onClick={()=>this.deleteMenu(m)}/>
@@ -172,8 +155,8 @@ class Menus extends Component
                     }
 
                     {
-                        this.state.editor.name==m ? 
-                        <MenuEditor lastOb={lastOb} locations={this.state.locations} menus={this.state.menus[m]} menu_name={m} closeMenuForm={this.closeMenuEditor}/> : 
+                        editor.name==m ? 
+                        <MenuEditor lastOb={lastOb} locations={locations} menus={menus[m]} menu_name={m} closeMenuForm={this.closeMenuEditor}/> : 
                         null
                     }
                 </div>
@@ -210,6 +193,8 @@ class Contents extends Component
 
     render()
     {
+        let {current_tab}=this.state;
+
         let pst=
         {
             'action':'nr_get_nav_posts',
@@ -230,13 +215,13 @@ class Contents extends Component
         return  <div className="col-6 col-md-5">
                     <h4>Contents</h4>
 
-                    <ObjectContents properties={pst} opener={this.open} current_tab={this.state.current_tab} addHook={this.adder}/>
+                    <ObjectContents properties={pst} opener={this.open} current_tab={current_tab} addHook={this.adder}/>
 
-                    <ObjectContents properties={txn} opener={this.open} current_tab={this.state.current_tab} addHook={this.adder}/>
+                    <ObjectContents properties={txn} opener={this.open} current_tab={current_tab} addHook={this.adder}/>
 
                     <div className="menu-content-type" onClick={()=>this.open('custom')}>
                         <b>Custom Link</b>
-                        {this.state.current_tab=='custom' ? <CustomLink addHook={this.adder}/> : null}
+                        {current_tab=='custom' ? <CustomLink addHook={this.adder}/> : null}
                     </div>
                 </div>
     }

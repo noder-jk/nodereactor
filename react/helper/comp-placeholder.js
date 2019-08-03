@@ -7,8 +7,6 @@ exports.Placeholder = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _react2 = require("nodereactor/react");
@@ -77,23 +75,21 @@ function (_Component) {
       var params = Object.assign({}, this.props);
       delete params.Data;
       delete params.Component;
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: Data
-      }).then(function (r) {
-        _this2.setState({
-          content: _react["default"].createElement(Component, _extends({
-            Response: r || {},
-            ResponseData: r && r.data ? r.data : {}
-          }, params))
-        });
-      })["catch"](function (r) {
-        _this2.setState({
+      var action = Data.action;
+      delete Data.action;
+      (0, _react2.ajaxRequest)(action, Data, function (r, d, e) {
+        var ob = e ? {
           content: _react["default"].createElement("span", {
             className: "text-danger"
           }, "Request Error.")
-        });
+        } : {
+          content: _react["default"].createElement(Component, _extends({
+            Response: d || {},
+            ResponseData: r
+          }, params))
+        };
+
+        _this2.setState(ob);
       });
     }
   }, {

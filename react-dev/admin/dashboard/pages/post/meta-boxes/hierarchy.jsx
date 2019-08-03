@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 
-import {ajax_url , get_hierarchy} from 'nodereactor/react';
+import {ajaxRequest , get_hierarchy} from 'nodereactor/react';
 
 class PostHierarchy extends Component
 {
@@ -21,45 +20,44 @@ class PostHierarchy extends Component
     componentDidMount()
     {
         let {post_type, post_id=false}=this.props;
-        
+
         this.setState({'loading':true});
         
-        axios({
-            method:'post',
-            url:ajax_url ,
-            data:{'action':'nr_get_hierarchy', 'post_type':post_type, 'post_id':post_id}
-        }).then(r=>
+        ajaxRequest('nr_get_hierarchy', {post_type, post_id}, (r, d, e)=>
         {
-            let psts=(r.data.posts && r.data.posts.length>0) ? r.data.posts : [];
+            let psts=(r.posts && r.posts.length>0) ? r.posts : [];
             
             psts=get_hierarchy(psts, 'post_parent', 'post_id', post_id);
             
             let st={'loading':false, 'posts':psts}
 
             this.setState(st);
-
-        }).catch(e=>
-        {
-            this.setState({'loading':false,'error':'Request Error'});
-        })
+        });
     }
 
     render()
     {
+        let {loading, posts}=this.state;
         let {post_parent=0}=this.props;
         
         return  <div>
-                    {this.state.loading ? <Spinner size="15px"/> : null}
 
+            {loading ? <Spinner size="15px"/> : null}
+
+            {
+                <select className="form-control" name="nr_post_parent" defaultValue={post_parent}>
+                    <option value="0">None</option>
                     {
-                        <select className="form-control" name="nr_post_parent" defaultValue={post_parent}>
-                            <option value="0">None</option>
-                            {
-                                this.state.posts.map(item=><option key={item.post_id} value={item.post_id} title={item.post_title}>{'-'.repeat(item.nest_level)+item.post_title}</option>)
-                            }
-                        </select>
+                        posts.map(item=>
+                        {
+                            return <option key={item.post_id} value={item.post_id} title={item.post_title}>
+                                {'-'.repeat(item.nest_level)+item.post_title}
+                            </option>
+                        })
                     }
-                </div>
+                </select>
+            }
+        </div>
     }
 }
 

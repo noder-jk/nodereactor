@@ -7,8 +7,6 @@ exports.InstalledThemes = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
@@ -67,26 +65,13 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': {
-          'action': 'nr_get_installed_themes'
-        }
-      }).then(function (r) {
+      (0, _react2.ajaxRequest)('nr_get_installed_themes', function (r) {
         var ob = {
           'loading': false
         };
-
-        if (r.data.themes) {
-          ob.themes = r.data.themes;
-        }
+        r.themes ? ob.themes = r.themes : 0;
 
         _this2.setState(ob);
-      })["catch"](function (e) {
-        _this2.setState({
-          'loading': false
-        });
       });
     }
   }, {
@@ -96,20 +81,19 @@ function (_Component) {
 
       var dt = {
         type: 'theme',
-        action: 'nr_theme_plugin_action',
         to_do: 'activate',
         node_package: pkg
       };
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': dt
-      }).then(function (r) {
-        _this3.fetchThemes();
-      })["catch"](function (e) {
+      (0, _react2.ajaxRequest)('nr_theme_plugin_action', dt, function (r, d, e) {
+        if (!e) {
+          _this3.fetchThemes();
+
+          return;
+        }
+
         _this3.setState({
           'loading': false
         });

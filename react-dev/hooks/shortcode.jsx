@@ -47,10 +47,10 @@ const do_shortcode=(str)=>
     {
         'component':comp_name, 
         'nr_package':pack,
-        'fallback_content':<span>{str}</span>
+        'fallback_content':str
     }
 
-    return <FindComp comp_props={comp_props} {...properties} />
+    return <FindComp comp_props={comp_props} {...properties}/>
 }
 
 const do_shortcodes=(value_p)=>

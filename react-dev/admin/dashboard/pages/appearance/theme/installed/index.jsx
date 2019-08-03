@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import Spinner from 'react-svg-spinner';
 
-import {ajax_url} from 'nodereactor/react';
+import {ajaxRequest} from 'nodereactor/react';
 
 import './style.scss';
 
@@ -26,25 +25,15 @@ class InstalledThemes extends Component
     fetchThemes()
     {
         this.setState({'loading':true});
-        axios({
-            'method':'post',
-            'url':ajax_url,
-            'data':{'action':'nr_get_installed_themes'}
-        }).then(r=>
+
+        ajaxRequest('nr_get_installed_themes', r=>
         {
             let ob={'loading':false};
 
-            if(r.data.themes)
-            {
-                ob.themes=r.data.themes;
-            }
+            r.themes ? ob.themes=r.themes : 0;
 
             this.setState(ob);
-
-        }).catch(e=>
-        {
-            this.setState({'loading':false});
-        })
+        });
     }
 
     activateTheme(pkg)
@@ -52,21 +41,20 @@ class InstalledThemes extends Component
         let dt=
         {
             type:'theme',
-            action:'nr_theme_plugin_action',
             to_do:'activate',
             node_package:pkg
         }
 
         this.setState({'loading':true});
-        axios({
-            'method':'post',
-            'url':ajax_url,
-            'data':dt
-        }).then(r=>
+
+        ajaxRequest('nr_theme_plugin_action', dt, (r,d,e)=>
         {
-            this.fetchThemes();
-        }).catch(e=>
-        {
+            if(!e)
+            {
+                this.fetchThemes();
+                return;
+            }
+
             this.setState({'loading':false});
             Swal.fire('Error', 'Request Failed. Something went wrong.', 'error');
         });

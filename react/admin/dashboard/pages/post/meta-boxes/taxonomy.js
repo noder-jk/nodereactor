@@ -7,8 +7,6 @@ exports.PostTaxonomy = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
@@ -88,19 +86,24 @@ function (_Component) {
       var _this$props2 = this.props,
           post_id = _this$props2.post_id,
           meta_box_id = _this$props2.meta_box_id;
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': {
-          'action': 'nr_get_taxonomy_in_editor',
-          'taxonomy': meta_box_id,
-          'post_id': post_id
+      (0, _react2.ajaxRequest)('nr_get_taxonomy_in_editor', {
+        'taxonomy': meta_box_id,
+        post_id: post_id
+      }, function (r, d, e) {
+        if (e) {
+          _this2.setState({
+            'loading': false
+          });
+
+          _sweetalert["default"].fire('Error', 'Request Error In Taxonomy Parse', 'error');
+
+          return;
         }
-      }).then(function (r) {
-        var taxonomies = r.data.all_terms || [];
-        var current_terms = r.data.current_terms || [];
-        var hierarchical = r.data.hierarchical || false;
-        var multiple = r.data.multiple == true;
+
+        var taxonomies = r.all_terms || [];
+        var current_terms = r.current_terms || [];
+        var hierarchical = r.hierarchical || false;
+        var multiple = r.multiple == true;
         current_terms = current_terms.map(function (item) {
           return parseInt(item);
         }).filter(function (item) {
@@ -114,12 +117,6 @@ function (_Component) {
           hierarchical: hierarchical,
           multiple: multiple
         });
-      })["catch"](function (e) {
-        _this2.setState({
-          'loading': false
-        });
-
-        _sweetalert["default"].fire('Error', 'Request Error In Taxonomy Parse', 'error');
       });
     }
   }, {
@@ -185,7 +182,6 @@ function (_Component) {
           meta_box_id = _this$props3.meta_box_id;
       var current_terms = this.state.current_terms;
       var req_ob = {
-        'action': 'nr_save_post_editor_taxonomy',
         'post_id': post_id,
         'current_terms': current_terms,
         'taxonomy': meta_box_id
@@ -193,15 +189,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': req_ob
-      }).then(function (r) {
-        _this3.setState({
-          'loading': false
-        });
-      })["catch"](function (e) {
+      (0, _react2.ajaxRequest)('nr_save_post_editor_taxonomy', req_ob, function (r) {
         _this3.setState({
           'loading': false
         });

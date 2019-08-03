@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import Spinner from 'react-svg-spinner';
 
-import {Placeholder, ajax_url } from 'nodereactor/react';
+import {Placeholder, ajaxRequest} from 'nodereactor/react';
 
 import {GSetting} from './general';
 import {PSetting} from './permalink';
@@ -48,46 +47,36 @@ class FormProcess extends Component
 
     saveOption()
     {
-        let vals=Object.assign({'action':'nr_save_general_settings'}, this.state);
+        let vals=Object.assign({}, this.state);
         delete vals.components;
         delete vals.loading;
 
         this.setState({'loading':true});
-
-        axios({
-            method:'post',
-            url:ajax_url ,
-            data:vals
-        }).then(r=>
+        ajaxRequest('nr_save_general_settings', {...vals}, (r, d, e)=>
         {
             this.setState({'loading':false});
+
+            let {status='failed'}=r;
         
-            Swal.fire((r.data && r.data.status=='done') ? 'Saved' : 'Could not saved');
-
-        }).catch(r=>
-        {
-            this.setState({'loading':false});
-            Swal.fire('Error', 'Request Failed', 'error');
-        })
+            Swal.fire(status=='done' ? 'Saved' : 'Could not saved');
+        });
     }
 
     render()
     {
-        let {settingPage}=this.props;
-        let {components}=this.state;
-
-        let resp=this.props.ResponseData;
+        let {settingPage, ResponseData}=this.props;
+        let {components, loading}=this.state;
 
         let Comp=components[settingPage];
 
         return <div>
-            <Comp onChange={this.storeVal} ResponseData={resp}/>
+            <Comp onChange={this.storeVal} ResponseData={ResponseData}/>
             <div className="row">
                 <div className="col-12 col-sm-4 col-md-3 col-lg-2"></div>
                 <div className="col-12 col-sm-8 col-md-6 col-lg-4">
-                    <button data-button="save" className="btn btn-secondary btn-sm" disabled={this.state.loading} onClick={this.saveOption}>Save</button> &nbsp;
-                    
-                    {this.state.loading ? <Spinner size="15px"/> : null}
+                    <button data-button="save" className="btn btn-secondary btn-sm" disabled={loading} onClick={this.saveOption}>
+                        Save {loading ? <span>&nbsp;<Spinner size="15px" color="white"/></span> : null}
+                    </button>
                 </div>
             </div>
         </div>

@@ -7,8 +7,6 @@ exports.PostHierarchy = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _react2 = require("nodereactor/react");
@@ -66,16 +64,11 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: {
-          'action': 'nr_get_hierarchy',
-          'post_type': post_type,
-          'post_id': post_id
-        }
-      }).then(function (r) {
-        var psts = r.data.posts && r.data.posts.length > 0 ? r.data.posts : [];
+      (0, _react2.ajaxRequest)('nr_get_hierarchy', {
+        post_type: post_type,
+        post_id: post_id
+      }, function (r, d, e) {
+        var psts = r.posts && r.posts.length > 0 ? r.posts : [];
         psts = (0, _react2.get_hierarchy)(psts, 'post_parent', 'post_id', post_id);
         var st = {
           'loading': false,
@@ -83,19 +76,17 @@ function (_Component) {
         };
 
         _this2.setState(st);
-      })["catch"](function (e) {
-        _this2.setState({
-          'loading': false,
-          'error': 'Request Error'
-        });
       });
     }
   }, {
     key: "render",
     value: function render() {
+      var _this$state = this.state,
+          loading = _this$state.loading,
+          posts = _this$state.posts;
       var _this$props$post_pare = this.props.post_parent,
           post_parent = _this$props$post_pare === void 0 ? 0 : _this$props$post_pare;
-      return _react["default"].createElement("div", null, this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
+      return _react["default"].createElement("div", null, loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       }) : null, _react["default"].createElement("select", {
         className: "form-control",
@@ -103,7 +94,7 @@ function (_Component) {
         defaultValue: post_parent
       }, _react["default"].createElement("option", {
         value: "0"
-      }, "None"), this.state.posts.map(function (item) {
+      }, "None"), posts.map(function (item) {
         return _react["default"].createElement("option", {
           key: item.post_id,
           value: item.post_id,

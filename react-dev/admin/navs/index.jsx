@@ -1,11 +1,10 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as FaIcons from '@fortawesome/free-solid-svg-icons';
 
-import {ajax_url } from 'nodereactor/react';
+import {ajaxRequest} from 'nodereactor/react';
 
 import './style.scss';
 
@@ -19,20 +18,24 @@ const getNavList=(cback)=>
 {
     if(AdminMenus)
     {
-        cback(AdminMenus,CurrentNav);
+        cback(AdminMenus, CurrentNav);
         return;
     }
 
     /* Get all admin menus and decide which component will be used to render admin page. */
-    axios({
-        method:'post',
-        url:ajax_url ,
-        data:{'action':'nr_get_admin_nav'}
-    }).then(r=>
+    ajaxRequest('nr_get_admin_nav', (r, d, e)=>
     {
-        if(r.data && r.data.nr_admin_navs)
+        if(e)
         {
-            AdminMenus= r.data.nr_admin_navs;
+            cback(false, CurrentNav);
+            return;
+        }
+
+        let {nr_admin_navs=false}=r;
+
+        if(nr_admin_navs)
+        {
+            AdminMenus= nr_admin_navs;
 
             let p=window.location.pathname;
             p=p.split('/').filter(item=>{return item!==''});
@@ -68,10 +71,7 @@ const getNavList=(cback)=>
         }
 
         cback(AdminMenus, CurrentNav);
-    }).catch(r=>
-    {
-        cback(false,CurrentNav);
-    })
+    });
 }
 
 class ProcessNav extends Component

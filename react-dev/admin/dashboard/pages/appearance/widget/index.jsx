@@ -1,11 +1,10 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import Spinner from 'react-svg-spinner';
 
 import {FindComp} from 'nodereactor/react/helper/comp-finder';
 
-import {ajax_url , Placeholder, parse_form, array_pull_down, array_pull_up} from 'nodereactor/react';
+import {ajaxRequest , Placeholder, parse_form, array_pull_down, array_pull_up} from 'nodereactor/react';
 
 import './style.scss';
 
@@ -138,19 +137,11 @@ class WidgetProcess extends Component
         }
 
         this.setState({'loading':true});
-        axios({
-            method:'post',
-            url:ajax_url ,
-            data:{'widget_and_areas':widget_in_sidebar, 'action':'nr_widget_save'}
-        }).then(r=>
+        ajaxRequest('nr_widget_save', {'widget_and_areas':widget_in_sidebar}, (r, d, e)=>
         {
-            Swal.fire('Changes Saved.');
             this.setState({'loading':false});
-        }).catch(r=>
-        {        
-            this.setState({'loading':false});
-            Swal.fire('Request Error');
-        })
+            Swal.fire(!e ? 'Changes Saved.' : 'Request Error');
+        });
     }
 
     addWidget(e, area_id)

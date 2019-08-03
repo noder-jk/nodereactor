@@ -7,8 +7,6 @@ exports.MenuPage = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
@@ -80,11 +78,14 @@ function (_Component) {
     value: function openEditor(menu) {
       var _this$props$lastOb = this.props.lastOb,
           lastOb = _this$props$lastOb === void 0 ? false : _this$props$lastOb;
+      var _this$state = this.state,
+          locations = _this$state.locations,
+          menus = _this$state.menus;
 
       var ed = _react["default"].createElement(_menuEditor.MenuEditor, {
         lastOb: lastOb,
-        locations: this.state.locations,
-        menus: this.state.menus[menu],
+        locations: locations,
+        menus: menus[menu],
         menu_name: menu,
         closeMenuForm: this.closeMenuEditor
       });
@@ -119,7 +120,7 @@ function (_Component) {
     }
   }, {
     key: "deleteMenu",
-    value: function deleteMenu(m) {
+    value: function deleteMenu(menu_name) {
       var _this2 = this;
 
       _sweetalert["default"].fire({
@@ -138,23 +139,14 @@ function (_Component) {
           'loading': true
         });
 
-        (0, _axios["default"])({
-          method: 'post',
-          data: {
-            'action': 'nr_delete_menu',
-            'menu_name': m
-          },
-          url: _react2.ajax_url
-        }).then(function (r) {
-          _this2.setState({
-            'loading': true
-          }, _this2.fetchMenuContents);
-        })["catch"](function (r) {
+        (0, _react2.ajaxRequest)('nr_delete_menu', {
+          menu_name: menu_name
+        }, function (r, d, e) {
           _this2.setState({
             'loading': false
-          });
+          }, _this2.fetchMenuContents);
 
-          _sweetalert["default"].fire('Request Error');
+          e ? _sweetalert["default"].fire('Request Error') : 0;
         });
       });
     }
@@ -166,38 +158,29 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': {
-          'action': 'nr_get_menu_items'
-        }
-      }).then(function (r) {
+      (0, _react2.ajaxRequest)('nr_get_menu_items', function (r) {
+        var _r$locations = r.locations,
+            locations = _r$locations === void 0 ? {} : _r$locations,
+            _r$nr_menus = r.nr_menus,
+            nr_menus = _r$nr_menus === void 0 ? {} : _r$nr_menus;
         var set_ob = {
-          'loading': false
+          'loading': false,
+          locations: locations,
+          'menus': nr_menus
         };
 
-        if (r.data) {
-          set_ob.locations = r.data.locations;
-          set_ob.menus = r.data.nr_menus;
-
-          var recurs = function recurs(ar) {
-            return Array.isArray(ar) ? ar.map(function (item) {
-              if (Array.isArray(item.children)) {
-                item.children = recurs(item.children);
-              }
-
-              return item;
-            }) : [];
-          };
-
-          for (var k in set_ob.menus) {
-            if (set_ob.menus[k].items) {
-              set_ob.menus[k].items = recurs(set_ob.menus[k].items);
+        var recurs = function recurs(ar) {
+          return Array.isArray(ar) ? ar.map(function (item) {
+            if (Array.isArray(item.children)) {
+              item.children = recurs(item.children);
             }
-          }
 
-          set_ob.menus = set_ob.menus;
+            return item;
+          }) : [];
+        };
+
+        for (var k in set_ob.menus) {
+          set_ob.menus[k].items ? set_ob.menus[k].items = recurs(set_ob.menus[k].items) : 0;
         }
 
         _this3.setState(set_ob);
@@ -215,23 +198,29 @@ function (_Component) {
 
       var _this$props$lastOb2 = this.props.lastOb,
           lastOb = _this$props$lastOb2 === void 0 ? false : _this$props$lastOb2;
+      var _this$state2 = this.state,
+          loading = _this$state2.loading,
+          locations = _this$state2.locations,
+          menus = _this$state2.menus,
+          mode = _this$state2.mode,
+          editor = _this$state2.editor;
       return _react["default"].createElement("div", {
         className: "col-6 col-md-7"
-      }, _react["default"].createElement("h4", null, "Menus ", this.state.loading == true ? _react["default"].createElement(_reactSvgSpinner["default"], {
+      }, _react["default"].createElement("h4", null, "Menus ", loading == true ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null), this.state.mode !== 'create' ? _react["default"].createElement("span", {
+      }) : null), mode !== 'create' ? _react["default"].createElement("span", {
         onClick: this.createNew
       }, "+ Create New") : _react["default"].createElement("div", {
         className: "menu-name-list"
       }, _react["default"].createElement(_menuEditor.MenuEditor, {
-        locations: this.state.locations,
+        locations: locations,
         closeMenuForm: this.closeMenuEditor,
         lastOb: lastOb
-      })), Object.keys(this.state.menus).map(function (m) {
+      })), Object.keys(menus).map(function (m) {
         return _react["default"].createElement("div", {
           className: "menu-name-list",
           key: m
-        }, _this4.state.editor.name == m ? null : _react["default"].createElement("b", null, m), _this4.state.editor.name == m ? null : _react["default"].createElement("span", null, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
+        }, editor.name == m ? null : _react["default"].createElement("b", null, m), editor.name == m ? null : _react["default"].createElement("span", null, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faEdit,
           onClick: function onClick() {
             return _this4.openEditor(m);
@@ -241,10 +230,10 @@ function (_Component) {
           onClick: function onClick() {
             return _this4.deleteMenu(m);
           }
-        })), _this4.state.editor.name == m ? _react["default"].createElement(_menuEditor.MenuEditor, {
+        })), editor.name == m ? _react["default"].createElement(_menuEditor.MenuEditor, {
           lastOb: lastOb,
-          locations: _this4.state.locations,
-          menus: _this4.state.menus[m],
+          locations: locations,
+          menus: menus[m],
           menu_name: m,
           closeMenuForm: _this4.closeMenuEditor
         }) : null);
@@ -291,6 +280,7 @@ function (_Component2) {
     value: function render() {
       var _this6 = this;
 
+      var current_tab = this.state.current_tab;
       var pst = {
         'action': 'nr_get_nav_posts',
         'title_name': 'post_title',
@@ -308,19 +298,19 @@ function (_Component2) {
       }, _react["default"].createElement("h4", null, "Contents"), _react["default"].createElement(_objects.ObjectContents, {
         properties: pst,
         opener: this.open,
-        current_tab: this.state.current_tab,
+        current_tab: current_tab,
         addHook: this.adder
       }), _react["default"].createElement(_objects.ObjectContents, {
         properties: txn,
         opener: this.open,
-        current_tab: this.state.current_tab,
+        current_tab: current_tab,
         addHook: this.adder
       }), _react["default"].createElement("div", {
         className: "menu-content-type",
         onClick: function onClick() {
           return _this6.open('custom');
         }
-      }, _react["default"].createElement("b", null, "Custom Link"), this.state.current_tab == 'custom' ? _react["default"].createElement(_custom.CustomLink, {
+      }, _react["default"].createElement("b", null, "Custom Link"), current_tab == 'custom' ? _react["default"].createElement(_custom.CustomLink, {
         addHook: this.adder
       }) : null));
     }

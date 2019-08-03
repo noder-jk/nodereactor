@@ -7,8 +7,6 @@ exports.UserCreate = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
@@ -100,24 +98,17 @@ function (_Component) {
         'message': null,
         'loading': true
       });
-      var vals = this.state;
-      delete vals.submitable;
-      var send_data = {
-        'action': 'nr_create_user',
-        'values': vals
-      };
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: send_data
-      }).then(function (r) {
-        _sweetalert["default"].fire(r.data.status, r.data.message, r.data.status.toLowerCase());
+      var values = this.state;
+      delete values.submitable;
+      (0, _react2.ajaxRequest)('nr_create_user', {
+        values: values
+      }, function (r) {
+        var _r$message = r.message,
+            message = _r$message === void 0 ? 'Action Failed' : _r$message,
+            _r$status = r.status,
+            status = _r$status === void 0 ? 'Error' : _r$status;
 
-        _this2.setState({
-          'loading': false
-        });
-      })["catch"](function (e) {
-        _sweetalert["default"].fire('Error', 'Request Failed', 'error');
+        _sweetalert["default"].fire(status, message, status.toLowerCase());
 
         _this2.setState({
           'loading': false
@@ -127,6 +118,13 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this$state = this.state,
+          display_name = _this$state.display_name,
+          user_username = _this$state.user_username,
+          user_email = _this$state.user_email,
+          user_password = _this$state.user_password,
+          loading = _this$state.loading,
+          message = _this$state.message;
       return _react["default"].createElement("div", null, _react["default"].createElement("div", {
         className: "row mb-4"
       }, _react["default"].createElement("div", {
@@ -134,22 +132,22 @@ function (_Component) {
       }, _react["default"].createElement("h3", null, "Add New User"), _react["default"].createElement("small", null, "Only administrator user role available for now.", _react["default"].createElement("br", null), "More user roles and role based capabilities will be added in future versions."))), _react["default"].createElement(InputFields, {
         title: "Display Name",
         name: "display_name",
-        default_value: this.state.display_name,
+        default_value: display_name,
         val_colletor: this.storeVal
       }, _react["default"].createElement("small", null, "Visible everywhere")), _react["default"].createElement(InputFields, {
         title: "Username",
         name: "user_username",
-        default_value: this.state.user_username,
+        default_value: user_username,
         val_colletor: this.storeVal
       }, _react["default"].createElement("small", null, "Profile slug. e.g. ", _react["default"].createElement("b", null, _react["default"].createElement("i", null, "example.com/username")), ". ", _react["default"].createElement("br", null), "It can not be changed later. ", _react["default"].createElement("br", null), "[Only Alphanumeric letter allowed.]")), _react["default"].createElement(InputFields, {
         title: "Email Address",
         name: "user_email",
-        default_value: this.state.user_email,
+        default_value: user_email,
         val_colletor: this.storeVal
       }), _react["default"].createElement(InputFields, {
         title: "Password",
         name: "user_password",
-        default_value: this.state.user_password,
+        default_value: user_password,
         val_colletor: this.storeVal
       }, _react["default"].createElement("small", null, "Min. 8, Max. 20 characters.")), _react["default"].createElement("div", {
         className: "row mb-4"
@@ -172,9 +170,9 @@ function (_Component) {
       }, _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm",
         onClick: this.createUser
-      }, "Create"), " \xA0\xA0", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
+      }, "Create"), " \xA0\xA0", loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null)), _react["default"].createElement("div", null, this.state.message));
+      }) : null)), _react["default"].createElement("div", null, message));
     }
   }]);
 

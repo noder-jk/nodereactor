@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowCircleRight, faArrowAltCircleDown} from '@fortawesome/free-solid-svg-icons';
 
-import {ajax_url, get_hierarchy} from 'nodereactor/react';
+import {ajaxRequest, get_hierarchy} from 'nodereactor/react';
 
 class ObjectContents extends Component
 {
@@ -83,21 +82,13 @@ class ObjectContents extends Component
     componentDidMount()
     {
         let {action}=this.props.properties;
+        
+        ajaxRequest(action, r=>
+        {
+            let {objects={}}=r;
 
-        axios({
-            'method':'post',
-            'url':ajax_url ,
-            'data':{'action':action}
-        }).then(r=>
-        {
-            if(r.data.objects)
-            {
-                this.setState({'items':r.data.objects});
-            }
-        }).catch(e=>
-        {
-            
-        })
+            this.setState({'items':objects});
+        });
     }
 
     render()
@@ -118,26 +109,31 @@ class ObjectContents extends Component
             let tab_ttl=item.charAt(0).toUpperCase()+item.slice(1);
 
             return  <div className="menu-content-type" key={item} onClick={()=>opener(item)} style={{'overflowY':'auto', 'maxHeight':'300px'}}>
-                        <b>{tab_ttl} </b>
+                <b>{tab_ttl} </b>
+                {
+                    current_tab==item ? 
+                    <div className="bg-white p-2">
                         {
-                            current_tab==item ? 
-                            <div className="bg-white p-2">
-                                {
-                                    items[item].length==0 ? <i>No {tab_ttl}</i> : 
-                                    items[item].map(post=>
-                                    {
-                                        return  <p key={post[id_name]} className="item-single-post" style={{'paddingLeft':(post.nest_level*10)+'px'}}>
-                                                <input type="checkbox" name={"nv_"+id_name} value={post[id_name]} onChange={this.checker}/> {post[title_name]}
-                                            </p>
-                                    })
-                                }
-                                <div className="text-right">
-                                    <button onClick={()=>this.adder('append')} className="btn btn-secondary btn-sm" title="Append to Selected"><FontAwesomeIcon icon={faArrowCircleRight}/></button> &nbsp;
-                                    <button onClick={()=>this.adder('after')} className="btn btn-secondary btn-sm" title="Add After Selected"><FontAwesomeIcon icon={faArrowAltCircleDown}/></button>
-                                </div>
-                            </div> : null
+                            items[item].length==0 ? <i>No {tab_ttl}</i> : 
+                            items[item].map(post=>
+                            {
+                                return  <p key={post[id_name]} className="item-single-post" style={{'paddingLeft':(post.nest_level*10)+'px'}}>
+                                        <input type="checkbox" name={"nv_"+id_name} value={post[id_name]} onChange={this.checker}/> {post[title_name]}
+                                    </p>
+                            })
                         }
-                    </div>
+                        <div className="text-right">
+                            <button onClick={()=>this.adder('append')} className="btn btn-secondary btn-sm" title="Append to Selected">
+                                <FontAwesomeIcon icon={faArrowCircleRight}/>
+                            </button>
+                            &nbsp;
+                            <button onClick={()=>this.adder('after')} className="btn btn-secondary btn-sm" title="Add After Selected">
+                                <FontAwesomeIcon icon={faArrowAltCircleDown}/>
+                            </button>
+                        </div>
+                    </div> : null
+                }
+            </div>
         })
     }
 }

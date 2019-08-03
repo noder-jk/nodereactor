@@ -7,8 +7,6 @@ exports.InstalledPlugins = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _react2 = require("nodereactor/react");
@@ -70,27 +68,28 @@ function (_Component) {
       e.preventDefault();
       var dt = {
         type: 'plugin',
-        action: 'nr_theme_plugin_action',
         to_do: t_do,
         node_package: pkg
       };
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: dt
-      }).then(function (r) {
-        if (r.data && r.data.status == 'done') {
-          var pl = _this2.state.plugins;
-          pl[pkg].activated = dt.to_do == 'activate' ? true : false;
+      (0, _react2.ajaxRequest)('nr_theme_plugin_action', dt, function (r, d, e) {
+        if (e) {
+          _sweetalert["default"].fire('Request Error');
 
-          _this2.setState({
-            'plugins': pl
-          });
-        } else {
-          _sweetalert["default"].fire('Action failed.');
+          return;
         }
-      })["catch"](function (r) {
-        _sweetalert["default"].fire('Request Error');
+
+        if (r.status !== 'done') {
+          _sweetalert["default"].fire('Action failed.');
+
+          return;
+        }
+
+        var pl = _this2.state.plugins;
+        pl[pkg].activated = dt.to_do == 'activate' ? true : false;
+
+        _this2.setState({
+          'plugins': pl
+        });
       });
     }
   }, {

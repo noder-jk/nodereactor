@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 import Swal from 'sweetalert2';
 
-import {ajax_url } from 'nodereactor/react';
+import {ajaxRequest} from 'nodereactor/react';
 
 const InputFields=(props)=>
 {
@@ -47,29 +46,31 @@ class UserCreate extends Component
 	{
 		this.setState({'message' : null, 'loading':true});
 
-		let vals=this.state;
-		delete vals.submitable;
+		let values=this.state;
+		delete values.submitable;
 
-		let send_data={'action':'nr_create_user', 'values':vals}
+        ajaxRequest('nr_create_user', {values}, r=>
+		{
+            let {message='Action Failed', status='Error'}=r;
 
-		axios({
-			method:'post',
-			url:ajax_url ,
-			data:send_data
-		}).then(r=>
-		{
-            Swal.fire(r.data.status, r.data.message, r.data.status.toLowerCase());
-            this.setState({'loading':false });
-            
-		}).catch(e=>
-		{
-            Swal.fire('Error', 'Request Failed', 'error');
-			this.setState({'loading':false});
-		});
+            Swal.fire(status, message, status.toLowerCase());
+
+            this.setState({'loading':false});
+        });
 	}
 
     render()
     {
+        let {
+                display_name, 
+                user_username, 
+                user_email,
+                user_password,
+                loading,
+                message
+            }=this.state;
+
+
         return(
 			<div>
                 <div className="row mb-4">
@@ -82,11 +83,11 @@ class UserCreate extends Component
                     </div>
                 </div>
 
-                <InputFields title="Display Name" name="display_name" default_value={this.state.display_name} val_colletor={this.storeVal}>
+                <InputFields title="Display Name" name="display_name" default_value={display_name} val_colletor={this.storeVal}>
                     <small>Visible everywhere</small>
                 </InputFields>
 
-                <InputFields title="Username" name="user_username" default_value={this.state.user_username} val_colletor={this.storeVal}>
+                <InputFields title="Username" name="user_username" default_value={user_username} val_colletor={this.storeVal}>
                     <small>
                         Profile slug. e.g. <b><i>example.com/username</i></b>. <br/>
                         It can not be changed later. <br/>
@@ -94,9 +95,9 @@ class UserCreate extends Component
                     </small>
                 </InputFields>
 
-                <InputFields title="Email Address" name="user_email" default_value={this.state.user_email} val_colletor={this.storeVal}/>
+                <InputFields title="Email Address" name="user_email" default_value={user_email} val_colletor={this.storeVal}/>
 
-                <InputFields title="Password" name="user_password" default_value={this.state.user_password} val_colletor={this.storeVal}>
+                <InputFields title="Password" name="user_password" default_value={user_password} val_colletor={this.storeVal}>
                     <small>Min. 8, Max. 20 characters.</small>
                 </InputFields>
 
@@ -113,13 +114,11 @@ class UserCreate extends Component
                     <div className="col-12 col-sm-4 col-md-3 col-lg-2"></div>
                     <div className="col-12 col-sm-8 col-md-6 col-lg-4">
                         <button className="btn btn-secondary btn-sm" onClick={this.createUser}>Create</button> &nbsp;&nbsp; 
-                        {this.state.loading ? <Spinner size="15px"/> : null}
+                        {loading ? <Spinner size="15px"/> : null}
                     </div>
                 </div>
 				<div>
-					{
-						this.state.message
-					}
+					{message}
 				</div>
 			</div>
         )

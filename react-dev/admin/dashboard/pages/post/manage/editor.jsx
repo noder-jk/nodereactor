@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 import Swal from 'sweetalert2';
 
-import {Editor, ajax_url , parse_form} from 'nodereactor/react';
+import {Editor, ajaxRequest , parse_form} from 'nodereactor/react';
 import {Title, Comment, Excerpt, LoadMetaBox} from './editor-modules';
 
 import './style.scss';
@@ -93,36 +92,34 @@ class PostProcess extends Component
 
         /* Now request to server to save */
         this.setState({'loading_icon':true});
-        axios({
-            method:'post',
-            url:ajax_url ,
-            data:{'action':'nr_save_post', 'post':post}
-        }).then(r=>
+        ajaxRequest('nr_save_post', {post}, (r, d, e)=>
         {
-            let ob={'loading_icon':false, 'post_updated':true}
+            let ob={loading_icon:false};
 
-            if(r.data && r.data.status=='done')
+            if(e)
             {
-                Swal.fire('Success', ((r.data && r.data.message) ? r.data.message : 'Saved'), 'success');
+                Swal.fire('Error', 'Request Failed', 'error');
+                this.setState(ob);
+                return;
+            }
 
-                if(r.data.post_id)
-                {
-                    /* Save the returned post id and set state */
-                    ob.post_id=r.data.post_id;
-                    this.store_vals.post_id=r.data.post_id;
-                }
+            let {status='failed', message='Action Failed', post_id=false}=r;
+
+            if(status=='done' && post_id)
+            {
+                Swal.fire('Success', message, 'success');
+
+                ob.post_updated         = true;
+                ob.post_id              = post_id;
+                this.store_vals.post_id = post_id;
             }
             else
             {
-                Swal.fire('Error', ((r.data && r.data.message) ? r.data.message : 'Action Failed.'), 'error');
+                Swal.fire('Error', message, 'error');
             }
 
             this.setState(ob, ()=>{this.setState({'post_updated':false})});
-        }).catch(r=>
-        {
-            Swal.fire('Error', 'Request Failed', 'error');
-            this.setState({loading_icon:false});
-        })
+        });
     }
 
     render()

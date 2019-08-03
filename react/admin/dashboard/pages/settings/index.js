@@ -7,8 +7,6 @@ exports.ReadingSetting = exports.PermalinkSetting = exports.GeneralSetting = voi
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
@@ -26,6 +24,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -85,42 +87,36 @@ function (_Component) {
     value: function saveOption() {
       var _this2 = this;
 
-      var vals = Object.assign({
-        'action': 'nr_save_general_settings'
-      }, this.state);
+      var vals = Object.assign({}, this.state);
       delete vals.components;
       delete vals.loading;
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: vals
-      }).then(function (r) {
+      (0, _react2.ajaxRequest)('nr_save_general_settings', _objectSpread({}, vals), function (r, d, e) {
         _this2.setState({
           'loading': false
         });
 
-        _sweetalert["default"].fire(r.data && r.data.status == 'done' ? 'Saved' : 'Could not saved');
-      })["catch"](function (r) {
-        _this2.setState({
-          'loading': false
-        });
+        var _r$status = r.status,
+            status = _r$status === void 0 ? 'failed' : _r$status;
 
-        _sweetalert["default"].fire('Error', 'Request Failed', 'error');
+        _sweetalert["default"].fire(status == 'done' ? 'Saved' : 'Could not saved');
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var settingPage = this.props.settingPage;
-      var components = this.state.components;
-      var resp = this.props.ResponseData;
+      var _this$props = this.props,
+          settingPage = _this$props.settingPage,
+          ResponseData = _this$props.ResponseData;
+      var _this$state = this.state,
+          components = _this$state.components,
+          loading = _this$state.loading;
       var Comp = components[settingPage];
       return _react["default"].createElement("div", null, _react["default"].createElement(Comp, {
         onChange: this.storeVal,
-        ResponseData: resp
+        ResponseData: ResponseData
       }), _react["default"].createElement("div", {
         className: "row"
       }, _react["default"].createElement("div", {
@@ -130,11 +126,12 @@ function (_Component) {
       }, _react["default"].createElement("button", {
         "data-button": "save",
         className: "btn btn-secondary btn-sm",
-        disabled: this.state.loading,
+        disabled: loading,
         onClick: this.saveOption
-      }, "Save"), " \xA0", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
-        size: "15px"
-      }) : null)));
+      }, "Save ", loading ? _react["default"].createElement("span", null, "\xA0", _react["default"].createElement(_reactSvgSpinner["default"], {
+        size: "15px",
+        color: "white"
+      })) : null))));
     }
   }]);
 

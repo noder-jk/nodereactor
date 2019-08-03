@@ -12,18 +12,14 @@ module.exports.get=function($)
 		for(var k in $.registered_meta_box_to_post)
 		{
 			/* Process if currently accessed post type match the registered post type */
-			if(k==pt)
-			{
-				var rmb=$.registered_meta_box_to_post[k];
-				post_modules=rmb;
+			if(k!==pt){continue;}
+			
+			var rmb=$.registered_meta_box_to_post[k];
+			post_modules=rmb;
 
-				for(var i=0; i<rmb.length; i++)
-				{
-					if($.nr_registered_meta_boxes[rmb[i]])
-					{
-						meta_boxes.push($.nr_registered_meta_boxes[rmb[i]]);
-					}
-				}
+			for(var i=0; i<rmb.length; i++)
+			{
+				$.nr_registered_meta_boxes[rmb[i]] ? meta_boxes.push($.nr_registered_meta_boxes[rmb[i]]) : 0;
 			}
 		}
 		
@@ -87,8 +83,8 @@ module.exports.get=function($)
 
 	var funcs=
 	[
-		register_post_modules, 
-		use_post_modules, 
+		register_meta_boxes, 
+		use_meta_boxes, 
 		register_taxonomies, 
 		use_taxonomies, 
 		register_custom_templates, 

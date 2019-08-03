@@ -7,8 +7,6 @@ exports.AdminWidget = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
@@ -200,25 +198,14 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: {
-          'widget_and_areas': widget_in_sidebar,
-          'action': 'nr_widget_save'
-        }
-      }).then(function (r) {
-        _sweetalert["default"].fire('Changes Saved.');
-
-        _this2.setState({
-          'loading': false
-        });
-      })["catch"](function (r) {
+      (0, _react2.ajaxRequest)('nr_widget_save', {
+        'widget_and_areas': widget_in_sidebar
+      }, function (r, d, e) {
         _this2.setState({
           'loading': false
         });
 
-        _sweetalert["default"].fire('Request Error');
+        _sweetalert["default"].fire(!e ? 'Changes Saved.' : 'Request Error');
       });
     }
   }, {

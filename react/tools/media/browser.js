@@ -7,8 +7,6 @@ exports.Browser = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
@@ -170,60 +168,58 @@ function (_Component) {
     value: function deleteFile() {
       var _this2 = this;
 
-      var f = this.state.selected;
+      var selected = this.state.selected;
 
-      if (f.length == 0) {
+      if (selected.length == 0) {
         return;
       }
 
-      _sweetalert["default"].fire({
-        title: 'Sure to delete?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true
-      }).then(function (result) {
+      var del_fnc = function del_fnc(result) {
         if (!result.value) {
           return;
         }
 
-        var post_ids = [];
+        var post_id = selected.map(function (fl) {
+          return fl.post_id;
+        });
+        (0, _react2.ajaxRequest)('nr_delete_media', {
+          post_id: post_id
+        }, function (r, d, e) {
+          if (e) {
+            _sweetalert["default"].fire('Request Error');
 
-        for (var i = 0; i < f.length; i++) {
-          post_ids.push(f[i].post_id);
-        }
+            return;
+          } // Remove deleted files from state.
 
-        (0, _axios["default"])({
-          method: 'post',
-          url: _react2.ajax_url,
-          data: {
-            'action': 'nr_delete_media',
-            'post_id': post_ids
-          }
-        }).then(function (r) {
-          var files = _this2.state.selected;
-          var new_ar = [];
 
-          _this2.state.files.map(function (item) {
+          var _this2$state = _this2.state,
+              selected = _this2$state.selected,
+              files = _this2$state.files;
+          var new_ar = files.map(function (item) {
             var exist = false;
-            files.map(function (item2) {
-              if (item.post_id == item2.post_id) {
-                exist = true;
-              }
+            selected.forEach(function (item2) {
+              return item.post_id == item2.post_id ? exist = true : 0;
             });
-
-            if (!exist) {
-              new_ar.push(item);
-            }
+            return !exist ? item : false;
+          }).filter(function (el) {
+            return el !== false;
           });
 
           _this2.setState({
             'selected': [],
             'files': new_ar
           });
-        })["catch"](function (r) {
-          _sweetalert["default"].fire('Request Error');
         });
-      });
+      };
+
+      var sob = {
+        title: 'Sure to delete?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true
+      };
+
+      _sweetalert["default"].fire(sob).then(del_fnc);
     }
   }, {
     key: "storeFilterCriteria",
@@ -256,35 +252,35 @@ function (_Component) {
       });
       var _this$props$accept = this.props.accept,
           accept = _this$props$accept === void 0 ? [] : _this$props$accept;
-      (0, _axios["default"])({
-        method: 'post',
-        data: {
-          'action': 'nr_get_gallery',
-          'accept': JSON.stringify(accept),
-          page: page,
-          posts_per_page: posts_per_page,
-          keyword: keyword
-        },
-        url: _react2.ajax_url
-      }).then(function (r) {
-        var ob = {};
+      var ob = {
+        'accept': JSON.stringify(accept),
+        page: page,
+        posts_per_page: posts_per_page,
+        keyword: keyword
+      };
+      (0, _react2.ajaxRequest)('nr_get_gallery', ob, function (r, d, e) {
+        if (e) {
+          _this3.setState({
+            'spinner': null,
+            'message': _react["default"].createElement("span", null, "Request Error")
+          });
 
-        if (r.data && r.data.files && Array.isArray(r.data.files) && r.data.files.length > 0) {
+          return;
+        }
+
+        var ob = {
+          spinner: null
+        };
+
+        if (Array.isArray(r.files) && r.files.length > 0) {
           ob.message = null;
-          ob.files = r.data.files;
-          ob.pagination = r.data.pagination;
+          ob.files = r.files;
+          ob.pagination = r.pagination;
         } else {
           ob.message = _react["default"].createElement("span", null, "No file");
         }
 
-        ob.spinner = null;
-
         _this3.setState(ob);
-      })["catch"](function (r) {
-        _this3.setState({
-          'spinner': null,
-          'message': _react["default"].createElement("span", null, "Request Error")
-        });
       });
     }
   }, {

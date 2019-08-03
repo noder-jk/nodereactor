@@ -9,8 +9,6 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _reactHelmet = _interopRequireDefault(require("react-helmet"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
@@ -26,6 +24,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -133,30 +133,32 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: Object.assign({
-          'action': 'nr_install_check',
-          'to_do': to_do
-        }, this.state)
-      }).then(function (r) {
-        if (r.data && r.data.status == 'done') {
-          _this2.setState({
-            active_tab: next_tab
-          });
-        } else {
-          _sweetalert["default"].fire('Error', r.data.message ? r.data.message : 'Could not process request. Please make sure configs are correct.', 'error');
-        }
-
+      (0, _react2.ajaxRequest)('nr_install_check', _objectSpread({
+        to_do: to_do
+      }, this.state), function (r, d, e) {
         _this2.setState({
           'loading': false
         });
-      })["catch"](function (r) {
-        _sweetalert["default"].fire('Error', 'Could not connect server.', 'error');
+
+        if (e) {
+          _sweetalert["default"].fire('Error', 'Could not connect server.', 'error');
+
+          return;
+        }
+
+        var _r$status = r.status,
+            status = _r$status === void 0 ? 'failed' : _r$status,
+            _r$message = r.message,
+            message = _r$message === void 0 ? 'Could not process request. Please make sure configs are correct.' : _r$message;
+
+        if (status !== 'done') {
+          _sweetalert["default"].fire('Error', message, 'error');
+
+          return;
+        }
 
         _this2.setState({
-          'loading': false
+          active_tab: next_tab
         });
       });
     }
@@ -177,7 +179,7 @@ function (_Component) {
         style: {
           'width': '100%'
         }
-      }), _react["default"].createElement("small", null, "Create By JK")), _react["default"].createElement("div", {
+      }), _react["default"].createElement("small", null, "Created by ", _react["default"].createElement("b", null, "JK"), ". Inspired by ", _react["default"].createElement("b", null, "WordPress"), ".")), _react["default"].createElement("div", {
         className: "text-center"
       }, this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"

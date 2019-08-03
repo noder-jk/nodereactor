@@ -29,7 +29,7 @@ var FindComp = function FindComp(props) {
 
   var default_resp = fallback_content || _react["default"].createElement("small", {
     className: "text-danger"
-  }, _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, component))), " not found.");
+  }, "Component ", _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, component))), " not found.");
 
   if (nr_package === true) {
     if (AdminComps[component]) {
@@ -60,8 +60,14 @@ var FindComp = function FindComp(props) {
 
     var resp = ret(component);
 
-    if (resp == false && fallback_component !== false) {
+    if (!resp && fallback_component) {
       resp = ret(fallback_component);
+
+      if (!resp) {
+        return _react["default"].createElement("small", {
+          className: "text-danger"
+        }, "Component ", _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, component))), " not found. Fallback component ", _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, fallback_component))), " not found too.");
+      }
     }
 
     if (resp) {

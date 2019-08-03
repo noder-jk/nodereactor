@@ -12,6 +12,8 @@ import {RenderMediaFile} from './helper/render-media';
 
 import {array_pull_down, array_pull_up} from './helper/array';
 
+import {ajaxRequest} from './helper/ajax';
+
 import * as ScodeHooks from './hooks/shortcode';
 import * as MenuHooks from './hooks/menu';
 import * as PostHooks from './hooks/post';
@@ -25,18 +27,20 @@ const hooks=
     ScodeHooks
 ];
 
-const ajax_url      = '/admin-ajax';
-const socket_url    = 'nr-socket-io-core-channel';
+const nr_ajax_url      = '/admin-ajax';
+const nr_socket_event    = 'nr-socket-io-core-channel';
 
 export  {
-            ajax_url , 
+            nr_ajax_url ,
+            ajaxRequest, 
+
+            nr_socket_event,
+
             parse_form,
             get_hierarchy,
             get_url_parameter,
             array_pull_down,
             array_pull_up, 
-
-            socket_url,
 
             LoginRegistration, 
             Placeholder,

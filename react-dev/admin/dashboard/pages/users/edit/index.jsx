@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 
-import {ajax_url , Placeholder} from 'nodereactor/react';
+import {ajaxRequest , Placeholder} from 'nodereactor/react';
 
 const InputFields=(props)=>
 {
@@ -62,79 +61,80 @@ class ProcessUser extends Component
 	{
 		this.setState({'message' : null, 'loading':true});
 
-        let vals=this.state;
+        let values=this.state;
         
-		delete vals.submitable;
-        delete vals.user_username;
+		delete values.submitable;
+        delete values.user_username;
         
-		let send_data={'action':'nr_update_user', 'values':vals}
+        ajaxRequest('nr_update_user', {values}, r=>
+		{
+            let {message='Request Failed'}=r;
 
-		axios({
-			method:'post',
-			url:ajax_url ,
-			data:send_data
-		}).then(r=>
-		{
-			this.setState({'message' : (r.data.message ? r.data.message : 'No response'), 'loading':false });
-		}).catch(r=>
-		{
-			this.setState({'message' : 'Request Error', 'loading':false});
-		})
+			this.setState({message, 'loading':false });
+        });
 	}
 
     render()
     {
-        return((!this.state.user_id || this.state.user_id==0) ? <small>User Not Found</small> : 
-			<div>
-                <div className="row mb-4">
-                    <div className="col-12">
-                        <h3>Add New User</h3>
-						<small>
-							Only administrator user role available for now.
-							<br/>More user roles and role based capabilities will be added in future versions.
-						</small>
-                    </div>
+        let {
+                user_id, 
+                display_name, 
+                user_username, 
+                user_email,
+                change_pass,
+                loading,
+                message
+            }=this.state;
+
+        return  (!user_id || user_id==0) ? <small>User Not Found</small> : 
+
+        <div>
+            <div className="row mb-4">
+                <div className="col-12">
+                    <h3>Add New User</h3>
+                    <small>
+                        Only administrator user role available for now.
+                        <br/>More user roles and role based capabilities will be added in future versions.
+                    </small>
                 </div>
+            </div>
 
-                <InputFields title="Display Name" name="display_name" default_value={this.state.display_name} val_colletor={this.storeVal}>
-                    <small>Visible everywhere</small>
-                </InputFields>
+            <InputFields title="Display Name" name="display_name" default_value={display_name} val_colletor={this.storeVal}>
+                <small>Visible everywhere</small>
+            </InputFields>
 
-                <InputFields title="Username" name="user_username" default_value={this.state.user_username} disabled={true}/>
+            <InputFields title="Username" name="user_username" default_value={user_username} disabled={true}/>
 
-                <InputFields title="Email Address" name="user_email" default_value={this.state.user_email} val_colletor={this.storeVal}/>
+            <InputFields title="Email Address" name="user_email" default_value={user_email} val_colletor={this.storeVal}/>
 
-                {
-                    this.state.change_pass ?    
-                    <InputFields title="Password" name="user_password" val_colletor={this.storeVal}>
-                        <small>Min. 8, Max. 20 characters.</small><br/>
-                        <a className="text-info" onClick={()=>this.togglePass(false)}>Don't Change Password</a>
-                    </InputFields> : <p><a className="text-info" onClick={()=>this.togglePass(true)}>Change Password</a></p>
-                }
-                
-                <div className="row mb-4">
-                    <div className="col-12 col-sm-4 col-md-3 col-lg-2">User Role</div>
-                    <div className="col-12 col-sm-8 col-md-6 col-lg-4">
-						<select className="form-control" disabled="disabled">
-							<option selected="selected">administrator</option>
-						</select>
-                    </div>
+            {
+                change_pass ?    
+                <InputFields title="Password" name="user_password" val_colletor={this.storeVal}>
+                    <small>Min. 8, Max. 20 characters.</small><br/>
+                    <a className="text-info" onClick={()=>this.togglePass(false)}>Don't Change Password</a>
+                </InputFields> : <p><a className="text-info" onClick={()=>this.togglePass(true)}>Change Password</a></p>
+            }
+            
+            <div className="row mb-4">
+                <div className="col-12 col-sm-4 col-md-3 col-lg-2">User Role</div>
+                <div className="col-12 col-sm-8 col-md-6 col-lg-4">
+                    <select className="form-control" disabled="disabled" defaultValue="administrator">
+                        <option>administrator</option>
+                    </select>
                 </div>
+            </div>
 
-                <div className="row mb-4">
-                    <div className="col-12 col-sm-4 col-md-3 col-lg-2"></div>
-                    <div className="col-12 col-sm-8 col-md-6 col-lg-4">
-                        <button className="btn btn-secondary btn-sm" onClick={this.updateUser}>Update</button> &nbsp;&nbsp; 
-                        {this.state.loading ? <Spinner size="15px"/> : null}
-                    </div>
+            <div className="row mb-4">
+                <div className="col-12 col-sm-4 col-md-3 col-lg-2"></div>
+                <div className="col-12 col-sm-8 col-md-6 col-lg-4">
+                    <button className="btn btn-secondary btn-sm" onClick={this.updateUser}>Update</button> &nbsp;&nbsp; 
+                    {loading ? <Spinner size="15px"/> : null}
                 </div>
-				<div>
-					{
-						this.state.message
-					}
-				</div>
-			</div>
-        )
+            </div>
+            <div>
+                {message}
+            </div>
+        </div>
     }
 }
 

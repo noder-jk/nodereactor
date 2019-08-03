@@ -1,8 +1,5 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from 'react-svg-spinner';
-
-import {ajax_url } from 'nodereactor/react';
 
 class RSetting extends Component
 {
@@ -26,6 +23,7 @@ class RSetting extends Component
     changHandle(e)
     {
         let {onChange}=this.props;
+
         onChange(e);
 
         let el=e.currentTarget;
@@ -36,35 +34,11 @@ class RSetting extends Component
         }
     }
 
-    componentDidMount()
-    {
-        /* this.setState({'loading':true});
-        axios({
-            'method':'post',
-            'url':ajax_url ,
-            'data':{'action':'get_posts_to_show_in_home'}
-        }).then(r=>
-        {
-            let set_ob={'loading':false};
-            
-            if(r.data && r.data.posts)
-            {
-                set_ob.posts=r.data.posts;
-            }
-
-            this.setState(set_ob);
-        }).catch(e=>
-        {
-            this.setState({'loading':false});
-            
-        }) */
-    }
-
     render()
     {
-        let {onChange}=this.props;
+        let {onChange, ResponseData={}}=this.props;
 
-        let {values={}}=this.props.ResponseData;
+        let {values={}}=ResponseData;
 
         let {posts_per_page=15}=values;
 

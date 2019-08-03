@@ -7,8 +7,6 @@ exports.MenuEditor = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
@@ -204,26 +202,25 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': {
-          'action': 'nr_save_menu',
-          'menus': standalone_menu
+      (0, _react2.ajaxRequest)('nr_save_menu', {
+        'menus': standalone_menu
+      }, function (r, d, e) {
+        if (e) {
+          _this2.setState({
+            'loading': false
+          });
+
+          _sweetalert["default"].fire('Error', 'Menu Could Not Saved', 'error');
+
+          return;
         }
-      }).then(function (r) {
+
         _sweetalert["default"].fire('Saved');
 
         _this2.setState({
           'loading': false,
           'saved_menu': true
         });
-      })["catch"](function (e) {
-        _this2.setState({
-          'loading': false
-        });
-
-        _sweetalert["default"].fire('Error', 'Menu Could Not Saved', 'error');
       });
     }
   }, {

@@ -1,5 +1,4 @@
 const nr_path_mod=require('path');
-
 const get_nodes_path=function(nodes)
 {
     var resp={};
@@ -28,10 +27,18 @@ const get_nodes_path=function(nodes)
 module.exports=function(project_root, extensions)
 {
 	console.log('');
+	console.log('-> Package Source');
 	console.log('https://github.com/noder-jk/nodereactor');
 	console.log('https://www.npmjs.com/package/nodereactor');
 	console.log('');
+	console.log('-> Documentations');
 	console.log('https://NodeReactor.com');
+	console.log('');
+	console.log('-> Add-ons');
+	console.log('https://nodereactor.com/add-ons/themes/');
+	console.log('https://nodereactor.com/add-ons/plugins/');
+	console.log('');
+	console.log('-> Communities');
 	console.log('https://facebook.com/NodeReactorCMS');
 	console.log('https://facebook.com/groups/NodeReactorDevs');
 	console.log('');
@@ -85,6 +92,7 @@ module.exports=function(project_root, extensions)
 	global.nr_port					= data_ob.nr_port;
 
 	global.nr_home_url				= data_ob.nr_home_url; // including trailing slash
+	global.nr_build_url				= nr_home_url+pack.homepage.slice(1)+'/';
 
 	global.nr_session_cookie_name	= 'f8376410e97a1357a406';
 	global.nr_session_cookie_pass	= 'c0ae6e2891174443aeb2';

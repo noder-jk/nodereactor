@@ -7,15 +7,11 @@ exports.ObjectContents = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
 var _react2 = require("nodereactor/react");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
@@ -120,19 +116,14 @@ function (_Component) {
       var _this3 = this;
 
       var action = this.props.properties.action;
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': {
-          'action': action
-        }
-      }).then(function (r) {
-        if (r.data.objects) {
-          _this3.setState({
-            'items': r.data.objects
-          });
-        }
-      })["catch"](function (e) {});
+      (0, _react2.ajaxRequest)(action, function (r) {
+        var _r$objects = r.objects,
+            objects = _r$objects === void 0 ? {} : _r$objects;
+
+        _this3.setState({
+          'items': objects
+        });
+      });
     }
   }, {
     key: "render",
@@ -190,7 +181,7 @@ function (_Component) {
           title: "Append to Selected"
         }, _react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
           icon: _freeSolidSvgIcons.faArrowCircleRight
-        })), " \xA0", _react["default"].createElement("button", {
+        })), "\xA0", _react["default"].createElement("button", {
           onClick: function onClick() {
             return _this4.adder('after');
           },

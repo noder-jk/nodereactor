@@ -7,15 +7,13 @@ exports.LoginRegistration = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _react2 = require("nodereactor/react");
-
 var _reactHelmet = require("react-helmet");
-
-var _axios = _interopRequireDefault(require("axios"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
+
+var _react2 = require("nodereactor/react");
 
 require("./style.css");
 
@@ -24,6 +22,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -77,28 +77,30 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: Object.assign({
-          'action': 'nr_login'
-        }, this.state)
-      }).then(function (r) {
-        if (r.data && r.data.status == 'done' && r.data.go_to) {
-          window.location.assign(r.data.go_to);
-        } else {
-          _sweetalert["default"].fire('Error', r.data.message ? r.data.message : 'Something went wrong. Could not login.', 'error');
+      (0, _react2.ajaxRequest)('nr_login', _objectSpread({}, this.state), function (r, d, e) {
+        _this2.setState({
+          'loading': false
+        });
+
+        if (e) {
+          _sweetalert["default"].fire('Error', 'Something went wrong.', 'error');
+
+          return;
         }
 
-        _this2.setState({
-          'loading': false
-        });
-      })["catch"](function (r) {
-        _sweetalert["default"].fire('Error', 'Something went wrong.', 'error');
+        var _r$message = r.message,
+            message = _r$message === void 0 ? 'Something went wrong. Could not login.' : _r$message,
+            _r$status = r.status,
+            status = _r$status === void 0 ? 'failed' : _r$status,
+            _r$go_to = r.go_to,
+            go_to = _r$go_to === void 0 ? false : _r$go_to;
 
-        _this2.setState({
-          'loading': false
-        });
+        if (status == 'done' && go_to) {
+          window.location.assign(go_to);
+          return;
+        }
+
+        _sweetalert["default"].fire('Error', message, 'error');
       });
     }
   }, {

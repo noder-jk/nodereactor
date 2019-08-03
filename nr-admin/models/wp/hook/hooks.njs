@@ -1,12 +1,12 @@
 /* --------------post hooks-------------- */
-global.use_post_modules=function($, callback)
+global.use_meta_boxes=function($, callback)
 {
-	$.do_action('use_post_modules',callback);
+	$.do_action('use_meta_boxes',callback);
 }
 
-global.register_post_modules=function($,callback)
+global.register_meta_boxes=function($,callback)
 {
-	$.do_action('register_post_modules',callback); 
+	$.do_action('register_meta_boxes',callback); 
 }
 
 global.register_post_types=function($,callback)
@@ -24,8 +24,6 @@ global.register_custom_templates=function($,callback)
 {
 	$.do_action('register_custom_templates',callback);
 }
-
-
 
 /* ----------------Core, themes, plugins related hooks---------------- */
 global.admin_menu=function($,callback)

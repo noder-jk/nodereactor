@@ -117,6 +117,16 @@ global.set_utility_configs=function(cb, post)
 	handle_opt(post);
 }
 
+const nr_er_handler=(e)=>
+{
+	console.log('');
+	console.log('\x1b[31m\x1b[4m', 'Fatal Error Occurred.', '\x1b[0m');
+	console.log(e);
+	console.log('\x1b[46m', 'Node Reactor has saved itself from unexpected termination.', '\x1b[0m');
+	console.log('\x1b[42m', 'Next methods have been queued.', '\x1b[0m');
+	console.log('');
+}
+
 module.exports.series_fire=function(functions)
 {
 	var $=this;
@@ -129,30 +139,18 @@ module.exports.series_fire=function(functions)
 		/* As you know nodejs is a event driven system, so pass every hooked function as a callback to another function. */
 		var ret='';
 		num++;
-		if(functions[num-1]!==undefined)
-		{
-			/* Next queued function */
-			var next_params=[];
-			if(functions[num])
-			{
-				/* If the next func param array, then set first one as function and other elements as parameter for that function. */
-				var func=Array.isArray(functions[num]) ? functions[num][0] : functions[num];
-				if(typeof func=='function')
-				{
-					var args=get_args(func);
-					if(args)
-					{
-						args.pop();
-						args.shift();
-						next_params=args;
-					}
-				}
-			}
-			next_params= next_params.length>0 ? ','+next_params.join(',') : '';
+
+		var new_num=num-1;
 			
-			/* Currently processing function */
-			var cur_params=[];
-			var func=Array.isArray(functions[num-1]) ? functions[num-1][0] : functions[num-1];
+		if(functions[new_num]==undefined){return ret;}
+		
+		/* Next queued function */
+		var next_params=[];
+		var cb_next_params=[];
+		if(functions[num])
+		{
+			/* If the next func param array, then set first one as function and other elements as parameter for that function. */
+			var func=Array.isArray(functions[num]) ? functions[num][0] : functions[num];
 			if(typeof func=='function')
 			{
 				var args=get_args(func);
@@ -160,41 +158,69 @@ module.exports.series_fire=function(functions)
 				{
 					args.pop();
 					args.shift();
-					cur_params=args;
+					
+					next_params=args;
+
+					cb_next_params=next_params.map(v=>'null');
 				}
 			}
-			
-			if(Array.isArray(functions[num-1]))
+		}
+		next_params= next_params.length>0 ? ','+next_params.join(',') : '';
+		cb_next_params= cb_next_params.length>0 ? ','+cb_next_params.join(',') : '';
+
+		// generate error handler
+		var catch_block='nr_er_handler(e); (($'+next_params+')=>cb($'+next_params+'))($'+cb_next_params+');';
+		
+		/* Currently processing function */
+		var cur_params=[];
+		var func=Array.isArray(functions[new_num]) ? functions[new_num][0] : functions[new_num];
+		if(typeof func=='function')
+		{
+			var args=get_args(func);
+			if(args)
 			{
-				/* This block means the function accept external parameter from function array */
-				var explicit_length=0;
-				var explicit_param=[];
-				for(var i=1; i<functions[num-1].length; i++)
-				{
-					explicit_param.push('functions['+(num-1)+']['+i+']');
-				}
-				explicit_length=explicit_param.length;
-				explicit_param 	= explicit_param.length>0 ? explicit_param.join(',')+',' : '';
-			
-				cur_params=cur_params.slice(0, cur_params.length-explicit_length);
-				cur_params= cur_params.length>0 ? cur_params.join(',')+',' : '';
-				
-				/* It means parameter passed to series function. Only one (any type) parameter can be pass. */
-				functions[num-1][0] ? ret = 'functions['+(num-1)+'][0]($,'+cur_params+explicit_param+'($'+next_params+')=>{'+nr_series_func_generate()+'});' : 0;
+				args.pop();
+				args.shift();
+				cur_params=args;
 			}
-			else
+		}
+		
+		if(Array.isArray(functions[new_num]))
+		{
+			/* This block means the function accept external parameter from function array */
+			var explicit_length=0;
+			var explicit_param=[];
+			for(var i=1; i<functions[new_num].length; i++)
 			{
-				cur_params= cur_params.length>0 ? cur_params.join(',')+',' : '';
-				/* It means no parameter is passing to series function */
-				ret = 'functions['+(num-1)+']($,'+cur_params+'($'+next_params+')=>{'+nr_series_func_generate()+'});';
+				explicit_param.push('functions['+(new_num)+']['+i+']');
 			}
-		};
+			explicit_length=explicit_param.length;
+			explicit_param 	= explicit_param.length>0 ? explicit_param.join(',')+',' : '';
+		
+			cur_params=cur_params.slice(0, cur_params.length-explicit_length);
+			cur_params= cur_params.length>0 ? cur_params.join(',')+',' : '';
+			
+			/* It means parameter passed to series function. Only one (any type) parameter can be pass. */
+			if(functions[new_num][0])
+			{
+				ret = 'var cb=($'+next_params+')=>{'+nr_series_func_generate()+'};\
+						try{functions['+(new_num)+'][0]($,'+cur_params+explicit_param+' cb);}catch(e){'+catch_block+'}';
+			}
+		}
+		else
+		{
+			cur_params= cur_params.length>0 ? cur_params.join(',')+',' : '';
+
+			/* It means no parameter is passing to series function */
+			ret = 'var cb=($'+next_params+')=>{'+nr_series_func_generate()+'};\
+					try{functions['+(new_num)+']($,'+cur_params+' cb);}catch(e){'+catch_block+'}';
+		}
+		
 		return ret;
 	}
 	
 	eval(nr_series_func_generate());
 }
-
 
 global.fl_up=function(string) 
 {

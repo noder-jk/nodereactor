@@ -17,7 +17,7 @@ const FindComp=(props)=>
     let params=Object.assign({},props);
     delete params.comp_props;
 
-    const default_resp=fallback_content || <small className="text-danger"><u><b><i>{component}</i></b></u> not found.</small>
+    const default_resp=fallback_content || <small className="text-danger">Component <u><b><i>{component}</i></b></u> not found.</small>
 
     if(nr_package===true)
     {
@@ -52,9 +52,17 @@ const FindComp=(props)=>
         
         let resp=ret(component);
 
-        if(resp==false && fallback_component!==false)
+        if(!resp && fallback_component)
         {
             resp=ret(fallback_component);
+
+            if(!resp)
+            {
+                return <small className="text-danger">
+                            Component <u><b><i>{component}</i></b></u> not found.
+                            Fallback component <u><b><i>{fallback_component}</i></b></u> not found too.
+                        </small>
+            }
         }
 
         if(resp)

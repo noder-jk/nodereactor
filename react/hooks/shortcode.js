@@ -49,7 +49,7 @@ var do_shortcode = function do_shortcode(str) {
   var comp_props = {
     'component': comp_name,
     'nr_package': pack,
-    'fallback_content': _react["default"].createElement("span", null, str)
+    'fallback_content': str
   };
   return _react["default"].createElement(_compFinder.FindComp, _extends({
     comp_props: comp_props

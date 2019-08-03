@@ -7,8 +7,6 @@ exports.Users = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
@@ -75,14 +73,12 @@ function (_Component) {
     key: "selectUser",
     value: function selectUser(e, id) {
       var el = e.currentTarget;
-      var st = this.state.users;
-
-      for (var i = 0; i < st.length; i++) {
-        st[i].user_id == id ? st[i].user_selected = el.checked : null;
-      }
-
+      var users = this.state.users;
+      users.forEach(function (u, i) {
+        u.user_id == id ? users[i].user_selected = el.checked : null;
+      });
       this.setState({
-        'users': st
+        users: users
       });
     }
   }, {
@@ -90,17 +86,21 @@ function (_Component) {
     value: function deleteUser() {
       var _this2 = this;
 
+      var _this$state = this.state,
+          user_action = _this$state.user_action,
+          users = _this$state.users;
       /* Get selected ids */
-      var selected = [];
-      var st = this.state.users;
 
-      for (var i = 0; i < st.length; i++) {
-        st[i].user_selected ? selected.push(st[i].user_id) : null;
-      }
+      var selected = users.map(function (u) {
+        return u.user_selected ? u.user_id : false;
+      }).filter(function (u) {
+        return u !== false;
+      });
       /* Check if deletable */
 
+      if (selected.length == 0 || user_action == '') {
+        _sweetalert["default"].fire('No User or Action Selected.');
 
-      if (selected.length == 0 || this.state.user_action == '') {
         return;
       }
 
@@ -120,24 +120,17 @@ function (_Component) {
           'loading': true
         });
 
-        (0, _axios["default"])({
-          method: 'post',
-          data: {
-            'action': 'nr_delete_users',
-            'user_ids': selected,
-            'user_action': _this2.state.user_action
-          },
-          url: _react2.ajax_url
-        }).then(function (r) {
-          _this2.setState({
+        (0, _react2.ajaxRequest)('nr_delete_users', {
+          'user_ids': selected,
+          user_action: user_action
+        }, function (r, d, e) {
+          var ob = {
             'loading': true
-          }, _this2.fetchUser);
-        })["catch"](function (r) {
-          _this2.setState({
-            'loading': false
-          });
+          };
 
-          _sweetalert["default"].fire('Request Error');
+          _this2.setState(ob, e ? function () {} : _this2.fetchUser);
+
+          e ? _sweetalert["default"].fire('Request Error') : 0;
         });
       });
     }
@@ -149,24 +142,14 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: {
-          'action': 'nr_get_users'
-        }
-      }).then(function (r) {
-        var users = Array.isArray(r.data.users) ? r.data.users : [];
-        var current_user_id = r.data.current_user_id;
+      (0, _react2.ajaxRequest)('nr_get_users', function (r) {
+        var users = r.users,
+            current_user_id = r.current_user_id;
 
         _this3.setState({
-          'users': users,
-          'current_user_id': current_user_id,
-          'loading': false
-        });
-      })["catch"](function (r) {
-        _this3.setState({
-          'loading': false
+          'loading': false,
+          users: users,
+          current_user_id: current_user_id
         });
       });
     }
@@ -180,17 +163,25 @@ function (_Component) {
     value: function render() {
       var _this4 = this;
 
-      var current_user_id = this.state.current_user_id;
-      var users = this.state.users;
+      var _this$state2 = this.state,
+          current_user_id = _this$state2.current_user_id,
+          loading = _this$state2.loading,
+          user_action = _this$state2.user_action,
+          users = _this$state2.users;
+      var selected = users.map(function (u) {
+        return u.user_selected ? true : false;
+      }).filter(function (u) {
+        return u;
+      });
       return _react["default"].createElement("div", {
         id: "users_container"
-      }, _react["default"].createElement("h4", null, "Registered Users ", this.state.loading == true ? _react["default"].createElement(_reactSvgSpinner["default"], {
+      }, _react["default"].createElement("h4", null, "Registered Users ", loading == true ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null), this.state.user_action == 'abandon' ? _react["default"].createElement("small", null, "Everything of this user except username and email will be deleted. So, email and username will not be reusable.") : null, this.state.user_action == 'delete' ? _react["default"].createElement("small", null, "Everything will be deleted. Username and email will be reusable by someone else.") : null, _react["default"].createElement("div", null, _react["default"].createElement("div", {
+      }) : null), user_action == 'abandon' ? _react["default"].createElement("small", null, "Everything except username and email will be deleted that prevents someone else from creating same account.") : null, user_action == 'delete' ? _react["default"].createElement("small", null, "Everything will be deleted. Username and email will be reusable by someone else.") : null, selected.length == 0 ? null : _react["default"].createElement("div", null, _react["default"].createElement("div", {
         className: "d-inline-block form-group form-inline mr-2 mb-1"
       }, _react["default"].createElement("select", {
         className: "form-control form-control-sm float-left",
-        defaultValue: this.state.user_action,
+        defaultValue: user_action,
         onChange: this.userAction
       }, _react["default"].createElement("option", {
         value: ""

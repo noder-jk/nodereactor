@@ -7,8 +7,6 @@ exports.Editor = exports.TaxonomyPage = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
@@ -111,36 +109,25 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': {
-          'action': 'create_update_category',
-          'values': values
-        }
-      }).then(function (r) {
+      (0, _react2.ajaxRequest)('create_update_category', {
+        'values': values
+      }, function (r) {
         var set_ob = {
           'loading': false
         };
 
-        if (r.data.status == 'done') {
+        if (r.status == 'done') {
           _this2.clearValues();
 
           closeEditor ? closeEditor(true) : _sweetalert["default"].fire('Success', 'Term Has Been Created', 'success');
           fetchTaxonomies();
         } else {
-          _sweetalert["default"].fire('Error', r.data.message ? r.data.message : 'Action Failed.', 'error');
+          _sweetalert["default"].fire('Error', r.message ? r.message : 'Action Failed.', 'error');
         }
 
-        if (!closeEditor || r.data.status !== 'done') {
+        if (!closeEditor || r.status !== 'done') {
           _this2.setState(set_ob);
         }
-      })["catch"](function (e) {
-        _this2.setState({
-          'loading': false
-        });
-
-        _sweetalert["default"].fire('Request Error');
       });
     }
   }, {
@@ -303,29 +290,20 @@ function (_Component2) {
           'loading': true
         });
 
-        (0, _axios["default"])({
-          'method': 'post',
-          'url': _react2.ajax_url,
-          'data': {
-            'action': 'nr_delete_taxonomy',
-            'term_ids': term_id
-          }
-        }).then(function (r) {
-          if (r.data.status !== 'done') {
-            _sweetalert["default"].fire('Error', 'Something Went Wrong', 'error');
-          }
-
+        (0, _react2.ajaxRequest)('nr_delete_taxonomy', {
+          'term_ids': term_id
+        }, function (r) {
           _this5.setState({
             'loading': false
           });
+
+          if (r.status !== 'done') {
+            _sweetalert["default"].fire('Error', 'Something Went Wrong', 'error');
+
+            return;
+          }
 
           fetchTaxonomies();
-        })["catch"](function (e) {
-          _this5.setState({
-            'loading': false
-          });
-
-          _sweetalert["default"].fire('Error', 'Request Failed or Server Error', 'error');
         });
       });
     }
@@ -443,29 +421,28 @@ function (_Component3) {
         'loading': true,
         'taxonomy': taxonomy
       });
-      (0, _axios["default"])({
-        'method': 'post',
-        'url': _react2.ajax_url,
-        'data': {
-          'action': 'nr_get_taxonomy',
-          'taxonomy': taxonomy
-        }
-      }).then(function (r) {
-        var set_ob = {
-          'loading': false,
-          'taxonomies': r.data.taxonomies,
-          'hierarchical': r.data.hierarchical,
-          'taxonomy_title': r.data.taxonomy_title
+      (0, _react2.ajaxRequest)('nr_get_taxonomy', {
+        'taxonomy': taxonomy
+      }, function (r, d, e) {
+        var ob = {
+          'loading': false
         };
 
-        _this8.setState(set_ob);
-      })["catch"](function (e) {
-        _this8.setState({
-          'loading': false,
-          'selected': []
-        });
+        if (e) {
+          ob.selected = [];
 
-        _sweetalert["default"].fire('Request Error. Could Not Fetch Taxonomies.');
+          _this8.setState(ob);
+
+          _sweetalert["default"].fire('Request Error. Could Not Fetch Taxonomies.');
+
+          return;
+        }
+
+        ob.taxonomies = r.taxonomies;
+        ob.hierarchical = r.hierarchical;
+        ob.taxonomy_title = r.taxonomy_title;
+
+        _this8.setState(ob);
       });
     }
   }, {

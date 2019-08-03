@@ -90,7 +90,7 @@ module.exports.get_menu_for_visitor=function($)
     });
 }
 
-module.exports.del_menu=function()
+module.exports.del_menu=function($)
 {
     if($._POST.menu_name && typeof $._POST.menu_name=='string')
     {

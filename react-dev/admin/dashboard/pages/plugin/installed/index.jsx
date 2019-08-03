@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Swal from 'sweetalert2';
 
-import {ajax_url ,Loading,Placeholder} from 'nodereactor/react';
+import {ajaxRequest, Placeholder} from 'nodereactor/react';
 import './style.scss';
 
 class ProcessPlugins extends Component
@@ -30,33 +29,30 @@ class ProcessPlugins extends Component
 
         let dt={  
             type:'plugin',
-            action:'nr_theme_plugin_action',
             to_do:t_do,
             node_package:pkg
         }
 
-        axios({
-            method:'post',
-            url:ajax_url ,
-            data:dt
-        }).then(r=>
+        ajaxRequest('nr_theme_plugin_action', dt, (r,d,e)=>
         {
-            if(r.data && r.data.status=='done')
+            if(e)
             {
-                let pl=this.state.plugins;
-
-                pl[pkg].activated=dt.to_do=='activate' ? true : false;
-
-                this.setState({'plugins':pl});
+                Swal.fire('Request Error');
+                return;
             }
-            else
+
+            if(r.status!=='done')
             {
-                Swal.fire('Action failed.');
+                Swal.fire('Action failed.'); 
+                return;
             }
-        }).catch(r=>
-        {
-            Swal.fire('Request Error');
-        })
+            
+            let pl=this.state.plugins;
+
+            pl[pkg].activated=dt.to_do=='activate' ? true : false;
+
+            this.setState({'plugins':pl});
+        });
     }
 
     render()

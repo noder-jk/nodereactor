@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import axios from 'axios';
 import Spinner from "react-svg-spinner";
 import Swal from 'sweetalert2';
 
-import {ajax_url , get_hierarchy} from 'nodereactor/react';
+import {get_hierarchy, ajaxRequest} from 'nodereactor/react';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faTrashAlt, faEye} from '@fortawesome/free-solid-svg-icons';
@@ -65,16 +64,12 @@ class Editor extends Component
         let values=this.state;
         values['taxonomy']=taxonomy;
 
-        this.setState({'loading':true})
-        axios({
-            'method':'post',
-            'url':ajax_url ,
-            'data':{'action':'create_update_category', 'values':values}
-        }).then(r=>
+        this.setState({'loading':true});
+        ajaxRequest('create_update_category', {'values':values}, r=>
         {
             let set_ob={'loading':false};
-            
-            if(r.data.status=='done')
+
+            if(r.status=='done')
             {
                 this.clearValues();
                 closeEditor ? closeEditor(true) : Swal.fire('Success', 'Term Has Been Created', 'success');
@@ -82,19 +77,14 @@ class Editor extends Component
             }
             else
             {
-                Swal.fire('Error', (r.data.message ? r.data.message : 'Action Failed.'), 'error');
+                Swal.fire('Error', (r.message ? r.message : 'Action Failed.'), 'error');
             }
 
-            if(!closeEditor || r.data.status!=='done')
+            if(!closeEditor || r.status!=='done')
             {
                 this.setState(set_ob);
             }
-
-        }).catch(e=>
-        {   
-            this.setState({'loading':false})
-            Swal.fire('Request Error');
-        })
+        });
     }
 
     render()
@@ -232,23 +222,19 @@ class Browser extends Component
             if(!result.value){return;}
 
             this.setState({'loading':true});
-            axios({
-                'method':'post',
-                'url':ajax_url ,
-                'data':{'action':'nr_delete_taxonomy', 'term_ids':term_id}
-            }).then(r=>
+
+            ajaxRequest('nr_delete_taxonomy', {'term_ids':term_id}, r=>
             {
-                if(r.data.status!=='done')
+                this.setState({'loading':false});
+
+                if(r.status!=='done')
                 {
                     Swal.fire('Error', 'Something Went Wrong', 'error');
+                    return;
                 }
-                this.setState({'loading':false});
+
                 fetchTaxonomies();
-            }).catch(e=>
-            {
-                this.setState({'loading':false});
-                Swal.fire('Error', 'Request Failed or Server Error', 'error');
-            })
+            });
         });
     }
 
@@ -349,25 +335,24 @@ class TaxonomyPage extends Component
         
         /* Now get taxonomies, taxonomy hierarchy etc. */
         this.setState({'loading':true, 'taxonomy':taxonomy});
-        axios({
-            'method':'post',
-            'url':ajax_url ,
-            'data':{'action':'nr_get_taxonomy', 'taxonomy':taxonomy}
-        }).then(r=>
-        {
-            let set_ob=
-            {
-                'loading':false,
-                'taxonomies':r.data.taxonomies,
-                'hierarchical':r.data.hierarchical,
-                'taxonomy_title':r.data.taxonomy_title
-            };
 
-            this.setState(set_ob)
-        }).catch(e=>
-        {  
-            this.setState({'loading':false, 'selected':[]})
-            Swal.fire('Request Error. Could Not Fetch Taxonomies.');
+        ajaxRequest('nr_get_taxonomy', {'taxonomy':taxonomy}, (r, d, e)=>
+        {
+            let ob={'loading':false};
+
+            if(e)
+            {
+                ob.selected=[];
+                this.setState(ob);
+                Swal.fire('Request Error. Could Not Fetch Taxonomies.');
+                return;
+            }
+
+            ob.taxonomies=r.taxonomies;
+            ob.hierarchical=r.hierarchical;
+            ob.taxonomy_title=r.taxonomy_title;
+
+            this.setState(ob)
         });
     }
 

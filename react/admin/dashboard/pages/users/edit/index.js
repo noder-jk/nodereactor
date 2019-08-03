@@ -7,8 +7,6 @@ exports.EditUser = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _react2 = require("nodereactor/react");
@@ -117,25 +115,17 @@ function (_Component) {
         'message': null,
         'loading': true
       });
-      var vals = this.state;
-      delete vals.submitable;
-      delete vals.user_username;
-      var send_data = {
-        'action': 'nr_update_user',
-        'values': vals
-      };
-      (0, _axios["default"])({
-        method: 'post',
-        url: _react2.ajax_url,
-        data: send_data
-      }).then(function (r) {
+      var values = this.state;
+      delete values.submitable;
+      delete values.user_username;
+      (0, _react2.ajaxRequest)('nr_update_user', {
+        values: values
+      }, function (r) {
+        var _r$message = r.message,
+            message = _r$message === void 0 ? 'Request Failed' : _r$message;
+
         _this2.setState({
-          'message': r.data.message ? r.data.message : 'No response',
-          'loading': false
-        });
-      })["catch"](function (r) {
-        _this2.setState({
-          'message': 'Request Error',
+          message: message,
           'loading': false
         });
       });
@@ -145,26 +135,34 @@ function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      return !this.state.user_id || this.state.user_id == 0 ? _react["default"].createElement("small", null, "User Not Found") : _react["default"].createElement("div", null, _react["default"].createElement("div", {
+      var _this$state = this.state,
+          user_id = _this$state.user_id,
+          display_name = _this$state.display_name,
+          user_username = _this$state.user_username,
+          user_email = _this$state.user_email,
+          change_pass = _this$state.change_pass,
+          loading = _this$state.loading,
+          message = _this$state.message;
+      return !user_id || user_id == 0 ? _react["default"].createElement("small", null, "User Not Found") : _react["default"].createElement("div", null, _react["default"].createElement("div", {
         className: "row mb-4"
       }, _react["default"].createElement("div", {
         className: "col-12"
       }, _react["default"].createElement("h3", null, "Add New User"), _react["default"].createElement("small", null, "Only administrator user role available for now.", _react["default"].createElement("br", null), "More user roles and role based capabilities will be added in future versions."))), _react["default"].createElement(InputFields, {
         title: "Display Name",
         name: "display_name",
-        default_value: this.state.display_name,
+        default_value: display_name,
         val_colletor: this.storeVal
       }, _react["default"].createElement("small", null, "Visible everywhere")), _react["default"].createElement(InputFields, {
         title: "Username",
         name: "user_username",
-        default_value: this.state.user_username,
+        default_value: user_username,
         disabled: true
       }), _react["default"].createElement(InputFields, {
         title: "Email Address",
         name: "user_email",
-        default_value: this.state.user_email,
+        default_value: user_email,
         val_colletor: this.storeVal
-      }), this.state.change_pass ? _react["default"].createElement(InputFields, {
+      }), change_pass ? _react["default"].createElement(InputFields, {
         title: "Password",
         name: "user_password",
         val_colletor: this.storeVal
@@ -186,10 +184,9 @@ function (_Component) {
         className: "col-12 col-sm-8 col-md-6 col-lg-4"
       }, _react["default"].createElement("select", {
         className: "form-control",
-        disabled: "disabled"
-      }, _react["default"].createElement("option", {
-        selected: "selected"
-      }, "administrator")))), _react["default"].createElement("div", {
+        disabled: "disabled",
+        defaultValue: "administrator"
+      }, _react["default"].createElement("option", null, "administrator")))), _react["default"].createElement("div", {
         className: "row mb-4"
       }, _react["default"].createElement("div", {
         className: "col-12 col-sm-4 col-md-3 col-lg-2"
@@ -198,9 +195,9 @@ function (_Component) {
       }, _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm",
         onClick: this.updateUser
-      }, "Update"), " \xA0\xA0", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
+      }, "Update"), " \xA0\xA0", loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null)), _react["default"].createElement("div", null, this.state.message));
+      }) : null)), _react["default"].createElement("div", null, message));
     }
   }]);
 

@@ -95,7 +95,6 @@ module.exports.deploy_src=function(data_ob)
     fs.writeFile(react_app_dest, final_str, (err)=>{err ? console.log('Fatal Error. Could not copy app file to src.') : 0});
     
     /* Copy react index and app test. */
-    fs.copyFile(nr_package_root+'/index.jsx', src+'/index.js', (err) => {err ? console.log('Fatal Error. Could not copy react index file.') : 0;});
     fs.copyFile(nr_package_root+'/index.jsx', src+'/index.jsx', (err) => {err ? console.log('Fatal Error. Could not copy react index file.') : 0;});
     fs.copyFile(nr_package_root+'/NodeReactorApp.test.jsx', src+'/NodeReactorApp.test.jsx', (err) => {err ? console.log('Fatal Error. Could not copy Node Reactor core App file to react src.') : 0;});
 }
@@ -118,35 +117,16 @@ module.exports.deploy_db=function()
             if(err)
             {
                 console.log('');
-                console.log('-> Database configs found but could not connect.');
+                console.log('-> Database configs found but could not connect. Maybe configs are incorrect or database is not running.');
+                console.log('\x1b[41m', '-> NR has nothing to do and getting terminated.', '\x1b[0m');
                 console.log('');
 
-                var reinst=node_modules['readline-sync'].question('Do you want to open re-installer? y/n: ');
-                
-                if(reinst.toLowerCase()=='y')
-                {
-                    nr_db_config=false;
-
-                    console.log('');
-                    console.log('\x1b[46m', '-> Visit your specified url to get installation page.', '\x1b[0m');
-                    console.log('');
-                }
-                else
-                {
-                    console.log('');
-                    console.log('-> You can put correct configs in config file and try again to use existing NR app.');
-                    console.log('\x1b[41m', '-> For now NR has nothing to do and terminated.', '\x1b[0m');
-                    console.log('');
-
-                    process.exit(1);
-                }
+                process.exit(1);
             }
-            else
-            {
-                console.log('');
-                console.log('\x1b[42m', '-> NodeReactor is installed already, and it has been launched successfully.', '\x1b[0m');
-                console.log('');
-            }
+
+            console.log('');
+            console.log('\x1b[42m', '-> NodeReactor is installed already, and it has been launched successfully.', '\x1b[0m');
+            console.log('');
 
             pool.end();
         });
@@ -227,8 +207,7 @@ module.exports.deploy_vendor_scripts=function()
         'filesize',
         'deepcopy',
         'mime-types',
-        'moment-timezone',
-        'readline-sync'
+        'moment-timezone'
     ];
 
     mods.forEach(element=>

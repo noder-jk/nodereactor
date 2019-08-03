@@ -7,8 +7,6 @@ exports.Uploader = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _react2 = require("nodereactor/react");
@@ -51,10 +49,41 @@ function (_Component) {
       'upload_details': _react["default"].createElement("span", null, "Select Files to Start Upload.")
     };
     _this.startUpload = _this.startUpload.bind(_assertThisInitialized(_this));
+    _this.progressHandler = _this.progressHandler.bind(_assertThisInitialized(_this));
+    _this.callbackHandler = _this.callbackHandler.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(Uploader, [{
+    key: "progressHandler",
+    value: function progressHandler(progressEvent, files_to_upload_total, files_to_upload) {
+      var percentCompleted = Math.round(progressEvent.loaded * 100 / progressEvent.total);
+
+      var d = _react["default"].createElement("span", null, "Upload in Progress:", files_to_upload_total - files_to_upload.length + '/' + files_to_upload_total + ' (' + percentCompleted + ')%');
+
+      this.setState({
+        upload_details: d
+      });
+    }
+  }, {
+    key: "callbackHandler",
+    value: function callbackHandler(r, d, e, files_to_upload, upload_loop) {
+      var ob = {
+        button_disabled: false,
+        upload_details: _react["default"].createElement("span", null, "Upload has been completed.")
+      };
+
+      if (e) {
+        ob.upload_details = _react["default"].createElement("span", null, "Upload Request Failed.");
+      } else if (!r.insertId) {
+        ob.upload_details = _react["default"].createElement("span", null, "Upload Failed.");
+      } else if (files_to_upload.length > 0) {
+        upload_loop();
+      }
+
+      this.setState(ob);
+    }
+  }, {
     key: "startUpload",
     value: function startUpload(e) {
       var _this2 = this;
@@ -83,54 +112,19 @@ function (_Component) {
           return;
         }
 
-        if (!_this2.state.button_disabled) {
-          _this2.setState({
-            button_disabled: true
-          });
-        }
+        !_this2.state.button_disabled ? _this2.setState({
+          button_disabled: true
+        }) : 0; // process file
 
         var f = files_to_upload.shift();
         var formData = new FormData();
         formData.append('nr_media_file', f, f.name);
-        formData.append('to_do', 'upload');
-        formData.append('action', 'nr_media_upload');
-        (0, _axios["default"])({
-          method: 'post',
-          url: _react2.ajax_url,
-          data: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          onUploadProgress: function onUploadProgress(progressEvent) {
-            var percentCompleted = Math.round(progressEvent.loaded * 100 / progressEvent.total);
+        formData.append('to_do', 'upload'); // start upload single file
 
-            var d = _react["default"].createElement("span", null, "Upload in Progress:", files_to_upload_total - files_to_upload.length + '/' + files_to_upload_total + ' (' + percentCompleted + ')%');
-
-            _this2.setState({
-              upload_details: d
-            });
-          }
-        }).then(function (r) {
-          if (!r.data || !r.data.insertId) {
-            _this2.setState({
-              button_disabled: false,
-              upload_details: _react["default"].createElement("span", null, "Upload Error. Probably server error or no internet, or you are logged out.")
-            });
-          } else {
-            if (files_to_upload.length > 0) {
-              upload_loop();
-            } else {
-              _this2.setState({
-                button_disabled: false,
-                upload_details: _react["default"].createElement("span", null, "Upload has been completed.")
-              });
-            }
-          }
-        })["catch"](function (r) {
-          _this2.setState({
-            button_disabled: false,
-            upload_details: _react["default"].createElement("span", null, "Upload Error.")
-          });
+        (0, _react2.ajaxRequest)('nr_media_upload', formData, function (r, d, e) {
+          return _this2.callbackHandler(r, d, e, files_to_upload, upload_loop);
+        }, function (p) {
+          return _this2.progressHandler(p, files_to_upload_total, files_to_upload);
         });
       };
 
@@ -139,6 +133,9 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this$state = this.state,
+          button_disabled = _this$state.button_disabled,
+          upload_details = _this$state.upload_details;
       return _react["default"].createElement("div", {
         id: "attachment_uploader",
         className: "uploader-inline"
@@ -147,7 +144,7 @@ function (_Component) {
       }, _react["default"].createElement("div", {
         className: "upload-ui"
       }, _react["default"].createElement("button", {
-        disabled: this.state.button_disabled,
+        disabled: button_disabled,
         type: "button",
         className: "btn btn-outline-secondary btn-lg",
         onClick: function onClick(e) {
@@ -162,7 +159,7 @@ function (_Component) {
         multiple: "multiple"
       })), _react["default"].createElement("div", {
         className: "upload-inline-status"
-      }, this.state.upload_details), _react["default"].createElement("div", {
+      }, upload_details), _react["default"].createElement("div", {
         className: "post-upload-ui"
       }, _react["default"].createElement("p", {
         className: "max-upload-size"

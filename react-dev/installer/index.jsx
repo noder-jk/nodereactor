@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 import Helmet from 'react-helmet';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import Spinner from 'react-svg-spinner';
 
-import {ajax_url ,LoginRegistration} from 'nodereactor/react';
+import {ajaxRequest ,LoginRegistration} from 'nodereactor/react';
 
 import './style.css';
 import Banner from './banner.jpg';
@@ -80,27 +79,27 @@ class NodeReactorInstaller extends Component
         }
 
         this.setState({'loading':true});
-        axios({
-            method:'post',
-            url:ajax_url ,
-            data:Object.assign({'action':'nr_install_check', 'to_do':to_do},this.state)
-        }).then(r=>
+
+        ajaxRequest('nr_install_check', {to_do, ...this.state}, (r, d, e)=>
         {
-            if(r.data && r.data.status=='done')
+            this.setState({'loading':false});
+
+            if(e)
             {
-                this.setState({active_tab:next_tab});
-            }
-            else
-            {
-                Swal.fire('Error', (r.data.message ?  r.data.message : 'Could not process request. Please make sure configs are correct.'), 'error');
+                Swal.fire('Error', 'Could not connect server.', 'error');
+                return;
             }
 
-            this.setState({'loading':false});
-        }).catch(r=>
-        {
-            Swal.fire('Error', 'Could not connect server.', 'error');
-            this.setState({'loading':false});
-        })
+            let {status='failed', message='Could not process request. Please make sure configs are correct.'}=r;
+
+            if(status!=='done')
+            {
+                Swal.fire('Error', message, 'error');
+                return;
+            }
+
+            this.setState({active_tab:next_tab});
+        });
     }
 
     render()
@@ -120,7 +119,7 @@ class NodeReactorInstaller extends Component
 
                 <div className="text-center installation_steps" id="get_config">
                     <img src={Banner} style={{'width':'100%'}}/>
-                    <small>Create By JK</small>
+                    <small>Created by <b>JK</b>. Inspired by <b>WordPress</b>.</small>
                 </div>
 
                 <div className="text-center">
