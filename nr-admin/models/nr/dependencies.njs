@@ -81,7 +81,7 @@ module.exports.deploy_src=function(data_ob)
     mods_str='const vendor_components='+mods_str;
 
     /* Now add generated script into app file */
-    var react_app_source=nr_package_root+'/NodeReactorApp.jsx';
+    var react_app_source=nr_package_root+'/react-scripts/NodeReactorApp.jsx';
     var react_app_dest=src+'/NodeReactorApp.jsx';
 
     /* No problem in sync mode, cause it's only first time when node run. */
@@ -95,8 +95,8 @@ module.exports.deploy_src=function(data_ob)
     fs.writeFile(react_app_dest, final_str, (err)=>{err ? console.log('Fatal Error. Could not copy app file to src.') : 0});
     
     /* Copy react index and app test. */
-    fs.copyFile(nr_package_root+'/index.jsx', src+'/index.jsx', (err) => {err ? console.log('Fatal Error. Could not copy react index file.') : 0;});
-    fs.copyFile(nr_package_root+'/NodeReactorApp.test.jsx', src+'/NodeReactorApp.test.jsx', (err) => {err ? console.log('Fatal Error. Could not copy Node Reactor core App file to react src.') : 0;});
+    fs.copyFile(nr_package_root+'/react-scripts/index.jsx', src+'/index.jsx', (err) => {err ? console.log('Fatal Error. Could not copy react index file.') : 0;});
+    fs.copyFile(nr_package_root+'/react-scripts/NodeReactorApp.test.jsx', src+'/NodeReactorApp.test.jsx', (err) => {err ? console.log('Fatal Error. Could not copy Node Reactor core App file to react src.') : 0;});
 }
 
 module.exports.deploy_db=function()

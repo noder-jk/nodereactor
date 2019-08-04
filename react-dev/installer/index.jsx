@@ -119,7 +119,7 @@ class NodeReactorInstaller extends Component
 
                 <div className="text-center installation_steps" id="get_config">
                     <img src={Banner} style={{'width':'100%'}}/>
-                    <small>Created by <b>JK</b>. Inspired by <b>WordPress</b>.</small>
+                    <small>Created by JK, Inspired by WordPress.</small>
                 </div>
 
                 <div className="text-center">
