@@ -107,7 +107,7 @@ module.exports.get_posts=function(nr_condition,get_p_n)
 		
 		// return;
 
-		nr_pool.query(sql,function(e,result)
+		nr_db_pool.query(sql,function(e,result)
 		{
 			if(e)
 			{
@@ -198,11 +198,11 @@ module.exports.insert_post=function(fields, save_post_callback)
 			for(var k in cols)
 			{
 				columns.push(k);
-				values.push(nr_pool.escape(cols[k]));
+				values.push(nr_db_pool.escape(cols[k]));
 			}
 			
 			var q='INSERT INTO '+nr_db_config.tb_prefix+'posts ('+columns.join(',')+') VALUES ('+values.join(',')+')';
-			nr_pool.query(q, function(e,r)
+			nr_db_pool.query(q, function(e,r)
 			{
 				var id=(r && r.insertId) ? r.insertId : false;
 
@@ -216,13 +216,13 @@ module.exports.insert_post=function(fields, save_post_callback)
 			{
 				if(k!=='user_id')
 				{
-					values.push(k+'='+nr_pool.escape(cols[k]));
+					values.push(k+'='+nr_db_pool.escape(cols[k]));
 				}
 			}
 			
 			var q='UPDATE '+nr_db_config.tb_prefix+'posts SET '+values.join(', ')+' WHERE post_id='+fields.post_id;
 
-			nr_pool.query(q, function(e, r)
+			nr_db_pool.query(q, function(e, r)
 			{
 				save_post_callback($, (r ? fields.post_id : false));
 			});
@@ -249,9 +249,9 @@ global.get_available_slug=function($,fields,get_slug_call_back)
 	num=2;
 	function get_slug_inner($,s,get_slug_call_back)
 	{
-		nr_pool.query
+		nr_db_pool.query
 		(
-			'SELECT post_id FROM '+nr_db_config.tb_prefix+'posts WHERE post_name='+nr_pool.escape(s)+' AND post_id!="'+fields.post_id+'"',
+			'SELECT post_id FROM '+nr_db_config.tb_prefix+'posts WHERE post_name='+nr_db_pool.escape(s)+' AND post_id!="'+fields.post_id+'"',
 			function(e,r)
 			{
 				if(!e && /\S+/.test(s)==true)
@@ -290,7 +290,7 @@ module.exports.delete_post=function(post_id, next)
 
 		var q='DELETE FROM '+nr_db_config.tb_prefix+'posts WHERE post_id IN ('+post_id+')'+ignore_attachment;
 		
-		nr_pool.query(q,(e,r)=>
+		nr_db_pool.query(q,(e,r)=>
 		{
 			next($);
 		});
@@ -300,7 +300,7 @@ module.exports.delete_post=function(post_id, next)
 	{
 		var q='DELETE FROM '+nr_db_config.tb_prefix+'term_relationships WHERE owner_post_id IN ('+post_ids.join(',')+')';
 		
-		nr_pool.query(q,(e,r)=>
+		nr_db_pool.query(q,(e,r)=>
 		{
 			next($);
 		});

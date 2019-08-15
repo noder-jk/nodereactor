@@ -3,7 +3,7 @@ global.nr_get_node_active=function($,call_back)
 	/* Retrieve active plugins, themes, options from database. */
 	var q='SELECT * FROM '+nr_db_config.tb_prefix+'nodes WHERE active=1';
 	
-	nr_pool.query(q, function(err, result)
+	nr_db_pool.query(q, function(err, result)
 	{
 		if(!err)
 		{

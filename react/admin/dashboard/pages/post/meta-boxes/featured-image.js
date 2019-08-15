@@ -122,7 +122,9 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var image_url = this.state.image_url;
+      var _this$state = this.state,
+          image_url = _this$state.image_url,
+          media_opened = _this$state.media_opened;
       return _react["default"].createElement("div", {
         id: "featured_image_container"
       }, this.state.loading_icon ? _react["default"].createElement("p", null, _react["default"].createElement(_reactSvgSpinner["default"], {
@@ -141,8 +143,7 @@ function (_Component) {
         onClick: this.removeImage
       }, "- Remove Featured Image") : _react["default"].createElement("span", {
         onClick: this.showMedia
-      }, "+ Add Featured Image"), _react["default"].createElement(_react2.Media, {
-        open: this.state.media_opened,
+      }, "+ Add Featured Image"), !media_opened ? null : _react["default"].createElement(_react2.Media, {
         onClose: this.closeMedia,
         onResult: this.getFiles,
         accept: ['image/jpeg', 'image/png']

@@ -49,8 +49,8 @@ module.exports=function(project_root, extensions)
 	/* Server configs */
 	var pack=require(project_root+'/package.json');
 	
-	pack.homepage!=='/nr-react' ? ini_errors.push('You must add homepage:"/nr-react" in package.json') : null;
-	!pack.nr_configs 			? ini_errors.push('Configs for NodeReactor not found in package.json') : null;
+	pack.homepage!=='/' 		? ini_errors.push('You must add homepage:"/" in package.json located in project root.') : null;
+	!pack.nr_configs 			? ini_errors.push('Configs for NodeReactor not found in package.json') 	: null;
 
 	!pack.nr_configs 			? pack.nr_configs={} : null;
 
@@ -89,10 +89,10 @@ module.exports=function(project_root, extensions)
 		nr_themes		: ['semplicemente']
 	}
 
+	global.nrg						= {};
 	global.nr_port					= data_ob.nr_port;
 
 	global.nr_home_url				= data_ob.nr_home_url; // including trailing slash
-	global.nr_build_url				= nr_home_url+pack.homepage.slice(1)+'/';
 
 	global.nr_session_cookie_name	= 'f8376410e97a1357a406';
 	global.nr_session_cookie_pass	= 'c0ae6e2891174443aeb2';
@@ -145,7 +145,7 @@ module.exports=function(project_root, extensions)
 
 	nr_socket.attach(nr_server);
 
-	global.nr_pool			= get_pool();
+	global.nr_db_pool			= get_pool();
 
 	nr_app.all('/*', function(request, response) 
 	{

@@ -67,7 +67,7 @@ class FeaturedImage extends Component
 
     render()
     {
-        let {image_url}=this.state;
+        let {image_url, media_opened}=this.state;
 
         return <div id="featured_image_container">
             {this.state.loading_icon ? <p><Spinner size="15px"/></p> : null}
@@ -78,7 +78,10 @@ class FeaturedImage extends Component
 
             {image_url ? <span className="text-danger" onClick={this.removeImage}>- Remove Featured Image</span> : <span onClick={this.showMedia}>+ Add Featured Image</span>}
 
-            <Media open={this.state.media_opened} onClose={this.closeMedia} onResult={this.getFiles} accept={['image/jpeg', 'image/png']}/>
+            {
+                !media_opened ? null :
+                <Media onClose={this.closeMedia} onResult={this.getFiles} accept={['image/jpeg', 'image/png']}/>
+            }
         </div>
     }
 }

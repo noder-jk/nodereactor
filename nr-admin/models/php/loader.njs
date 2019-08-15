@@ -12,7 +12,7 @@ global.include=function(path)
 		}
 		catch(e)
 		{
-
+			console.log(e);
 		}
 	}
 

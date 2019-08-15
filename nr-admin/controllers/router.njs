@@ -28,15 +28,15 @@ const is_it_file_request=($, f_next)=>
 		/* Serve static files from nr-content folder */
 		p=nr_contents+$.nr_pathname.slice('/nr-content/'.length);
 	}
-	else if($.nr_pathname.indexOf('/nr-react/')===0)
-	{
-		/* Serve react static build files */
-		p=normalize_path(nr_project_root+'/build/'+$.nr_pathname.slice('/nr-react/'.length));
-	}
-	else
+	else if($.nr_pathname.indexOf('/nr-includes/')===0)
 	{
 		/* Or refer to core NodeReactor directory */
 		p=normalize_path(nr_package_root+$.nr_pathname);
+	}
+	else
+	{
+		/* Serve react static build files */
+		p=normalize_path(nr_project_root+'/build/'+$.nr_pathname);
 	}
 	
 	p=!p ? '' : normalize_path(p);
@@ -282,7 +282,7 @@ module.exports.run=($)=>
 		get_user_sessions, 
 		nr_get_user, 
 		include_nodes, 
-		nodes_init, 
+		init, 
 		[send_if_file, true], 
 		load_static, 
 		socket_event,

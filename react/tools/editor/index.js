@@ -279,6 +279,10 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this$state = this.state,
+          media_open = _this$state.media_open,
+          loading = _this$state.loading,
+          editor_id = _this$state.editor_id;
       var _this$props = this.props,
           _this$props$defaultVa = _this$props.defaultValue,
           defaultValue = _this$props$defaultVa === void 0 ? '' : _this$props$defaultVa,
@@ -287,12 +291,11 @@ function (_Component) {
       return _react["default"].createElement("div", null, addMedia ? _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm mb-1",
         onClick: this.openMedia
-      }, "Add Media") : null, addMedia ? _react["default"].createElement(_react2.Media, {
-        open: this.state.media_open,
+      }, "Add Media") : null, addMedia && media_open ? _react["default"].createElement(_react2.Media, {
         onClose: this.mediaClose,
         onResult: this.getResult,
         multiple: true
-      }) : null, this.state.loading ? _react["default"].createElement("span", {
+      }) : null, loading ? _react["default"].createElement("span", {
         style: {
           'display': 'inline-block',
           'float': 'right'
@@ -300,7 +303,7 @@ function (_Component) {
       }, _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       })) : null, _react["default"].createElement("textarea", {
-        id: this.state.editor_id,
+        id: editor_id,
         className: "form-control",
         defaultValue: defaultValue
       }));

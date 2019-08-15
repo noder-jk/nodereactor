@@ -74,9 +74,9 @@ global.set_utility_configs=function(cb, post)
 											if(Number.isInteger(nm) && nm>5 && max_db_connection!==nm)
 											{
 												max_db_connection=nm;
-												nr_pool.end(function(err)
+												nr_db_pool.end(function(err)
 												{
-													nr_pool=get_pool();
+													nr_db_pool=get_pool();
 												});
 											}
 											break;
@@ -98,7 +98,7 @@ global.set_utility_configs=function(cb, post)
 		var tbl=nr_db_config.tb_prefix+'nodes';
 		var q='SELECT * FROM '+tbl+' WHERE id=1';
 		
-		nr_pool.query(q, function(e,r)
+		nr_db_pool.query(q, function(e,r)
 		{
 			try
 			{

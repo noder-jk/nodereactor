@@ -68,7 +68,7 @@ module.exports.upload=function($)
         var without_ext = f.join('.');
 
         var millisecond = new Date().getTime();
-        var randomize=millisecond+'_'+node_modules.randomstring.generate({length: 6,charset: 'alphabetic'});
+        var randomize=millisecond+'_'+Math.random().toString(36).substr(2);
         
         var new_path    = file_dir+without_ext+'_'+randomize+'.'+ext;
         var fname       = without_ext;

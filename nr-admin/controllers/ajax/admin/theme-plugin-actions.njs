@@ -1,6 +1,6 @@
 function insert_theme_plugin($, nr_package, call_back)
 {
-	nr_pool.query
+	nr_db_pool.query
 	(
 		'INSERT INTO '+nr_db_config.tb_prefix+'nodes (nr_package,type,active) VALUES ("'+nr_package+'","'+$.node_type+'",1)',
 		function(e,r)
@@ -25,7 +25,7 @@ function deactivate_other_node($, node_package)
 	
 	if(q)
 	{
-		nr_pool.query
+		nr_db_pool.query
 		(
 			q,
 			function(e,r)
@@ -42,7 +42,7 @@ function deactivate_other_node($, node_package)
 
 function check_if_node_exist_in_db($, nr_package,call_back)
 {
-	nr_pool.query
+	nr_db_pool.query
 	(
 		'SELECT * FROM '+nr_db_config.tb_prefix+'nodes WHERE type="'+$.node_type+'" AND nr_package="'+nr_package+'"',
 		function(e,r)
@@ -54,7 +54,7 @@ function check_if_node_exist_in_db($, nr_package,call_back)
 
 function activate_existing($, nr_package,call_back)
 {
-	nr_pool.query
+	nr_db_pool.query
 	(
 		'UPDATE '+nr_db_config.tb_prefix+'nodes SET active=1 WHERE type="'+$.node_type+'" AND nr_package="'+nr_package+'"',
 		function(e,r)
@@ -71,16 +71,25 @@ function activation_deactivation_hook($, activation, nr_package)
 
 	try
 	{
-		var hook_file=require(nr_package+'/'+'index.njs');
+		var p=nr_plugins[nr_package] || nr_themes[nr_package];
 
-		typeof hook_file[event]=='function' ? hook_file[event]($) : 0;
+		if(p && p.dir)
+		{
+			var hook_file=require(normalize_path(p.dir+'/index.njs'));
+
+			typeof hook_file[event]=='function' ? hook_file[event]($) : 0;
+		}
 	}
 	catch(e)
 	{
-
+		console.error(e)
 	}
 	
-	!activation ? uninclude(nr_package) : null;
+	if(!activation)
+	{
+		delete nrg[nr_package];
+		uninclude(nr_package);
+	}
 }
 
 module.exports.run=function($)

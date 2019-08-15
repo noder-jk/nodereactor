@@ -187,7 +187,6 @@ module.exports.deploy_vendor_scripts=function()
     var mods=
     [
         'jsdom',
-        'html-entities',
         'express',
         'http',
         'socket.io',
@@ -203,7 +202,6 @@ module.exports.deploy_vendor_scripts=function()
         'formidable',
         'html-to-text',
         'gravatar',
-        'randomstring',
         'filesize',
         'deepcopy',
         'mime-types',
@@ -217,9 +215,6 @@ module.exports.deploy_vendor_scripts=function()
             case 'jsdom'        :   const jsdom 		  = require('jsdom');
                                     const { JSDOM } 	  = jsdom;
                                     node_modules['jsdom'] = JSDOM;
-                                    break;
-
-            case 'html-entities':   node_modules['html-entities']= new require('html-entities').XmlEntities();
                                     break;
 
             default             :   node_modules[element]=require(element);

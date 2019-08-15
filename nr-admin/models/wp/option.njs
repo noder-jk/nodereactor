@@ -15,6 +15,11 @@ const get_node_type=function(nr_package)
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~get option and set option~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+module.exports.update_option=function(option, nr_package)
+{
+	this.add_option(option, nr_package);
+}
+
 module.exports.add_option=function(option, nr_package)
 {
 	/* to_set parameter is json, key value paired data. */
@@ -44,48 +49,44 @@ module.exports.get_option=function(key, nr_package)
 {
 	if(nr_package===0)
 	{
-		return this.nr_set_option_queue.core.c[key]==undefined ? false : this.nr_set_option_queue.core.c[key];
+		return this.nr_set_option_queue.core.c[key];
 	}
 	
 	var type=get_node_type(nr_package);
 	
 	if(type!==false && this.nr_set_option_queue[type] && this.nr_set_option_queue[type][nr_package])
 	{
-		return this.nr_set_option_queue[type][nr_package][key]==undefined ? false : this.nr_set_option_queue[type][nr_package][key];
+		return this.nr_set_option_queue[type][nr_package][key];
 	}
-
-	return false;
 }
 
-global.delete_option=function($, key, nr_package)
+module.exports.delete_option=function(key, nr_package)
 {
 	if(nr_package===0)
 	{
-		if($.nr_set_option_queue.core.c[key])
+		if(this.nr_set_option_queue.core.c[key])
 		{
-			delete $.nr_set_option_queue.core.c[key];
+			delete this.nr_set_option_queue.core.c[key];
 		}
 	}
 	else
 	{
 		var type=get_node_type(nr_package);
 		
-		if(type!==false && $.nr_set_option_queue[type] && $.nr_set_option_queue[type][nr_package])
+		if(type!==false && this.nr_set_option_queue[type] && this.nr_set_option_queue[type][nr_package])
 		{
-			if($.nr_set_option_queue[type][nr_package][key])
+			if(this.nr_set_option_queue[type][nr_package][key])
 			{
-				delete $.nr_set_option_queue[type][nr_package][key];
+				delete this.nr_set_option_queue[type][nr_package][key];
 			}
 		}
 	}
-	
-	return $;
 }
 
 global.real_set_option=function($, resp_next)
 {
 	// for core functions. Not for developers.
-	if($.nr_call_real_set_option!==true)
+	if($.nr_call_real_set_option!==true && typeof resp_next=='function')
 	{
 		resp_next($);
 		return;
@@ -100,7 +101,7 @@ global.real_set_option=function($, resp_next)
 		for(var k in $.nr_set_option_queue[type])
 		{
 			/* Convert to json and escape options */
-			var options=nr_pool.escape(JSON.stringify($.nr_set_option_queue[type][k]));
+			var options=nr_db_pool.escape(JSON.stringify($.nr_set_option_queue[type][k]));
 			
 			var q='UPDATE '+nr_db_config.tb_prefix+'nodes SET options='+options+' WHERE type="'+type+'" AND nr_package="'+k+'"';
 			
@@ -109,7 +110,7 @@ global.real_set_option=function($, resp_next)
 			([
 				($, q, next)=>
 				{
-					nr_pool.query(q, function(e)
+					nr_db_pool.query(q, function(e)
 					{
 						next($);
 					});
@@ -119,9 +120,9 @@ global.real_set_option=function($, resp_next)
 		}
 	}
 
-	op_funcs.push(resp_next);
+	typeof resp_next=='function' ? op_funcs.push(resp_next) : 0;
 
-	$.series_fire( op_funcs);
+	$.series_fire(op_funcs);
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Other necessary functions.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

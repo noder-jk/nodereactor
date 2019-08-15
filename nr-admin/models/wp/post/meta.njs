@@ -67,12 +67,12 @@ global.get_post_meta=function($, post_id, meta_k, meta_v, next)
 {
 	post_id			= get_array(post_id);
 
-	var meta_key 	= meta_k 	? " AND meta_key="+nr_pool.escape(meta_k) : '';
-	var meta_value	= meta_v	? " AND meta_value="+nr_pool.escape(meta_v) : "";
+	var meta_key 	= meta_k 	? " AND meta_key="+nr_db_pool.escape(meta_k) : '';
+	var meta_value	= meta_v	? " AND meta_value="+nr_db_pool.escape(meta_v) : "";
 	
 	var q="SELECT * FROM "+nr_db_config.tb_prefix+"postmeta WHERE owner_post_id IN ("+post_id.join(',')+")" + meta_key + meta_value;
 	
-	nr_pool.query(q, function(e,r)
+	nr_db_pool.query(q, function(e,r)
 	{
 		e ? r=[] : null;
 		
@@ -87,11 +87,11 @@ global.update_post_meta=function($, post_id, meta_ob, next)
 	/* delete existing */
 	var del_first=($, next)=>
 	{
-		var meta_key=Object.keys(meta_ob).map(key=>nr_pool.escape(key)).join(',');
+		var meta_key=Object.keys(meta_ob).map(key=>nr_db_pool.escape(key)).join(',');
 
 		var q='DELETE FROM '+meta+' WHERE owner_post_id='+post_id+' AND meta_key IN ('+meta_key+')';
 
-		nr_pool.query(q, function()
+		nr_db_pool.query(q, function()
 		{
 			next($);
 		});
@@ -101,11 +101,11 @@ global.update_post_meta=function($, post_id, meta_ob, next)
 	{
 		var insert=Object.keys(meta_ob).map(key=>
 		{
-			var k=nr_pool.escape(key);
+			var k=nr_db_pool.escape(key);
 			var v=meta_ob[key];
 
 			typeof v=='object' ? v=JSON.stringify(v) : null;
-			v=nr_pool.escape(v.toString());
+			v=nr_db_pool.escape(v.toString());
 
 			return '('+post_id+', '+k+', '+v+')';
 		});
@@ -113,7 +113,7 @@ global.update_post_meta=function($, post_id, meta_ob, next)
 
 		var q='INSERT INTO '+meta+' (owner_post_id, meta_key, meta_value) VALUES '+insert.join(',');
 
-		nr_pool.query(q, function(e,r)
+		nr_db_pool.query(q, function(e,r)
 		{
 			next($);
 		});
@@ -131,7 +131,7 @@ global.delete_post_meta=function($, post_id, meta_key, next)
 
 	var q='DELETE FROM '+nr_db_config.tb_prefix+'postmeta WHERE owner_post_id IN ('+post_ids.join(',')+') '+and_clause;
 	
-	nr_pool.query(q, function(e, r)
+	nr_db_pool.query(q, function(e, r)
 	{
 		typeof next=='function' ? next($) : 0;
 	});

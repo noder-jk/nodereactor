@@ -192,7 +192,7 @@ module.exports.get_post_list=function($)
 					var trm=nr_db_config.tb_prefix+'terms';
 					var q='SELECT '+rel+'.owner_post_id, '+trm+'.name, '+trm+'.taxonomy FROM '+rel+' LEFT JOIN '+trm+' ON '+rel+'.owner_term_id='+trm+'.term_id WHERE '+rel+'.owner_post_id IN ('+post_ids.join(',')+')';
 
-					nr_pool.query(q, function(e, r)
+					nr_db_pool.query(q, function(e, r)
 					{
 						(e || !Array.isArray(r)) ? r=[] : 0;
 

@@ -13,7 +13,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 var MediaPage = function MediaPage() {
   return _react["default"].createElement(_react2.Media, {
-    open: true,
     adminCall: true,
     multiple: true
   });

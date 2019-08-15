@@ -1,3 +1,14 @@
+/* Start end request processing */
+global.init=function($,callback)
+{
+	$.do_action('init',callback);
+}
+
+global.terminate=function($, callback)
+{
+	$.do_action('terminate', callback);
+}
+
 /* --------------post hooks-------------- */
 global.use_meta_boxes=function($, callback)
 {
@@ -19,7 +30,6 @@ global.save_post=function($,callback)
 	$.do_action('save_post',callback);
 }
 
-
 global.register_custom_templates=function($,callback)
 {
 	$.do_action('register_custom_templates',callback);
@@ -34,11 +44,6 @@ global.admin_menu=function($,callback)
 global.widgets_init=function($,callback)
 {
 	$.do_action('widgets_init',callback);
-}
-
-global.nodes_init=function($,callback)
-{
-	$.do_action('nodes_init',callback);
 }
 
 global.save_post=function($,callback)

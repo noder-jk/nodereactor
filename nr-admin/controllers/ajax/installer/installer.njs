@@ -40,6 +40,7 @@ const install_nr=function($, nr_fields, nr_data)
 				db_host		: nr_data.db_host,
 				db_user		: nr_data.db_username,
 				db_pass		: nr_data.db_password,
+				db_engine	: nr_data.db_engine,
 				tb_prefix	: nr_data.tb_prefix
 			}
 					
@@ -58,7 +59,7 @@ const install_nr=function($, nr_fields, nr_data)
 				uninclude(nr_admin+'plugin/ajax/installer/', true);
 				
 				/* So, everything okay. Now load new pool. */
-				nr_pool=get_pool();
+				nr_db_pool=get_pool();
 
 				exit($, {'status':'done'});
 			});

@@ -50,7 +50,7 @@ global.include_post_media=function($, content, call_back)
 
 	/* Fetch posts by attachment id */
 	var q='SELECT post_id, post_title, real_path FROM '+nr_db_config.tb_prefix+'posts WHERE post_id IN ('+attachments.join(',')+') AND post_type="attachment"';
-	nr_pool.query(q,function(e,r)
+	nr_db_pool.query(q,function(e,r)
 	{
 		/* Loop through all fetched attachment post and match id */
 		for(var n=0; n<r.length; n++)
@@ -115,7 +115,7 @@ module.exports.delete_attachment=function(post_ids, next)
 	
 	var $=this;
 
-	nr_pool.query(q, function(e, r)
+	nr_db_pool.query(q, function(e, r)
 	{
 		/* firstly delete files from file system. */
 		if(!e && r.length>0)

@@ -181,7 +181,7 @@ function (_Component) {
         style: {
           'width': '100%'
         }
-      }), _react["default"].createElement("small", null, "Created by JK, Inspired by WordPress.")), _react["default"].createElement("div", {
+      }), _react["default"].createElement("small", null, "Inspired by WordPress.")), _react["default"].createElement("div", {
         className: "text-center"
       }, this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"

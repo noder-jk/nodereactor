@@ -211,17 +211,19 @@ class Editor extends Component
 
     render()
     {
-        const {defaultValue='', addMedia=true}=this.props;
+        let {media_open, loading, editor_id}=this.state;
+
+        let {defaultValue='', addMedia=true}=this.props;
 
         return(
             <div>
                 {addMedia ? <button className="btn btn-secondary btn-sm mb-1" onClick={this.openMedia}>Add Media</button> : null}
                 
-                {addMedia ? <Media open={this.state.media_open} onClose={this.mediaClose} onResult={this.getResult} multiple={true}/> : null}
+                {(addMedia && media_open) ? <Media onClose={this.mediaClose} onResult={this.getResult} multiple={true}/> : null}
                 
-                {this.state.loading ? <span style={{'display':'inline-block', 'float':'right'}}><Spinner size="15px"/></span> : null}
+                {loading ? <span style={{'display':'inline-block', 'float':'right'}}><Spinner size="15px"/></span> : null}
                 
-                <textarea id={this.state.editor_id} className="form-control" defaultValue={defaultValue}></textarea>
+                <textarea id={editor_id} className="form-control" defaultValue={defaultValue}></textarea>
             </div>
         )
     }

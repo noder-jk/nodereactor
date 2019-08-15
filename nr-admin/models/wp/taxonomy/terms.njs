@@ -46,28 +46,28 @@ module.exports.delete_term=function(term_ids, next)
 		{
 			var q='DELETE FROM '+nr_db_config.tb_prefix+'termmeta WHERE owner_term_id IN ('+term_ids+')';
 
-			nr_pool.query(q, e=>{next($)});
+			nr_db_pool.query(q, e=>{next($)});
 		}
 
 		var delete_rel=($, next)=>
 		{
 			var q='DELETE FROM '+nr_db_config.tb_prefix+'term_relationships WHERE owner_term_id IN ('+term_ids+')';
 
-			nr_pool.query(q, e=>{next($)});
+			nr_db_pool.query(q, e=>{next($)});
 		}
 
 		var set_parent=($, next)=>
 		{
 			var q='UPDATE '+nr_db_config.tb_prefix+'terms SET parent=0 WHERE parent IN ('+term_ids+')';
 
-			nr_pool.query(q, e=>{next($)});
+			nr_db_pool.query(q, e=>{next($)});
 		}
 
 		var delete_term=($, next)=>
 		{
 			var q='DELETE FROM '+nr_db_config.tb_prefix+'terms WHERE term_id IN ('+term_ids+')';
 
-			nr_pool.query(q, e=>{next($)});
+			nr_db_pool.query(q, e=>{next($)});
 		}
 
 		$.series_fire([delete_meta, delete_rel, set_parent, delete_term, next]);
@@ -94,7 +94,7 @@ module.exports.set_post_terms=function(post_id, term_id, taxonomy, append, next)
     {
 		/* Delete those term relationships that are not currently selected in editor but exist in relation */
 		var q='DELETE FROM '+rel+' WHERE '+common;
-        nr_pool.query(q, function(e,r)
+        nr_db_pool.query(q, function(e,r)
         {
             next($);
         });
@@ -104,7 +104,7 @@ module.exports.set_post_terms=function(post_id, term_id, taxonomy, append, next)
     {
 		/* Fetch those terms that are selected in editor and already exist in relationship */
         var q='SELECT owner_term_id FROM '+rel+' WHERE '+common_ex;
-        nr_pool.query(q, (e,r)=>
+        nr_db_pool.query(q, (e,r)=>
         {
             if(!e)
             {
@@ -128,7 +128,7 @@ module.exports.set_post_terms=function(post_id, term_id, taxonomy, append, next)
 
 			var q='INSERT INTO '+rel+' (owner_post_id, owner_term_id) VALUES '+v.join(',');
 			
-			nr_pool.query(q, function(e)
+			nr_db_pool.query(q, function(e)
 			{
 				next($);
 			});
@@ -166,7 +166,7 @@ module.exports.insert_term=function(term, taxonomy, args, next)
 
 		var q='SELECT term_id FROM '+term_tbl+' WHERE '+t_id+' parent='+parent+' AND taxonomy="'+taxonomy+'" AND slug="'+slug+'"';
 
-		nr_pool.query(q, function(e,r)
+		nr_db_pool.query(q, function(e,r)
 		{
 			slug_exist=(!e && r.length>0);
 			next($);
@@ -183,7 +183,7 @@ module.exports.insert_term=function(term, taxonomy, args, next)
 
 		var q='INSERT INTO '+term_tbl+' (name, slug , description, parent, taxonomy) values ("'+term+'", "'+slug+'", "'+description+'", "'+parent+'", "'+taxonomy+'")';
 
-		nr_pool.query(q, (e,r)=>
+		nr_db_pool.query(q, (e,r)=>
 		{
 			next($, !e);
 		});
@@ -199,7 +199,7 @@ module.exports.insert_term=function(term, taxonomy, args, next)
 
 		var q='UPDATE '+term_tbl+' SET name="'+term+'", slug="'+slug+'", description="'+description+'", parent="'+parent+'" WHERE term_id='+term_id;
 		
-		nr_pool.query(q, (e,r)=>
+		nr_db_pool.query(q, (e,r)=>
 		{
 			next($, !e);
 		});
@@ -315,7 +315,7 @@ module.exports.get_term_meta=function(term_id, meta_k, meta_v, next)
 	
 	var $=this;
 	
-	nr_pool.query(q, function(e,r)
+	nr_db_pool.query(q, function(e,r)
 	{
 		e ? r=[] : null;
 		
@@ -382,7 +382,7 @@ module.exports.get_terms=function(nr_condition, get_p_n)
 		sql = sql + where_word + clause_parent.join(' AND ') + orderby + order;
 		
 		
-		nr_pool.query(sql,function(e,result)
+		nr_db_pool.query(sql,function(e,result)
 		{
 			if(e)
 			{

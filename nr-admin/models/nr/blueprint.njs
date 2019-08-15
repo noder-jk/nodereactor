@@ -236,12 +236,9 @@ mods.forEach(element =>
 {
     var m=require(normalize_path(nr_models+element));
 
-    for(k in m)
+    for(var k in m)
     {
-        if(typeof m[k]=='function')
-        {
-            nr_funcs[k]=m[k];
-        }
+        typeof m[k]=='function' ? nr_funcs[k]=m[k] : 0;
     }
 });
 
@@ -275,6 +272,7 @@ module.exports.get_nr_blueprint=function(request, response)
 								'QUERY_STRING'		: decodeURIComponent(request.originalUrl),
                                 'REQUEST_HEADERS'	: request.headers,
                                 'HTTP_USER_AGENT'   : request.headers['user-agent'],
+                                'REMOTE_ADDR'       : request.connection.remoteAddress,
 								'CURRENT_URL'		: request.protocol + '://' + request.get('host') + decodeURIComponent(request.originalUrl),
 							  };
 								

@@ -68,55 +68,53 @@ class Media extends Component
 
         let insert_disable=this.state.selected_files.length>0 ? false : true;
 
-        let {accept=[], open=false}=this.props;
+        let {accept=[]}=this.props;
         
-        return(open==true ? 
-            <div className="nr-media-uploader-explorer">	
-				<div className={cls}>	
-					<div className="media-modal-content">	
-						<div className="media-frame mode-select wp-core-ui" id="__wp-uploader-id-0">	
-							<div className="media-frame-title">	
-								<h1>File Manager</h1>
-							</div>
-							<div className="media-frame-router">	
-								<div className="media-router">	
-									<a href="#" className={"media-menu-item"+(this.state.active_tab=='uploader' ? ' active' : '')} onClick={(e)=>this.navigate(e, 'uploader')}>
-										Upload Files
-									</a>
-									<a href="#" data-current_offset="1" className={"media-menu-item"+(this.state.active_tab=='explorer' ? ' active' : '')} onClick={(e)=>this.navigate(e, 'explorer')}>
-										Media Library
-									</a>
-								</div>
-							</div>
-							<div className="media-frame-content" data-columns="6">	
-                                {
-                                    this.state.active_tab=='explorer' ? <Browser onSelectChange={this.getSelected} multiple={multiple} accept={accept}/> : <Uploader/>
-                                }	
-							</div>
+        return <div className="nr-media-uploader-explorer">	
+            <div className={cls}>	
+                <div className="media-modal-content">	
+                    <div className="media-frame mode-select wp-core-ui" id="__wp-uploader-id-0">	
+                        <div className="media-frame-title">	
+                            <h1>File Manager</h1>
+                        </div>
+                        <div className="media-frame-router">	
+                            <div className="media-router">	
+                                <a href="#" className={"media-menu-item"+(this.state.active_tab=='uploader' ? ' active' : '')} onClick={(e)=>this.navigate(e, 'uploader')}>
+                                    Upload Files
+                                </a>
+                                <a href="#" data-current_offset="1" className={"media-menu-item"+(this.state.active_tab=='explorer' ? ' active' : '')} onClick={(e)=>this.navigate(e, 'explorer')}>
+                                    Media Library
+                                </a>
+                            </div>
+                        </div>
+                        <div className="media-frame-content" data-columns="6">	
                             {
-                                adminCall ? null : 
-                                <div className="media-frame-toolbar">	
-                                    <div className="media-toolbar">	
-                                        <div className="media-toolbar-secondary">	
-                                            <div className="media-selection">
-                                                
-                                            </div>
-                                        </div>
-                                        <div className="media-toolbar-primary search-form mr-3">	
-                                            <button className="btn btn-outline-secondary btn-sm mr-1 mt-3" onClick={this.closeThisMedia}>{cancelText}</button>
-                                            <button className="btn btn-outline-secondary btn-sm mt-3" disabled={insert_disable} onClick={this.insertEvent}>{insertText}</button>
+                                this.state.active_tab=='explorer' ? <Browser onSelectChange={this.getSelected} multiple={multiple} accept={accept}/> : <Uploader/>
+                            }	
+                        </div>
+                        {
+                            adminCall ? null : 
+                            <div className="media-frame-toolbar">	
+                                <div className="media-toolbar">	
+                                    <div className="media-toolbar-secondary">	
+                                        <div className="media-selection">
+                                            
                                         </div>
                                     </div>
+                                    <div className="media-toolbar-primary search-form mr-3">	
+                                        <button className="btn btn-outline-secondary btn-sm mr-1 mt-3" onClick={this.closeThisMedia}>{cancelText}</button>
+                                        <button className="btn btn-outline-secondary btn-sm mt-3" disabled={insert_disable} onClick={this.insertEvent}>{insertText}</button>
+                                    </div>
                                 </div>
-                            }
-						</div>
-					</div>
-				</div>
-				<div className="media-modal-backdrop">
-					
-				</div>
-			</div> : null
-        )
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div className="media-modal-backdrop">
+                
+            </div>
+        </div>
     }
 }
 

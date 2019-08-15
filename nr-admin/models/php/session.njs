@@ -9,7 +9,7 @@ global.get_user_sessions=function($, call_backk)
 		/* If session code exist, retrieve sessions. */
 		var q='SELECT * FROM '+nr_db_config.tb_prefix+'sessions WHERE id='+$._COOKIE[nr_session_cookie_name];
 
-		nr_pool.query(q, function(e,r)
+		nr_db_pool.query(q, function(e,r)
 		{
 			if(e)
 			{
@@ -91,9 +91,9 @@ global.real_set_session=function($, call_back)
 		/* This block means already this user has a session cookie in browser and database. So just updated in database. */
 		var user_id = is_user_logged_in($) ? ', user_id='+get_current_user_id($) : '';
 		
-		var q='UPDATE '+nr_db_config.tb_prefix+'sessions SET json_values='+nr_pool.escape(jsn)+user_id+' WHERE id='+$._COOKIE[nr_session_cookie_name];
+		var q='UPDATE '+nr_db_config.tb_prefix+'sessions SET json_values='+nr_db_pool.escape(jsn)+user_id+' WHERE id='+$._COOKIE[nr_session_cookie_name];
 
-		nr_pool.query(q, function(e)
+		nr_db_pool.query(q, function(e)
 		{
 			call_back($);
 		});
@@ -102,13 +102,13 @@ global.real_set_session=function($, call_back)
 	{
 		/* This block means no session found in browser but now it has some new session to store, so create a new session and pass session cookie. */
 
-		var p=node_modules.randomstring.generate();
+		var p=Math.random().toString(36).substr(2);
 
 		password_hash($, p, ($, hash)=>
 		{
-			var q='INSERT INTO '+nr_db_config.tb_prefix+'sessions (json_values,user_id,password) VALUES ('+nr_pool.escape(jsn)+', '+(get_current_user_id($)==false ? 'NULL' : get_current_user_id($))+',\''+hash+'\')';
+			var q='INSERT INTO '+nr_db_config.tb_prefix+'sessions (json_values,user_id,password) VALUES ('+nr_db_pool.escape(jsn)+', '+(get_current_user_id($)==false ? 'NULL' : get_current_user_id($))+',\''+hash+'\')';
 			
-			nr_pool.query(q, function(e,r)
+			nr_db_pool.query(q, function(e,r)
 			{
 				if(!e)
 				{
@@ -143,7 +143,7 @@ global.session_destroy=function($, call_back)
 	{
 		var q='DELETE FROM '+nr_db_config.tb_prefix+'sessions WHERE '+q.join(' OR ');
 		
-		nr_pool.query(q,function()
+		nr_db_pool.query(q,function()
 		{
 			call_back ? call_back($) : 0;
 		});

@@ -116,12 +116,9 @@ function (_Component) {
       }
 
       var insert_disable = this.state.selected_files.length > 0 ? false : true;
-      var _this$props3 = this.props,
-          _this$props3$accept = _this$props3.accept,
-          accept = _this$props3$accept === void 0 ? [] : _this$props3$accept,
-          _this$props3$open = _this$props3.open,
-          open = _this$props3$open === void 0 ? false : _this$props3$open;
-      return open == true ? _react["default"].createElement("div", {
+      var _this$props$accept = this.props.accept,
+          accept = _this$props$accept === void 0 ? [] : _this$props$accept;
+      return _react["default"].createElement("div", {
         className: "nr-media-uploader-explorer"
       }, _react["default"].createElement("div", {
         className: cls
@@ -175,7 +172,7 @@ function (_Component) {
         onClick: this.insertEvent
       }, insertText))))))), _react["default"].createElement("div", {
         className: "media-modal-backdrop"
-      })) : null;
+      }));
     }
   }]);
 
