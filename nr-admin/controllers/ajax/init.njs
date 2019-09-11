@@ -2,13 +2,13 @@ module.exports.dispatch=function($)
 {
     var usr={};
 
-    var user=nr_get_current_user($) || {};
+    var user=$.get_current_user() || {};
 
     usr.display_name=user.display_name;
 
     usr.gravatar=get_avatar_url(user.user_email, {s: '32', r: 'g', d: 'mm'});
 
-	var z=$.get_option( 'time_zone', 0);
+	var z=$.get_option( 'time_zone', true);
     var zz=z || 'UTC';
 
     var resp=
@@ -34,13 +34,16 @@ module.exports.dispatch=function($)
 
         if(pth.indexOf('/nr-admin')===0)
         {
-            resp.nr_configs.component= is_user_logged_in($) ? 'InitAdmin' : 'LoginRegistration';
+            resp.nr_configs.component= $.is_user_logged_in() ? 'InitAdmin' : 'LoginRegistration';
         }
         else
         {
             resp.nr_configs.component='InitFrontend';
         }
     }
-    
-    exit($, resp);
+
+    $.do_action('init_response', resp, function($, resp, bummer)
+    {
+        $.exit(resp);
+    });
 }

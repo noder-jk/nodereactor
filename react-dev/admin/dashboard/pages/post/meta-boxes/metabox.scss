@@ -1,7 +1,12 @@
-#featured_image_container
+#nr_featured_image_container
 {
     span
     {
         cursor: pointer;
     }
+}
+
+#nr_taxonomy_metabox
+{
+    .label-pointer{cursor: pointer;}
 }

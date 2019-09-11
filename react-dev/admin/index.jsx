@@ -14,13 +14,11 @@ class InitAdmin extends Component
 
     render()
     {
-        return(
-            <div>
+        return <div>
                 <AdminBar/>
                 <Navigation/>
                 <DashboardContainer/>
             </div>
-        )
     }
 }
 

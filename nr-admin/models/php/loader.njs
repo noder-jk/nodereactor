@@ -12,11 +12,9 @@ global.include=function(path)
 		}
 		catch(e)
 		{
-			console.log(e);
+			
 		}
 	}
-
-	return false;
 }
 
 global.uninclude=function(path, del_by_dir)

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import Spinner from "react-svg-spinner";
 
-import {ajaxRequest} from 'nodereactor/react';
+import {ajax_request} from 'nodereactor/react';
 
 class Placeholder extends Component
 {
@@ -13,31 +13,36 @@ class Placeholder extends Component
 
         let ldr=<Spinner size="15px"/>
         
-        this.state={content: spinnerCenter ? <div style={{'textAlign':'center'}}>{ldr}</div> : ldr}
+        this.state=
+        {
+            content: spinnerCenter ? <div style={{'textAlign':'center'}}>{ldr}</div> : ldr
+        }
     }
     
     componentDidMount()
     {
-        let {Data={},Component}=this.props;
+        let {
+                action, 
+                data={}, 
+                component, 
+                properties={}
+            }=this.props;
+            
+        let Comp=component;
 
-        var params=Object.assign({},this.props);
-        delete params.Data;
-        delete params.Component;
-
-        let action=Data.action;
-        delete Data.action;
-
-        ajaxRequest(action, Data, (r, d, e)=>
+        ajax_request(action, data, (r, d, e)=>
         {
-            let ob= e ? {content:<span className="text-danger">Request Error.</span>} : {content:<Component Response={d || {}} ResponseData={r} {...params}/>};
-
-            this.setState(ob);
+            let content= <Comp response={r} responseData={d} error={e} properties={properties}/>
+                            
+            this.setState({content});
         });
     }
 
     componentDidCatch()
     {
-        this.setState({content:<span className="text-danger">Component Crashed.</span>})
+        let {action}=this.props;
+
+        this.setState({content:<span className="text-danger">Placeholder Crashed. Action: {action}</span>});
     }
 
     render()

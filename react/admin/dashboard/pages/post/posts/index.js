@@ -21,7 +21,9 @@ require("./style.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -150,14 +152,14 @@ function (_Component) {
           loading_icon: true
         });
 
-        (0, _react2.ajaxRequest)('nr_delete_posts', {
+        (0, _react2.ajax_request)('nr_delete_posts', {
           'post_id': checked_posts
         }, function (r) {
           _this2.setState({
             'loading_icon': false
           });
 
-          r.status == 'done' ? _this2.fetchPosts() : _sweetalert["default"].fire('Error', 'Something went wrong.', 'error');
+          r.status == 'success' ? _this2.fetchPosts() : _sweetalert["default"].fire('Error', 'Something went wrong.', 'error');
         });
       });
     }
@@ -172,7 +174,8 @@ function (_Component) {
       if (page_num) {
         /* This block will be called when user click pagination buttons */
         e.preventDefault();
-        var el = this.page_number;
+        console.log(this.list_container);
+        var el = this.list_container.getElementsByClassName('nr_pagination_page_number')[0];
         el.value = page_num;
         form.page = page_num;
       }
@@ -180,7 +183,7 @@ function (_Component) {
       this.setState({
         loading_icon: true
       });
-      (0, _react2.ajaxRequest)('nr_get_post_list', {
+      (0, _react2.ajax_request)('nr_get_post_list', {
         'query': JSON.stringify(form)
       }, function (r, d, e) {
         if (e) {
@@ -208,6 +211,8 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this4 = this;
+
       var _this$state = this.state,
           taxonomies = _this$state.taxonomies,
           posts = _this$state.posts,
@@ -215,7 +220,10 @@ function (_Component) {
           pagination = _this$state.pagination;
       posts = (0, _react2.get_hierarchy)(posts, 'post_parent', 'post_id');
       return _react["default"].createElement("div", {
-        id: "post_list_container"
+        id: "post_list_container",
+        ref: function ref(el) {
+          return _this4.list_container = el;
+        }
       }, _react["default"].createElement("h4", null, "All Posts ", loading_icon ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       }) : null), _react["default"].createElement(_action.Action, {
@@ -233,7 +241,7 @@ function (_Component) {
       }, _react["default"].createElement(_react2.Pagination, {
         pgn: pagination,
         activeClass: "btn btn-outline-secondary btn-sm ml-1 mr-1",
-        clickEvent: this.fetchPosts,
+        onClick: this.fetchPosts,
         inactiveClass: "btn btn-secondary btn-sm ml-1 mr-1"
       })));
     }

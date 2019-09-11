@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import Spinner from "react-svg-spinner";
 
-import {ajaxRequest ,Media} from 'nodereactor/react';
+import {ajax_request ,Media} from 'nodereactor/react';
 
 class FeaturedImage extends Component
 {
@@ -57,7 +57,7 @@ class FeaturedImage extends Component
         
         this.setState({loading_icon:true});
 
-        ajaxRequest('nr_get_featured_image', {'post_id':image_post_id}, (r, d, e)=>
+        ajax_request('nr_get_featured_image', {'post_id':image_post_id}, (r, d, e)=>
         {
             let {url=false}=r;
 
@@ -69,7 +69,7 @@ class FeaturedImage extends Component
     {
         let {image_url, media_opened}=this.state;
 
-        return <div id="featured_image_container">
+        return <div id="nr_featured_image_container">
             {this.state.loading_icon ? <p><Spinner size="15px"/></p> : null}
 
             <input type="hidden" name="featured_image" value={this.state.image_post_id}/>

@@ -3,7 +3,32 @@ global.normalize_path=function(p)
 	return node_modules.path.normalize(p);
 }
 
-module.exports.deploy_src=function(data_ob)
+const csv_to_array=function(csv)
+{
+
+	var lines=csv.split("\n");
+  
+	var result = [];
+  
+	var headers=lines[0].split(",");
+  
+	for(var i=1;i<lines.length;i++)
+	{
+		var obj = {};
+		var currentline=lines[i].split(",");
+  
+		for(var j=0;j<headers.length;j++)
+		{
+			obj[headers[j]] = currentline[j];
+		}
+  
+		result.push(obj);
+	}
+  
+	return result;
+}
+
+module.exports.deploy_src=function()
 {
     /* 
         Some sync methods is used in this function. 
@@ -13,8 +38,8 @@ module.exports.deploy_src=function(data_ob)
     
     var fs=node_modules.fs;
 
-    var root=data_ob.nr_project_root+'/';
-    var src=data_ob.nr_project_root+'/src/';
+    var root=nr_project_root+'/';
+    var src=nr_project_root+'/src/';
 
     /* Deploy nr-content package, if already not done. */
     var nr_content=root+'nr-content';
@@ -29,7 +54,7 @@ module.exports.deploy_src=function(data_ob)
 		{
 			console.error('');
 			console.error('-> Fatal Error. nr-content folder could not deployed.');
-			console.log('\x1b[41m', '-> NodeReactor has been terminated.', '\x1b[0m');
+			console.log('\x1b[7m', '-> NodeReactor has been terminated.', '\x1b[0m');
             console.error('');
             
 			process.exit(1);
@@ -54,10 +79,10 @@ module.exports.deploy_src=function(data_ob)
 
         for(var k in node_package)
         {
-            var comp=k+'/react';
+            var comp=node_package[k].dir.replace(/\\/g, '/')+'/react';
             var comp_file=normalize_path(node_package[k].dir+'/react/index.js');
             
-            var as='Pkg'+fl_up(k.replace(/\-/g, '_'));
+            var as='PKG_'+k.replace(/\-/g, '_');
 
             if(fs.existsSync(comp_file))
             {
@@ -73,30 +98,62 @@ module.exports.deploy_src=function(data_ob)
     }
 
     /* Generate json of vendor modules */
-    var mods={};
-    mods.plugins=get_vendor_comps(nr_plugins);
-    mods.themes=get_vendor_comps(nr_themes);
-    mods_str=JSON.stringify(mods);
-    mods_str=mods_str.replace(/\"\*/g,'').replace(/\*\"/g,'');
-    mods_str='const vendor_components='+mods_str;
+    var mods    = {};
+    mods.plugins= get_vendor_comps(nr_plugins);
+    mods.themes = get_vendor_comps(nr_themes);
+    mods_str    = JSON.stringify(mods);
+    mods_str    = mods_str.replace(/\"\*/g,'').replace(/\*\"/g,'');
+    mods_str    = 'window.nr_vendor_comps='+mods_str;
 
     /* Now add generated script into app file */
-    var react_app_source=nr_package_root+'/react-scripts/NodeReactorApp.jsx';
-    var react_app_dest=src+'/NodeReactorApp.jsx';
+    var react_app_source= nr_package_root+'/react-scripts/NodeReactorApp.jsx';
+    var react_app_dest  = src+'/NodeReactorApp.jsx';
 
-    /* No problem in sync mode, cause it's only first time when node run. */
+    // Modify react script to enable outside import
+    var s_path  = normalize_path(nr_project_root+'/node_modules/react-dev-utils/ModuleScopePlugin.js');
+    var r_script= file_get_contents_sync(s_path);
+    var rem_str = "return relative.startsWith('../') || relative.startsWith('..\\\\\');";
+    if(r_script)
+    {
+        var identifier='/* modified_by_node_reactor */';
+
+        if(r_script.indexOf(rem_str)>-1)
+        {
+            r_script=r_script.replace(rem_str, "return true;"+identifier);
+            fs.writeFile(s_path, r_script, er=>er ? console.log('Fatal Error. Could not enable react outsider import. Write File Error.') : 0);
+        }
+        else if(r_script.indexOf(identifier)==-1)
+        {
+            console.log('Fatal Error. It seems, React Outsider import enabler could not be implemented properly. It will lead to build error.');
+        }
+    }
+    else
+    {
+        console.log('Fatal Error. Could not enable react outsider importer. Code not found.');
+    }
+
+    /* Deploy importer scripts */
     var existing_str=file_get_contents_sync(react_app_source);
-    
-    existing_str=existing_str.split('//do_not_delete_or_modify_this_comment');
+    if(existing_str)
+    {
+        existing_str=existing_str.split('//do_not_delete_or_modify_this_comment');
+        var final_str=existing_str[0]+vendor_import+'\n'+mods_str+'\n'+existing_str[1];
 
-    var final_str=existing_str[0]+vendor_import+'\n'+mods_str+'\n'+existing_str[1];
-    
+        // Add package imports
+        fs.writeFile(react_app_dest, final_str, (err)=>{err ? console.log('Fatal Error. Could not copy app file to src.') : 0});
+    }
+    else
+    {
+        console.log('Fatal Error. React app scripts returns null.')
+    }
 
-    fs.writeFile(react_app_dest, final_str, (err)=>{err ? console.log('Fatal Error. Could not copy app file to src.') : 0});
-    
     /* Copy react index and app test. */
-    fs.copyFile(nr_package_root+'/react-scripts/index.jsx', src+'/index.jsx', (err) => {err ? console.log('Fatal Error. Could not copy react index file.') : 0;});
-    fs.copyFile(nr_package_root+'/react-scripts/NodeReactorApp.test.jsx', src+'/NodeReactorApp.test.jsx', (err) => {err ? console.log('Fatal Error. Could not copy Node Reactor core App file to react src.') : 0;});
+    fs.copyFile(nr_package_root+'/react-scripts/index.jsx', src+'/index.jsx', function(err){err ? console.log('Fatal Error. Could not copy react index file.') : 0;});
+    fs.copyFile(nr_package_root+'/react-scripts/index.jsx', src+'/index.js', function(err){err ? console.log('Fatal Error. Could not copy react index file.') : 0;});
+    fs.copyFile(nr_package_root+'/react-scripts/NodeReactorApp.test.jsx', src+'/NodeReactorApp.test.jsx', function(err){err ? console.log('Fatal Error. Could not copy Node Reactor core App file to react src.') : 0;});
+
+    // Create build directory
+    fs.mkdir(nr_project_root+'/build', {recursive:true}, function(err){err ? console.log('Could not create build folder') : 0;}); 
 }
 
 module.exports.deploy_db=function()
@@ -118,7 +175,8 @@ module.exports.deploy_db=function()
             {
                 console.log('');
                 console.log('-> Database configs found but could not connect. Maybe configs are incorrect or database is not running.');
-                console.log('\x1b[41m', '-> NR has nothing to do and getting terminated.', '\x1b[0m');
+                console.log('-> Or delete config file and launch Node Reactor again to get installation interface.');
+                console.log('\x1b[7m', '-> NR has nothing to do and getting terminated.', '\x1b[0m');
                 console.log('');
 
                 process.exit(1);
@@ -136,7 +194,7 @@ module.exports.deploy_db=function()
 		console.log('');
 		console.log('-> Database configs not found.');
 		console.log('-> It means NodeReactor is not installed yet.');
-		console.log('\x1b[46m', '-> Visit your specified url to get installation page.', '\x1b[0m');
+		console.log('-> Visit your specified url to get installation page.');
         console.log('');
 	}
 }
@@ -259,6 +317,7 @@ module.exports.handle_route=function($)
     
     if(nr_db_config && refresh_utility_config==true)
     {
+        // Refresh utility configs if it is changed from dashboard.
         set_utility_configs(function()
         {
             refresh_utility_config=false;

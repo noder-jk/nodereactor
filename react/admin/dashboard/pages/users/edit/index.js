@@ -13,7 +13,9 @@ var _react2 = require("nodereactor/react");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -72,11 +74,9 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ProcessUser).call(this, props));
     var ob = {};
-
-    if (_this.props.ResponseData.user) {
-      ob = _this.props.ResponseData.user;
-    }
-
+    var _this$props$response = _this.props.response,
+        response = _this$props$response === void 0 ? {} : _this$props$response;
+    response.user ? ob = response.user : 0;
     _this.state = {
       user_id: ob.user_id || 0,
       display_name: ob.display_name,
@@ -118,7 +118,7 @@ function (_Component) {
       var values = this.state;
       delete values.submitable;
       delete values.user_username;
-      (0, _react2.ajaxRequest)('nr_update_user', {
+      (0, _react2.ajax_request)('nr_update_user', {
         values: values
       }, function (r) {
         var _r$message = r.message,
@@ -216,11 +216,11 @@ var EditUser = function EditUser(props) {
   }
 
   return _react["default"].createElement(_react2.Placeholder, {
-    Data: {
-      'action': 'nr_get_edit_user',
+    action: "nr_get_edit_user",
+    data: {
       'user_id': user_id
     },
-    Component: ProcessUser
+    component: ProcessUser
   });
 };
 

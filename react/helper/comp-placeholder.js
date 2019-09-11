@@ -13,11 +13,11 @@ var _react2 = require("nodereactor/react");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -69,36 +69,34 @@ function (_Component) {
       var _this2 = this;
 
       var _this$props = this.props,
-          _this$props$Data = _this$props.Data,
-          Data = _this$props$Data === void 0 ? {} : _this$props$Data,
-          Component = _this$props.Component;
-      var params = Object.assign({}, this.props);
-      delete params.Data;
-      delete params.Component;
-      var action = Data.action;
-      delete Data.action;
-      (0, _react2.ajaxRequest)(action, Data, function (r, d, e) {
-        var ob = e ? {
-          content: _react["default"].createElement("span", {
-            className: "text-danger"
-          }, "Request Error.")
-        } : {
-          content: _react["default"].createElement(Component, _extends({
-            Response: d || {},
-            ResponseData: r
-          }, params))
-        };
+          action = _this$props.action,
+          _this$props$data = _this$props.data,
+          data = _this$props$data === void 0 ? {} : _this$props$data,
+          component = _this$props.component,
+          _this$props$propertie = _this$props.properties,
+          properties = _this$props$propertie === void 0 ? {} : _this$props$propertie;
+      var Comp = component;
+      (0, _react2.ajax_request)(action, data, function (r, d, e) {
+        var content = _react["default"].createElement(Comp, {
+          response: r,
+          responseData: d,
+          error: e,
+          properties: properties
+        });
 
-        _this2.setState(ob);
+        _this2.setState({
+          content: content
+        });
       });
     }
   }, {
     key: "componentDidCatch",
     value: function componentDidCatch() {
+      var action = this.props.action;
       this.setState({
         content: _react["default"].createElement("span", {
           className: "text-danger"
-        }, "Component Crashed.")
+        }, "Placeholder Crashed. Action: ", action)
       });
     }
   }, {

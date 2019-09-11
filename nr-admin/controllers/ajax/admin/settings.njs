@@ -1,10 +1,26 @@
-module.exports.get=function($)
+module.exports.get=function($, next)
 {
-    var resp={}
+    // get environment configs
+    var resp=require(node_modules.path.resolve(__dirname, '../../../../nr-utilities/configs.njs'));
+    
+    // Store desired data
+    for(var k in $.nr_set_option_queue.core.c)
+    {
+        $._POST.fields.indexOf(k)>-1 ? resp[k]=$.nr_set_option_queue.core.c[k] : 0;
+    }
 
+    // Add time zone value
+    resp.time_zone = $.get_option('time_zone', true) || 'UTC';
+
+    $.echo(resp);	
+
+    next($);			
+}
+
+module.exports.gen=function($, next)
+{
+    /* Get time zone */
     var t_zones=[];
-
-    /* Sort by zone name */
     nr_timezones.map(item=>
     {
         return item.name;
@@ -16,36 +32,32 @@ module.exports.get=function($)
         })
     });
 
-    resp.time_zones=t_zones;
+    $.echo
+    ({
+        'time_zones':t_zones.map(t=>{return{value:t.zone, title:t.name}})
+    });
 
-    resp.values={}
-    
-    for(var k in $.nr_set_option_queue.core.c)
-    {
-        resp.values[k]=$.nr_set_option_queue.core.c[k];
-    }
-
-    resp.values.time_zone       = $.get_option('time_zone',0)==false ? 'UTC' : $.get_option('time_zone',0);
-
-    $.echo(resp);	
-
-    exit($);				
+    next($);
 }
 
-module.exports.save=function($)
+module.exports.save=function($, next)
 {
-    set_utility_configs(false, $._POST);
+    var v=$._POST.values;
 
-    $.add_option($._POST, 0);
-    $.echo({'status':'done'});
+    set_utility_configs(false, v);
+
+    $.add_option(v, true);
     
-    exit($);
+    $.echo({'status':'success'});
+    
+    next($);
 }
 
-module.exports.permalink_page=function($)
+module.exports.permalink_page=function($, next)
 {
     var send_perm=($, next)=>
     {
+        // Configurations
         var resp=
         {
             'post_types'        :   $.registered_post_types,
@@ -53,8 +65,59 @@ module.exports.permalink_page=function($)
             'used_taxonomies'   :   $.registered_taxonomies_to_post
         }
 
-        exit($, resp);
+        // get already set values
+        var p_types=Object.keys(resp.post_types).map(pt=>pt);
+        var permalink=p_types.map(p=>p+'_post_permalink');
+        var taxonomy=p_types.map(p=>p+'_post_taxonomy');
+        var fields=['term_permalink'].concat(permalink, taxonomy);
+        var v={};
+        fields.forEach(f=>v[f]=$.get_option(f, true));
+
+        $.echo({configs:resp, values:v});
+        
+        next($);
     }
 
-    $.series_fire( [register_post_types, register_taxonomies, use_taxonomies, send_perm]);
+    $.series_fire( [register_post_types, register_taxonomies, use_taxonomies, send_perm, next]);
+}
+
+module.exports.basic_get=function($, next)
+{
+    var fields      = $._POST.fields;
+    var package_name= $._POST.package_name;
+
+    !Array.isArray(fields) ? fields=[] : 0;
+
+    var ob={};
+
+    fields.forEach(f=>
+    {
+        ob[f]=$.get_option(f, package_name);
+    });
+
+    $.echo(ob);
+
+    next($);
+}
+
+module.exports.basic_save=function($, next)
+{
+    var values      = $._POST.values;
+    var fields      = $._POST.fields;
+    var package_name= $._POST.package_name;
+
+    (typeof values!=='object' || Array.isArray(values)) ? values={} : 0;
+    !Array.isArray(fields) ? fields=[] : 0;
+
+    var ob={};
+
+    for(var k in values)
+    {
+        fields.indexOf(k)>-1 ? ob[k]=values[k] : 0;
+    }
+
+    $.update_option(ob, package_name);
+
+    $.echo({status:'success', message:'Saved'});
+    next($);
 }

@@ -15,7 +15,9 @@ var _react2 = require("nodereactor/react");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -138,6 +140,48 @@ function (_Component) {
                                 ');
           break;
 
+        case 'l_up':
+          var m_child = child.slice(0, child.lastIndexOf('[')); // remove ["children"]
+
+          var ind = m_child.slice(m_child.lastIndexOf('[')).replace('[', '').replace(']', ''); // pick the index
+
+          m_child = m_child.slice(0, m_child.lastIndexOf('[')); // remove index like [3]
+
+          if (ind == '') {
+            return;
+          }
+
+          window.eval('\
+                                    window.nr_temp=window.nr_items' + child + '.splice(' + index + ', 1)[0];\
+                                    window.nr_items' + m_child + '.splice(' + ind + ', 0, window.nr_temp);\
+                                    window.nr_ind=' + ind + ';\
+                                ');
+          child = m_child;
+          break;
+
+        case 'l_down':
+          window.nr_rettt = false;
+          window.eval('\
+                                    if(window.nr_items' + child + '[' + (index + 1) + '])\
+                                    {\
+                                        window.nr_temp=window.nr_items' + child + '.splice(' + index + ', 1)[0];\
+                                        if(!Array.isArray(window.nr_items' + child + '[' + index + '].children))\
+                                        {\
+                                            window.nr_items' + child + '[' + index + '].children=[];\
+                                        }\
+                                        window.nr_items' + child + '[' + index + '].children.splice(0, 0, window.nr_temp);\
+                                        window.nr_ind=0;\
+                                    }\
+                                    else{window.nr_rettt=true;}\
+                                ');
+
+          if (window.nr_rettt == true) {
+            return;
+          }
+
+          child += '[' + index + ']["children"]';
+          break;
+
         case 'delete':
           window.eval('\
                                     window.nr_items' + child + '.splice(' + index + ',1);\
@@ -149,11 +193,7 @@ function (_Component) {
       var ob = {
         'items': window.nr_items
       };
-
-      if (window.nr_ind === false) {} else {
-        ob.active_index = child + '[' + window.nr_ind + ']';
-      }
-
+      !(window.nr_ind === false) ? ob.active_index = child + '[' + window.nr_ind + ']' : 0;
       this.setState(ob);
     }
   }, {
@@ -202,7 +242,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _react2.ajaxRequest)('nr_save_menu', {
+      (0, _react2.ajax_request)('nr_save_menu', {
         'menus': standalone_menu
       }, function (r, d, e) {
         if (e) {
@@ -271,13 +311,14 @@ function (_Component) {
         '38': 'pull_up',
         '40': 'pull_down',
         '46': 'delete',
-        'parent': 'pull_up_level'
+        '37': 'l_up',
+        '39': 'l_down'
       };
       var cd = e.keyCode;
       cd = cd.toString();
 
-      if (key_action[cd]) {
-        this.processOrder(key_action[e.shiftKey && cd == '38' ? 'parent' : cd]);
+      if (e.ctrlKey && key_action[cd]) {
+        this.processOrder(key_action[cd]);
         e.preventDefault();
       }
     }
@@ -371,7 +412,7 @@ function (_Component) {
             'show_keyboard_shortcut': !_this4.state.show_keyboard_shortcut
           });
         }
-      }, this.state.show_keyboard_shortcut ? 'Hide' : 'Show', " Keyboard Shortcut")), this.state.show_keyboard_shortcut ? _react["default"].createElement("ul", null, _react["default"].createElement("li", null, "Up Arrow: Move selected menu one step up"), _react["default"].createElement("li", null, "Down Arrow: Move selected menu one step down"), _react["default"].createElement("li", null, "Delete Key: Remove selected menu")) : null), _react["default"].createElement("br", null), _react["default"].createElement("div", null, _react["default"].createElement("b", null, "Associate To Locations"), _react["default"].createElement("hr", null), Object.keys(locations).length == 0 ? _react["default"].createElement("span", null, "No Locations Registered") : Object.keys(locations).map(function (item) {
+      }, this.state.show_keyboard_shortcut ? 'Hide' : 'Show', " Keyboard Shortcut")), !this.state.show_keyboard_shortcut ? null : _react["default"].createElement("div", null, "Firstly select specific menu, then", _react["default"].createElement("ul", null, _react["default"].createElement("li", null, _react["default"].createElement("kbd", null, "Ctrl + \u2191"), " Move up"), _react["default"].createElement("li", null, _react["default"].createElement("kbd", null, "Ctrl + \u2193"), " Move down"), _react["default"].createElement("li", null, _react["default"].createElement("kbd", null, "Ctrl + \u2192"), " Append to next one."), _react["default"].createElement("li", null, _react["default"].createElement("kbd", null, "Ctrl + \u2190"), " Level up."), _react["default"].createElement("li", null, _react["default"].createElement("kbd", null, "Delete"), " Remove")))), _react["default"].createElement("br", null), _react["default"].createElement("div", null, _react["default"].createElement("b", null, "Associate To Locations"), _react["default"].createElement("hr", null), Object.keys(locations).length == 0 ? _react["default"].createElement("span", null, "No Locations Registered") : Object.keys(locations).map(function (item) {
         return _react["default"].createElement("p", {
           key: item
         }, _react["default"].createElement("input", {

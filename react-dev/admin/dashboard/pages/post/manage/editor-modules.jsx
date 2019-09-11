@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Spinner from 'react-svg-spinner';
 import Swal from 'sweetalert2';
 
-import {ajaxRequest} from 'nodereactor/react';
+import {ajax_request} from 'nodereactor/react';
 
 import {FindComp} from 'nodereactor/react/helper/comp-finder';
 
@@ -38,7 +38,7 @@ class Title extends Component
         let {sendSlug}=this.props;
 
         this.setState({'loading_icon':true});
-        ajaxRequest('nr_slug_check', {post_name}, (r, d, e)=>
+        ajax_request('nr_slug_check', {post_name}, (r, d, e)=>
         {
             let ob={slug_edit_mode:false, loading_icon:false}
             if(e)

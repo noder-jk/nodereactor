@@ -1,30 +1,32 @@
 module.exports.save=function($)
 {
-    var values=$._POST.values || {};
+    var args=$._POST.values || {};
 
-    var name        = values.name;
-    var taxonomy    = values.taxonomy;
+    var feat=args.featured_image;
+    delete args.featured_image;
 
-    var args        =
+    // Check required fields
+    if(!args.name || /\S+/.test(args.name)==false)
     {
-        description : values.description,
-        parent      : values.parent,
-        term_id     : values.term_id,
-        slug        : values.slug
+        $.exit( {'status':'error', 'message':'Name is required.'});
+        return;
     }
-
-    for(var k in args)
+    
+    $.insert_term(args, function($, t_id, e)
     {
-        if(k!=='description' && (args[k]==undefined || /\S+/.test(args[k])==false))
+        if(t_id)
         {
-            exit($, {'status':'error', 'message':'Required Fields Empty'});
+            var fet_ob=feat ? {'featured_image':feat} : {};
+            
+            $.update_term_meta(t_id, fet_ob, function($)
+            {
+                $.exit( {'status':'success'});
+            });
+            
             return;
         }
-    }
-
-    $.insert_term(name, taxonomy, args, function($, done, next)
-    {
-        exit($, {'status':(done ? 'done' : 'error'), 'message':'Check if the slug exist in same level already.'});
+        
+        $.exit( {'status':'error', 'message':'Check if the slug exist in same level already.'});
     });
 }
 
@@ -50,29 +52,52 @@ module.exports.get_taxonomy=function($)
                 return;
             }
             
-            exit($);
+            $.exit();
         });
     }
 
     /* Now fetch all taxonomies and terms from database */
     var fetch_taxs=($, next)=>
     {
+        // generate query string
         var terms=nr_db_config.tb_prefix+'terms';
         var rel=nr_db_config.tb_prefix+'term_relationships';
-
-        var q='SELECT DISTINCT '+terms+'.*, (SELECT COUNT(rel_id) FROM '+rel+' WHERE owner_term_id='+terms+'.term_id) As post_count FROM '+terms+' LEFT JOIN '+rel+' ON '+terms+'.term_id='+rel+'.owner_term_id WHERE '+terms+'.taxonomy="'+taxonomy+'"';
+        var q='SELECT DISTINCT  '+terms+'.*, \
+                    (SELECT COUNT(rel_id) FROM '+rel+' WHERE owner_term_id='+terms+'.term_id) As post_count \
+                    FROM '+terms+' LEFT JOIN '+rel+' \
+                    ON '+terms+'.term_id='+rel+'.owner_term_id \
+                    WHERE '+terms+'.taxonomy="'+taxonomy+'"';
         
+        // run query in database
         nr_db_pool.query(q, function(e, r)
         {
-            (!e && r.length>0) ? resp.taxonomies=r : null;
+            // Collect term id
+            var ids=r.map(t=>t.term_id);
 
-            next($);
+            // get featured image of every single terms
+            $.get_the_term_thumbnail_url(ids, function($, urls)
+            {
+                // Assign featured image url in terms based on their ID
+                for(var k in urls)
+                {
+                    r.forEach(function(t, i)
+                    {
+                        t.term_id==k ? r[i].featured_image=urls[k] : 0;
+                    });
+                }
+
+                resp.taxonomies=r;
+
+                $.echo(resp);
+                
+                next($);
+            });
         });
     }
     
     var final_resp=($)=>
     {
-        exit($, resp);
+        $.exit( resp);
     }
 
     $.series_fire( [ret_taxonomy, fetch_taxs, final_resp]);
@@ -84,12 +109,12 @@ module.exports.delete=function($)
     {
         $.delete_term($._POST.term_ids, function($, next)
         {
-            exit($, {'status':'done'});
+            $.exit( {'status':'success'});
         });
     }
     else
     {
-        exit($);
+        $.exit();
     }
 }
 
@@ -117,7 +142,7 @@ module.exports.get_for_editor=function($)
             next($);
             return;
         }
-        exit($);
+        $.exit();
     }
 
     var get_all=($, next)=>
@@ -142,8 +167,8 @@ module.exports.get_for_editor=function($)
 
     var resp=($, next)=>
     {
-        exit($, 
-        {
+        $.exit
+        ({
             'all_terms':all_terms, 
             'current_terms':current_terms, 
             'hierarchical':hierarchical,
@@ -162,7 +187,7 @@ module.exports.save_from_editor=function($)
 
     $.set_post_terms(post_id, term_ids, taxonomy, false, function($)
     {
-        exit($);
+        $.exit();
     });
 }
 
@@ -179,6 +204,6 @@ module.exports.t_for_nav=function($)
             tts[t.taxonomy].push(t);
         });
 
-        exit($, {'objects':tts});
+        $.exit( {'objects':tts});
     });
 }

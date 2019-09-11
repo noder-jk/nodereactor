@@ -12,7 +12,7 @@ module.exports.get=function($)
             resp.widget_in_sidebar=$.nr_widget_linked_to_sidebar;
 
             $.echo(resp);
-            exit($);
+            $.exit();
         }
     );
 }
@@ -28,5 +28,5 @@ module.exports.save=function($)
         $.add_option({'area_widget_linking':w}, $.nr_active_theme);
     }
     
-    exit($);
+    $.exit();
 }

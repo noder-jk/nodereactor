@@ -91,7 +91,7 @@ module.exports.navs=function($)
 
         /* Finally send the menus to the react as json */
         $.echo({'nr_admin_navs':$.nr_admin_menus_runtime});
-        exit($);
+        $.exit();
     }
     
     $.series_fire( [admin_menu, register_post_types, register_taxonomies, use_taxonomies, init_nav_render]);

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import Spinner from "react-svg-spinner";
 
-import {ajaxRequest , get_hierarchy} from 'nodereactor/react';
+import {ajax_request , get_hierarchy} from 'nodereactor/react';
 
 class PostHierarchy extends Component
 {
@@ -23,7 +23,7 @@ class PostHierarchy extends Component
 
         this.setState({'loading':true});
         
-        ajaxRequest('nr_get_hierarchy', {post_type, post_id}, (r, d, e)=>
+        ajax_request('nr_get_hierarchy', {post_type, post_id}, (r, d, e)=>
         {
             let psts=(r.posts && r.posts.length>0) ? r.posts : [];
             
@@ -40,10 +40,8 @@ class PostHierarchy extends Component
         let {loading, posts}=this.state;
         let {post_parent=0}=this.props;
         
-        return  <div>
-
-            {loading ? <Spinner size="15px"/> : null}
-
+        return loading ? <Spinner size="15px"/> : 
+        <div>
             {
                 <select className="form-control" name="nr_post_parent" defaultValue={post_parent}>
                     <option value="0">None</option>

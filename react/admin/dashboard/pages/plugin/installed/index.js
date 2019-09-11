@@ -15,7 +15,9 @@ require("./style.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -46,7 +48,7 @@ function (_Component) {
     _classCallCheck(this, ProcessPlugins);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ProcessPlugins).call(this, props));
-    var plugins = _this.props.ResponseData;
+    var plugins = _this.props.response;
     var ob = {};
 
     for (var k in plugins) {
@@ -54,7 +56,8 @@ function (_Component) {
     }
 
     _this.state = {
-      'plugins': ob
+      'plugins': ob,
+      'loading': false
     };
     _this.activateDeactivate = _this.activateDeactivate.bind(_assertThisInitialized(_this));
     return _this;
@@ -71,25 +74,25 @@ function (_Component) {
         to_do: t_do,
         node_package: pkg
       };
-      (0, _react2.ajaxRequest)('nr_theme_plugin_action', dt, function (r, d, e) {
+      this.setState({
+        loading: pkg
+      });
+      (0, _react2.ajax_request)('nr_theme_plugin_action', dt, function (r, d, e) {
+        var ob = {
+          loading: false
+        };
+
         if (e) {
           _sweetalert["default"].fire('Request Error');
-
-          return;
-        }
-
-        if (r.status !== 'done') {
+        } else if (r.status !== 'success') {
           _sweetalert["default"].fire('Action failed.');
-
-          return;
+        } else {
+          var pl = _this2.state.plugins;
+          pl[pkg].activated = dt.to_do == 'activate';
+          ob.plugins = pl;
         }
 
-        var pl = _this2.state.plugins;
-        pl[pkg].activated = dt.to_do == 'activate' ? true : false;
-
-        _this2.setState({
-          'plugins': pl
-        });
+        _this2.setState(ob);
       });
     }
   }, {
@@ -97,10 +100,10 @@ function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var plugins = this.props.ResponseData;
+      var plugins = this.props.response;
       return _react["default"].createElement("div", {
         id: "installed_plugins"
-      }, _react["default"].createElement("h3", null, "Installed Plugins"), _react["default"].createElement("table", {
+      }, _react["default"].createElement("h3", null, "Installed Plugins"), _react["default"].createElement("small", null, "Please reload page (for updated dashboard) after changing active statuses."), _react["default"].createElement("table", {
         className: "table table-bordered"
       }, _react["default"].createElement("thead", null, _react["default"].createElement("tr", null, _react["default"].createElement("th", null, "Name"), _react["default"].createElement("th", null, "Author"), _react["default"].createElement("th", null, "Description"), _react["default"].createElement("th", null, "Version"), _react["default"].createElement("th", null, "License"))), _react["default"].createElement("tbody", null, Object.keys(plugins).map(function (k) {
         var ind_p = _this3.state.plugins[k] || {};
@@ -114,7 +117,7 @@ function (_Component) {
           key: k,
           className: ind_p.activated ? 'activated_plugin' : 'deactivated_plugin'
         }, _react["default"].createElement("td", null, k, _react["default"].createElement("div", {
-          className: "mt-4"
+          className: "mt-2"
         }, _react["default"].createElement("a", {
           className: "activate_plugin text-success",
           onClick: function onClick(e) {
@@ -125,7 +128,9 @@ function (_Component) {
           onClick: function onClick(e) {
             return _this3.activateDeactivate(e, k, 'deactivate');
           }
-        }, "Deactivate"))), _react["default"].createElement("td", null, !url ? name : _react["default"].createElement("a", {
+        }, "Deactivate"), _react["default"].createElement(_react2.SpinIcon, {
+          show: _this3.state.loading == k
+        }))), _react["default"].createElement("td", null, !url ? name : _react["default"].createElement("a", {
           href: url,
           target: "_blank"
         }, name)), _react["default"].createElement("td", null, plugins[k].description), _react["default"].createElement("td", null, plugins[k].version), _react["default"].createElement("td", null, plugins[k].license));
@@ -138,10 +143,8 @@ function (_Component) {
 
 var InstalledPlugins = function InstalledPlugins() {
   return _react["default"].createElement(_react2.Placeholder, {
-    Data: {
-      'action': 'nr_get_plugins'
-    },
-    Component: ProcessPlugins
+    action: "nr_get_plugins",
+    component: ProcessPlugins
   });
 };
 

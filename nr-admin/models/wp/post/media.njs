@@ -6,24 +6,23 @@ module.exports.get_attachment_url=function(post_id, next)
 	{
 		var urls={};
 		
-		var r=r.map(item=>
+		// Loop through all attachment post and generate file url.
+		r.forEach(item=>
 		{
-			if(!Array.isArray(post_id))
-			{
-				urls=nr_uploads_url+item.real_path;
-			}
-			else
-			{
-				urls[item.post_id]=nr_uploads_url+item.real_path;
-			}
+			urls[item.post_id]=nr_uploads_url+item.real_path;
 		});
+
+		// pass only url if it is single argument
+		!Array.isArray(post_id) ? urls=urls[post_id] : 0;
 
 		next($, urls);
 	});
 }
 
-global.include_post_media=function($, content, call_back)
+module.exports.include_post_media=function(content, call_back)
 {
+	var $=this;
+
 	var content_copy=node_modules.deepcopy(content);
 	
 	var attachments	=[];
@@ -32,13 +31,10 @@ global.include_post_media=function($, content, call_back)
 	for(var i=0; i<content.length; i++)
 	{
 		content[i].post_content=nr_dom(content[i].post_content);
-		content[i].post_content('[data-attachment_id]').each
-		(
-			function()
-			{
-				attachments.push(content[i].post_content(this).attr('data-attachment_id'));
-			}
-		);
+		content[i].post_content('[data-attachment_id]').each(function()
+		{
+			attachments.push(content[i].post_content(this).attr('data-attachment_id'));
+		});
 	}
 	
 	/* Send copied content if no attachment retrieval is necessary */
@@ -86,23 +82,22 @@ global.include_post_media=function($, content, call_back)
 	});
 }
 
-global.exclude_post_media=function(content,post_type)
+module.exports.exclude_post_media=function(content, post_type)
 {
 	if(content.indexOf('data-attachment_id="')>-1 || content.indexOf('href="'+nr_home_url))
 	{
 		var d=nr_dom(content);
-		post_type=='attachment' ? d('[data-attachment_id]').remove() :
-		
-		d('[data-attachment_id]').each
-		(
-			function()
-			{
-				d(this).removeAttr('src').removeAttr('alt').removeAttr('title');
-			}
-		);
+
+		post_type=='attachment' ? 
+		d('[data-attachment_id]').remove() : // Otherwise media will be duplicated
+		d('[data-attachment_id]').each(function()
+		{
+			d(this).removeAttr('src').removeAttr('alt').removeAttr('title');
+		});
 		
 		return d('body').html();
 	}
+
 	return content;
 }
 

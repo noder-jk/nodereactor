@@ -11,70 +11,37 @@ module.exports.get=function($)
 
 		var resp=
 		{
-			'current_user_id':get_current_user_id($), 
+			'current_user_id':$.get_current_user_id(), 
 			'users':r
 		}
 
 		$.echo(resp);
 		
-		exit($);
+		$.exit();
 	});
 }
 
 module.exports.get_to_edit=function($)
 {
-	var user_id=$._POST.user_id===true ? get_current_user_id($) : $._POST.user_id;
+	var user_id=$._POST.user_id===true ? $.get_current_user_id() : $._POST.user_id;
 	
 	nr_db_pool.query
 	(
 		'SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_id='+user_id,
 		function(e,r)
 		{
-			var resp=(e || r.length==0) ? {'status':'failed', 'message':'User not found'} : {'status':'done', 'user':r[0]};
+			var resp=(e || r.length==0) ? {'status':'error', 'message':'User not found'} : {'status':'success', 'user':r[0]};
 			 
-			exit($, resp);
+			$.exit( resp);
 		}
 	);
 }
 
 module.exports.login=function($)
 {
-	var fields		= $._POST;
-	var email		= fields.user_username;
-	var pass		= fields.user_password;
-	var user_login	= fields.user_username;
-	
-	var q='SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_email='+nr_db_pool.escape(email)+' OR user_login='+nr_db_pool.escape(user_login)+' LIMIT 1';
-	
-	nr_db_pool.query(q, function(err, result)
+	nr_login($, $._POST, function($)
 	{
-		if(err)
-		{
-			exit($,{'status':'failed','message':'Database Error.'}); 
-			return; 
-		}
-
-		var resp={'status':'failed','message':'Invalid email or password.'};
-
-		if(result.length==0)
-		{
-			exit($, resp);
-			return;
-		}
-		
-		password_verify($, pass, result[0].user_pass, ($, valid)=>
-		{
-			if(valid==true)
-			{
-				$.nr_current_user=result[0];
-				$.set_session('user_id', result[0].user_id, nr_login_expiry);
-				$.set_session('user_login', result[0].user_login, nr_login_expiry);
-				
-				resp={'status':'done','go_to':'/nr-admin'};
-			}
-
-			exit($, resp);
-		});
+		$.exit();
 	});
 }
 
@@ -115,7 +82,7 @@ module.exports.register=function($)
 
     if(err_text)
     {
-        exit($,{'status':'Error','message':err_text});
+        $.exit({'status':'Error','message':err_text});
         return;
     }
 
@@ -125,7 +92,7 @@ module.exports.register=function($)
 	{
 		if(e)
 		{	
-			exit($,{'status':'Error','message':'Error in fetching from db'});
+			$.exit({'status':'Error','message':'Error in fetching from db'});
 			return;
 		}
 		
@@ -137,11 +104,11 @@ module.exports.register=function($)
 			
 			var resp=str.join(' and ')+' already exist';
 			
-			exit($,{'status':'Error','message':resp});
+			$.exit({'status':'Error','message':resp});
 			return;
 		}
 		
-		password_hash($, fields.user_password, ($, hash)=>
+		password_hash(fields.user_password, function(hash)
 		{
 			var values=	
 			{
@@ -167,7 +134,7 @@ module.exports.register=function($)
 				function(e,r)
 				{
 					var resp=e ? {'status':'Error','message':'Error in when insert/update user.'} : {'status':'Success','message':'Registered successfully','user_id':r.insertId}
-					exit($,resp);
+					$.exit(resp);
 				}
 			);
 		});
@@ -180,7 +147,7 @@ module.exports.update=function($)
 
 	var need_hash=fields.user_password || '';
 
-	password_hash($, need_hash, ($, hash)=>
+	password_hash(need_hash, function(hash)
 	{
 		var values=	
 		{
@@ -203,8 +170,8 @@ module.exports.update=function($)
 			'UPDATE '+nr_db_config.tb_prefix+'users SET '+set_val.join(', ')+' WHERE user_id="'+fields.user_id+'"',
 			function(e)
 			{
-				var resp = e ? {'status':'failed','message':'Could not update'} : {'status':'done','message':'Updated successfully'};
-				exit($, resp);
+				var resp = e ? {'status':'error','message':'Could not update'} : {'status':'success','message':'Updated successfully'};
+				$.exit( resp);
 			}
 		);
 	})	
@@ -216,7 +183,7 @@ module.exports.delete=function($)
 {
 	var terminate=($)=>
 	{
-		exit($);
+		$.exit();
 	}
 
 	nr_delete_user($, $._POST.user_ids, $._POST.user_action, false, terminate);

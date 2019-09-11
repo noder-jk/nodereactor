@@ -3,7 +3,7 @@ import Spinner from 'react-svg-spinner';
 
 import Swal from 'sweetalert2';
 
-import {ajaxRequest , array_pull_down, array_pull_up} from 'nodereactor/react';
+import {ajax_request , array_pull_down, array_pull_up} from 'nodereactor/react';
 
 class MenuEditor extends Component
 {
@@ -109,6 +109,43 @@ class MenuEditor extends Component
                                 ');
                                 break;
 
+            case 'l_up'     :   var m_child=child.slice(0, child.lastIndexOf('[')); // remove ["children"]
+                                var ind=m_child.slice(m_child.lastIndexOf('[')).replace('[', '').replace(']', ''); // pick the index
+                                m_child=m_child.slice(0, m_child.lastIndexOf('[')); // remove index like [3]
+                                
+                                if(ind==''){return;}
+
+                                window.eval
+                                ('\
+                                    window.nr_temp=window.nr_items'+child+'.splice('+index+', 1)[0];\
+                                    window.nr_items'+m_child+'.splice('+ind+', 0, window.nr_temp);\
+                                    window.nr_ind='+ind+';\
+                                ');
+                                child=m_child;
+                                break;
+                                
+            case 'l_down'   :   window.nr_rettt=false;
+                                window.eval
+                                ('\
+                                    if(window.nr_items'+child+'['+(index+1)+'])\
+                                    {\
+                                        window.nr_temp=window.nr_items'+child+'.splice('+index+', 1)[0];\
+                                        if(!Array.isArray(window.nr_items'+child+'['+index+'].children))\
+                                        {\
+                                            window.nr_items'+child+'['+index+'].children=[];\
+                                        }\
+                                        window.nr_items'+child+'['+index+'].children.splice(0, 0, window.nr_temp);\
+                                        window.nr_ind=0;\
+                                    }\
+                                    else{window.nr_rettt=true;}\
+                                ');
+
+                                if(window.nr_rettt==true){return;}
+
+                                child+='['+index+']["children"]';
+
+                                break;
+
             case 'delete'   :   window.eval
                                 ('\
                                     window.nr_items'+child+'.splice('+index+',1);\
@@ -119,10 +156,7 @@ class MenuEditor extends Component
         
         let ob={'items':window.nr_items};
 
-        if(window.nr_ind===false){}else
-        {
-            ob.active_index=child+'['+window.nr_ind+']';
-        }
+        (!(window.nr_ind===false)) ? ob.active_index=child+'['+window.nr_ind+']' : 0;
 
         this.setState(ob);
     }
@@ -160,7 +194,7 @@ class MenuEditor extends Component
 
         this.setState({'loading':true});
 
-        ajaxRequest('nr_save_menu', {'menus':standalone_menu}, (r, d, e)=>
+        ajax_request('nr_save_menu', {'menus':standalone_menu}, (r, d, e)=>
         {
             if(e)
             {
@@ -229,15 +263,16 @@ class MenuEditor extends Component
             '38'    :   'pull_up',
             '40'    :   'pull_down',
             '46'    :   'delete',
-            'parent':   'pull_up_level'
+            '37'    :   'l_up',
+            '39'    :   'l_down',
         }
 
         let cd=e.keyCode;
         cd=cd.toString();
 
-        if(key_action[cd])
+        if(e.ctrlKey && key_action[cd])
         {
-            this.processOrder(key_action[(e.shiftKey && cd=='38') ? 'parent' : cd]);
+            this.processOrder(key_action[cd]);
             
             e.preventDefault();
         }
@@ -276,7 +311,7 @@ class MenuEditor extends Component
                         'paddingRight':'5px',
                         'paddingBottom':'5px'
                     }
-
+                    
                     return typeof item=='object' ? 
                             <div key={item.key} className="recursive_menu_items" style={this.state.active_index==act_ind ? act_st : {}} onClick={(e)=>this.setIndex(e, act_ind)}>
                                 <div className="actions-container">
@@ -315,11 +350,17 @@ class MenuEditor extends Component
                         </div>
                         
                         {
-                            this.state.show_keyboard_shortcut ? <ul>
-                                <li>Up Arrow: Move selected menu one step up</li>
-                                <li>Down Arrow: Move selected menu one step down</li>
-                                <li>Delete Key: Remove selected menu</li>
-                            </ul> : null
+                            !this.state.show_keyboard_shortcut ? null :
+                            <div>
+                                Firstly select specific menu, then
+                                <ul>
+                                    <li><kbd>Ctrl + ↑</kbd> Move up</li>
+                                    <li><kbd>Ctrl + ↓</kbd> Move down</li>
+                                    <li><kbd>Ctrl + →</kbd> Append to next one.</li>
+                                    <li><kbd>Ctrl + ←</kbd> Level up.</li>
+                                    <li><kbd>Delete</kbd> Remove</li>
+                                </ul>
+                            </div>
                         }
                     </div>
                     <br/>

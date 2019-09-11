@@ -1,15 +1,9 @@
 global.trim=function  (s, c) 
 {
-  	if (c === "]") c = "\\]";
-		if (c === "\\") c = "\\\\";
+  	c === "]" ? c = "\\]" : 0;
+	c === "\\" ? c = "\\\\" : 0;
 
-		s=s.toString();
+	s=s ? s.toString() : '';
 
   	return s.replace(new RegExp("^[" + c + "]+|[" + c + "]+$", "g"), "");
 }
-
-global.is_numeric=function(obj) 
-{
-	var type = typeof obj;
-	return ( type === "number" || type === "string" ) && !isNaN( obj - parseFloat( obj ) );
-};

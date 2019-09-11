@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-import {nr_ajax_url} from 'nodereactor/react';
+import {ajax_url} from 'nodereactor/react';
 
-const ajaxRequest=(action, data, callback, u_progress)=>
+const ajax_request=(action, data, callback, u_progress)=>
 {
+    // Manage if data object is not provided
     if(typeof data!=='object')
     {
         u_progress=callback;
@@ -11,6 +12,7 @@ const ajaxRequest=(action, data, callback, u_progress)=>
         data={};
     }
 
+    // Create data object to send to server
     let form_data=data instanceof FormData;
 
     let ind=action.indexOf('?');
@@ -23,13 +25,16 @@ const ajaxRequest=(action, data, callback, u_progress)=>
     let req_ob=
     {
         method:'post',
-        url:nr_ajax_url+search,
+        url:ajax_url+search,
+        timeout:30000,
         data:data
     }
     
+    // Set headers and progress event handler
     form_data ? req_ob.headers={'Content-Type':'multipart/form-data'} : 0;
     u_progress ? req_ob.onUploadProgress=u_progress : 0;
 
+    // Finally start ajax
     axios(req_ob).then(r=>
     {
         typeof r!=='object' ? r={} : 0;
@@ -43,4 +48,4 @@ const ajaxRequest=(action, data, callback, u_progress)=>
     });
 }
 
-export {ajaxRequest}
+export {ajax_request}

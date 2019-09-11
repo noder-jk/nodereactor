@@ -16,7 +16,7 @@ const install_nr=function($, nr_fields, nr_data)
 		{
 			pool.end();
 
-			exit($, !e ? {'status':'done'} : {'status':'failed','message':'Could not Connect. Make sure configs are correct and database is running.'});
+			$.exit( !e ? {'status':'success'} : {'status':'error','message':'Could not Connect. Make sure configs are correct and database is running.'});
 			
 			return;
 		}
@@ -29,7 +29,7 @@ const install_nr=function($, nr_fields, nr_data)
 
 			if(e)
 			{
-				exit($, {'status':'error', 'message':'Database Import Error.'});
+				$.exit( {'status':'error', 'message':'Database Import Error.'});
 				return;
 			}
 
@@ -52,7 +52,7 @@ const install_nr=function($, nr_fields, nr_data)
 			{
 				if(e)
 				{
-					exit($, {'status':'failed','message':'Installed, But Error in creating config file.'});
+					$.exit( {'status':'error','message':'Installed, But Error in creating config file.'});
 					return;
 				}
 				
@@ -61,7 +61,7 @@ const install_nr=function($, nr_fields, nr_data)
 				/* So, everything okay. Now load new pool. */
 				nr_db_pool=get_pool();
 
-				exit($, {'status':'done'});
+				$.exit( {'status':'success'});
 			});
 		});
 	});
@@ -71,7 +71,7 @@ module.exports.run=function($)
 {
 	var nr_fields=$._POST;
 	
-	password_hash($, nr_fields.user_password, ($, hash)=>
+	password_hash(nr_fields.user_password, function(hash)
 	{
 		var nr_data			= {};
 		nr_data.db_name		= nr_fields.db_name;

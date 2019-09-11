@@ -7,8 +7,6 @@ global.nr_get_node_active=function($,call_back)
 	{
 		if(!err)
 		{
-			$.nr_call_real_set_option=true;
-
 			var active_nodes={'themes':[], 'plugins':[]};
 
 			for(var i=0; i<result.length; i++)

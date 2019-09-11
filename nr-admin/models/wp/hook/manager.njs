@@ -20,9 +20,12 @@ module.exports.remove_action=function(hook)
 module.exports.do_action=function(hook, params, callback)
 {
 	/* Determine callback and passable parameters */
-	var next=!callback ? params : callback;
-	var params=callback ? params : false;
-
+	if(!callback)
+	{
+		callback=params;
+		params=undefined;
+	}
+	
 	/* Check if the hook exist in registered array, and it has at least one function to invoke */
 	if(this.nr_hooks[hook] && this.nr_hooks[hook].length>0)
 	{
@@ -33,16 +36,16 @@ module.exports.do_action=function(hook, params, callback)
 		{
 			var fnc=this.nr_hooks[hook][i];
 
-			hks.push(params!==false ? [fnc, params] : fnc);
+			hks.push(params ? [fnc, params] : fnc);
 		}
 
-		hks.push(next);
+		hks.push(callback);
 		
 		/* Finally call all that in series mode */
 		this.series_fire(hks);
 	}
-	else if(typeof next=='function')
+	else if(typeof callback=='function')
 	{
-		next(this);
+		callback(this, params);
 	}
 }

@@ -1,8 +1,6 @@
 /* Retrieve user sessions by session code */
 global.get_user_sessions=function($, call_backk)
 {
-	$.nr_call_real_set_session=true;
-	
 	/* Now Retrieve and store all cookies of current access. */
 	if($._COOKIE[nr_session_cookie_name] && $._COOKIE[nr_session_cookie_pass])
 	{
@@ -19,7 +17,8 @@ global.get_user_sessions=function($, call_backk)
 			
 			var psd=(r[0] && r[0].password) ? r[0].password : '';
 
-			password_verify($, $._COOKIE[nr_session_cookie_pass], psd, ($, valid)=>
+			// verify if cookie password matches
+			password_verify($._COOKIE[nr_session_cookie_pass], psd, function(valid)
 			{
 				/* Verify session password (retrieved from cookie) */
 				if(r.length>0 && valid==true)
@@ -70,46 +69,57 @@ module.exports.set_session=function(key, value, expiry)
 /* now at the end of response, save sessions in database. */
 global.real_set_session=function($, call_back)
 {
-	if(!$.nr_call_real_set_session)
+	if(!nr_db_config)
 	{
 		call_back($);
 		return;
 	}
 	
-	
+	var session_response_queue={};
+
 	/* Keep only those session that still are in both of queue and variable */
-	for(var k in $.nr_session_queue)
+	for(var k in $._SESSION)
 	{
-		!$._SESSION[k] ? (delete $.nr_session_queue[k]) : 0;
+		$.nr_session_queue[k]!==undefined ? session_response_queue[k]=$.nr_session_queue[k] : 0;
 	}
 	
-	var jsn=JSON.stringify($.nr_session_queue);
+	var jsn=JSON.stringify(session_response_queue);
 	
 	
-	if($._COOKIE[nr_session_cookie_name])
+	if($._COOKIE[nr_session_cookie_name] && $._COOKIE[nr_session_cookie_pass])
 	{
 		/* This block means already this user has a session cookie in browser and database. So just updated in database. */
-		var user_id = is_user_logged_in($) ? ', user_id='+get_current_user_id($) : '';
+		var user_id = $.is_user_logged_in() ? ', user_id='+$.get_current_user_id() : '';
 		
 		var q='UPDATE '+nr_db_config.tb_prefix+'sessions SET json_values='+nr_db_pool.escape(jsn)+user_id+' WHERE id='+$._COOKIE[nr_session_cookie_name];
 
 		nr_db_pool.query(q, function(e)
 		{
+			if($._POST.pathname=='/logout')
+			{
+				console.log('')
+				console.log($._POST.pathname)
+				console.log(q)
+			}
+
 			call_back($);
 		});
 	}
-	else if(Object.keys($.nr_session_queue).length>0)
+	else if(Object.keys(session_response_queue).length>0)
 	{
 		/* This block means no session found in browser but now it has some new session to store, so create a new session and pass session cookie. */
 
 		var p=Math.random().toString(36).substr(2);
 
-		password_hash($, p, ($, hash)=>
+		password_hash(p, function(hash)
 		{
-			var q='INSERT INTO '+nr_db_config.tb_prefix+'sessions (json_values,user_id,password) VALUES ('+nr_db_pool.escape(jsn)+', '+(get_current_user_id($)==false ? 'NULL' : get_current_user_id($))+',\''+hash+'\')';
+			var q='INSERT INTO '+nr_db_config.tb_prefix+'sessions (json_values,user_id,password) VALUES ('+nr_db_pool.escape(jsn)+', '+($.get_current_user_id()==false ? 'NULL' : $.get_current_user_id())+',\''+hash+'\')';
 			
 			nr_db_pool.query(q, function(e,r)
 			{
+				console.log('');
+				console.log('Inserted', $._POST.pathname);
+
 				if(!e)
 				{
 					$.set_cookie(nr_session_cookie_name, r.insertId, nr_cookie_expiry);
@@ -125,31 +135,4 @@ global.real_set_session=function($, call_back)
 		/* This block means no old session, and nothing store newly, so just invoke next function. */
 		call_back($);
 	}
-}
-
-
-global.session_destroy=function($, call_back)
-{
-	/* Delete all session of current session cookie and current user. */
-	var q=[];
-	
-	$._COOKIE[nr_session_cookie_name] ? q.push('id='+$._COOKIE[nr_session_cookie_name]) : 0;
-	
-	get_current_user_id($)!==false ? q.push('user_id='+get_current_user_id($)) : 0;
-
-	$._SESSION={};
-	
-	if(q.length>0)
-	{
-		var q='DELETE FROM '+nr_db_config.tb_prefix+'sessions WHERE '+q.join(' OR ');
-		
-		nr_db_pool.query(q,function()
-		{
-			call_back ? call_back($) : 0;
-		});
-		
-		return;
-	}
-
-	call_back($);
 }

@@ -47,7 +47,7 @@ const is_it_file_request=($, f_next)=>
 	/* Prevent njs and jsx files */
 	if(ext!=='.jsx' && ext!=='.njs')
 	{
-		file_exists($, p, ($, exists)=>
+		file_exists(p, function(exists)
 		{
 			f_next($, (exists ? p : false));
 		});
@@ -78,19 +78,6 @@ const get_pat_array=(str)=>
 		}
 		return rg;
 	}).filter(item=>item!==false);
-}
-
-const is_pattern_matched=(pathname)=>
-{
-	var pats=get_pat_array(file_request_pattern);
-
-	var matched=false;
-	pats.forEach(item=>
-	{
-		item.test(pathname)==true ? matched=true : 0;
-	});
-
-	return matched;
 }
 
 const allowed_hotlinked=($)=>
@@ -137,14 +124,14 @@ module.exports.run=($)=>
 		if($.requested_file_path && !allowed_hotlinked($))
 		{
 			$.http_response_code(403);
-			exit($, 'Access Forbidden');
+			$.exit( 'Access Forbidden');
 			return;
 		}
 			
-		if($.requested_file_path && (!nr_db_config || !track_file_request || after_filter || (track_file_request && !is_pattern_matched($.nr_pathname))))
+		if($.requested_file_path && (!nr_db_config || after_filter))
 		{
 			$ = readfile($, $.requested_file_path);
-			exit($);
+			$.exit();
 			return;
 		}
 
@@ -159,15 +146,16 @@ module.exports.run=($)=>
 			var p=nr_project_root+'/build/index.html';
 
 			/* Use async, cause this action will be called every time user hit the server */
-			file_get_contents($, p, ($, data)=>
+			file_get_contents(p, function(data)
 			{
 				var def_resp=data || 'Sorry! <br/>"'+p+'" not found. <br/>You must build react app for static serve.';
 				
-				exit($, def_resp);
+				$.exit( def_resp);
 			});
 
 			return;
 		}
+
 		next($);
 	}
 	
@@ -188,7 +176,7 @@ module.exports.run=($)=>
 		if(nr_themes[$.nr_active_theme])
 		{
 			var theme_funcs=include(nr_themes[$.nr_active_theme].dir+'/'+'index.njs');
-			(theme_funcs && theme_funcs.run) ? include_funcs.push(theme_funcs.run) : 0;
+			(theme_funcs && typeof theme_funcs.run=='function') ? include_funcs.push(theme_funcs.run) : 0;
 		}
 		
 		/* Lastly load all the plugins */
@@ -198,7 +186,7 @@ module.exports.run=($)=>
 			{
 				var plugin_funcs=include(nr_plugins[$.nr_active_plugins[i]].dir+'/'+'index.njs');
 			
-				(plugin_funcs && plugin_funcs.run) ? include_funcs.push(plugin_funcs.run) : 0;
+				(plugin_funcs && typeof plugin_funcs.run=='function') ? include_funcs.push(plugin_funcs.run) : 0;
 			}
 		}
 
@@ -228,7 +216,7 @@ module.exports.run=($)=>
 
 	var ajax_router=function($)
 	{
-		var logged=is_user_logged_in($);
+		var logged=$.is_user_logged_in();
 		var found=false;
 
 		if($._POST['action'] || $._IO['action'])
@@ -258,6 +246,8 @@ module.exports.run=($)=>
 				{
 					var args=get_args(methd);
 
+					var exit=function($){$.exit();}
+
 					/* Ensure core ajax requests gets handler key too as these are registered through loop. Three args indicates it is core. */
 					args.length==3 ? methd($, k, exit) : methd($, exit);
 					
@@ -268,7 +258,7 @@ module.exports.run=($)=>
 			}
 		}
 		
-		!found ? exit($) : 0;
+		!found ? $.exit() : 0;
 	}
 
 	/* Call all the function in a series action */

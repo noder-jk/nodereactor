@@ -1,19 +1,5 @@
 module.exports.run=function($,next)
 {
-	$.add_action('register_custom_templates',function($, next)
-	{
-		var ob=
-		{
-			'component':'TestCustomTemplate', 
-			'title':'First Test',
-			'package':false
-		}
-
-		$=register_custom_template($, ob);
-
-		next($);
-	});
-
 	/* $.add_action('socket_connected', function($, next)
 	{
 		next($);

@@ -1,0 +1,23 @@
+.nr-file-chooser-container
+{
+    &>img, &>video
+    {
+        display: block;
+        height: auto;
+        width: auto;
+        max-height: 140px;
+        max-width: 100%;
+    }
+
+    &>audio
+    {
+        display: block;
+        max-width: 100%;
+    }
+
+    &>button
+    {
+        display: block;
+        margin-bottom: 2px;
+    }
+}

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Spinner from "react-svg-spinner";
 import Swal from 'sweetalert2';
 
-import {ajaxRequest} from 'nodereactor/react';
+import {ajax_request} from 'nodereactor/react';
 
 const InputFields=(props)=>
 {
@@ -49,7 +49,7 @@ class UserCreate extends Component
 		let values=this.state;
 		delete values.submitable;
 
-        ajaxRequest('nr_create_user', {values}, r=>
+        ajax_request('nr_create_user', {values}, r=>
 		{
             let {message='Action Failed', status='Error'}=r;
 

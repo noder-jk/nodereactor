@@ -3,79 +3,59 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.parse_form = void 0;
+exports.parse_input_value = exports.parse_dom_form = void 0;
 
-var ignore_value = function ignore_value(inp_el, ignore) {
-  var ignore_attr = inp_el.dataset ? inp_el.dataset.ignore : false;
+var parse_input_value = function parse_input_value(el, values) {
+  var name = el.name,
+      type = el.type,
+      checked = el.checked,
+      value = el.value;
 
-  if (!inp_el.name || ignore == true && (ignore_attr == true || ignore_attr == 'true')) {
-    return false;
-  }
+  switch (type) {
+    case 'checkbox':
+      !Array.isArray(values[name]) ? values[name] = [] : 0;
+      var ind = values[name].indexOf(value);
 
-  return inp_el;
-};
-
-var parse_form = function parse_form(elment, ignore) {
-  /* Store all the parsed values in values object */
-  var values = {};
-  /* As because input type is various, so treat it separately. */
-
-  var inp = elment.getElementsByTagName('INPUT');
-
-  for (var nm = 0; nm < inp.length; nm++) {
-    var el = ignore_value(inp[nm], ignore);
-
-    if (!el) {
-      continue;
-    }
-
-    var name = el.name;
-    var value = el.value;
-    var type = el.type;
-    var checked = el.checked;
-
-    switch (type) {
-      case 'radio':
-      case 'checkbox':
-        if (!checked) {
-          continue;
-        }
-
-        if (type == 'radio' && !values[name]) {
-          values[name] = value;
-          continue;
-        }
-
-        if (!values[name]) {
-          values[name] = [];
-        }
-
-        if (Array.isArray(values[name])) {
-          values[name].push(value);
-        }
-
-        break;
-
-      default:
-        values[name] = value;
-    }
-  }
-  /* Now parse other type of value such as text area, select */
-
-
-  var get_val = function get_val(tag, ignore) {
-    for (var n = 0; n < tag.length; n++) {
-      var t = ignore_value(tag[n], ignore);
-
-      if (t && !values[t.name]) {
-        values[t.name] = t.value;
+      if (checked == true) {
+        // Add to value array if already not exist
+        ind == -1 ? values[name].push(value) : 0;
+      } else {
+        // Remove from value array if exist.
+        ind > -1 ? values[name].splice(ind, 1) : 0;
       }
-    }
-  };
 
-  get_val(elment.getElementsByTagName('SELECT'), ignore);
-  get_val(elment.getElementsByTagName('TEXTAREA'), ignore);
+      break;
+
+    case 'radio':
+      checked == true ? values[name] = value : 0;
+      break;
+
+    default:
+      values[name] = value;
+  }
+
   return values;
 };
 
-exports.parse_form = parse_form;
+exports.parse_input_value = parse_input_value;
+
+var parse_dom_form = function parse_dom_form(elment) {
+  /* Store all the parsed values in values object */
+  var values = {};
+  var fields = ['INPUT', 'SELECT', 'TEXTAREA'];
+  fields.forEach(function (f) {
+    var inps = elment.getElementsByTagName(f);
+
+    for (var i = 0; i < inps.length; i++) {
+      var inp = inps[i];
+      var ignore_attr = inp.dataset ? inp.dataset.ignore : false;
+
+      if (inp.name && ignore_attr !== true && ignore_attr !== 'true') {
+        values = parse_input_value(inp, values);
+      }
+    }
+  });
+  return values;
+};
+
+exports.parse_dom_form = parse_dom_form;

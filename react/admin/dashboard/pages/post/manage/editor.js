@@ -19,7 +19,9 @@ require("./style.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -54,12 +56,13 @@ function (_Component) {
     _classCallCheck(this, PostProcess);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(PostProcess).call(this, props));
-    var _this$props$ResponseD = _this.props.ResponseData,
-        _this$props$ResponseD2 = _this$props$ResponseD.meta_boxes,
-        meta_boxes = _this$props$ResponseD2 === void 0 ? [] : _this$props$ResponseD2,
-        _this$props$ResponseD3 = _this$props$ResponseD.post,
-        post = _this$props$ResponseD3 === void 0 ? {} : _this$props$ResponseD3,
-        post_type = _this$props$ResponseD.post_type;
+    var _this$props$response = _this.props.response,
+        _this$props$response$ = _this$props$response.meta_boxes,
+        meta_boxes = _this$props$response$ === void 0 ? [] : _this$props$response$,
+        _this$props$response$2 = _this$props$response.post,
+        post = _this$props$response$2 === void 0 ? {} : _this$props$response$2,
+        post_type = _this$props$response.post_type,
+        permalink = _this$props$response.permalink;
 
     if (_typeof(post) !== 'object') {
       post = {};
@@ -75,6 +78,7 @@ function (_Component) {
       'mime_type': post.mime_type,
       'post_id': post.post_id || 0,
       'loading_icon': false,
+      'permalink': permalink,
       'post_updated': false,
       'meta_boxes': meta_boxes
     };
@@ -127,7 +131,7 @@ function (_Component) {
       var post_meta = {};
 
       for (var num = 0; num < el.length; num++) {
-        post_meta = Object.assign(post_meta, (0, _react2.parse_form)(el[num], true));
+        post_meta = Object.assign(post_meta, (0, _react2.parse_dom_form)(el[num], true));
       }
       /* Store meta in post object */
 
@@ -138,7 +142,7 @@ function (_Component) {
       this.setState({
         'loading_icon': true
       });
-      (0, _react2.ajaxRequest)('nr_save_post', {
+      (0, _react2.ajax_request)('nr_save_post', {
         post: post
       }, function (r, d, e) {
         var ob = {
@@ -154,27 +158,28 @@ function (_Component) {
         }
 
         var _r$status = r.status,
-            status = _r$status === void 0 ? 'failed' : _r$status,
+            status = _r$status === void 0 ? 'error' : _r$status,
             _r$message = r.message,
             message = _r$message === void 0 ? 'Action Failed' : _r$message,
             _r$post_id = r.post_id,
-            post_id = _r$post_id === void 0 ? false : _r$post_id;
+            post_id = _r$post_id === void 0 ? false : _r$post_id,
+            _r$permalink = r.permalink,
+            permalink = _r$permalink === void 0 ? '' : _r$permalink;
 
-        if (status == 'done' && post_id) {
-          _sweetalert["default"].fire('Success', message, 'success');
-
+        if (status == 'success' && post_id) {
+          ob.permalink = permalink;
           ob.post_updated = true;
           ob.post_id = post_id;
           _this2.store_vals.post_id = post_id;
-        } else {
-          _sweetalert["default"].fire('Error', message, 'error');
         }
 
         _this2.setState(ob, function () {
-          _this2.setState({
+          return _this2.setState({
             'post_updated': false
           });
         });
+
+        _sweetalert["default"].fire(status, message, status);
       });
     }
   }, {
@@ -183,14 +188,17 @@ function (_Component) {
       var _this3 = this,
           _React$createElement;
 
-      var _this$props$ResponseD4 = this.props.ResponseData,
-          _this$props$ResponseD5 = _this$props$ResponseD4.post,
-          post = _this$props$ResponseD5 === void 0 ? {} : _this$props$ResponseD5,
-          _this$props$ResponseD6 = _this$props$ResponseD4.post_modules,
-          post_modules = _this$props$ResponseD6 === void 0 ? [] : _this$props$ResponseD6,
-          post_type = _this$props$ResponseD4.post_type,
-          _this$props$ResponseD7 = _this$props$ResponseD4.custom_templates,
-          custom_templates = _this$props$ResponseD7 === void 0 ? {} : _this$props$ResponseD7;
+      var _this$state = this.state,
+          loading_icon = _this$state.loading_icon,
+          post_id = _this$state.post_id;
+      var _this$props$response2 = this.props.response,
+          _this$props$response3 = _this$props$response2.post,
+          post = _this$props$response3 === void 0 ? {} : _this$props$response3,
+          _this$props$response4 = _this$props$response2.post_modules,
+          post_modules = _this$props$response4 === void 0 ? [] : _this$props$response4,
+          post_type = _this$props$response2.post_type,
+          _this$props$response5 = _this$props$response2.custom_templates,
+          custom_templates = _this$props$response5 === void 0 ? {} : _this$props$response5;
       var _post$post_meta = post.post_meta,
           post_meta = _post$post_meta === void 0 ? {} : _post$post_meta,
           _post$post_parent = post.post_parent,
@@ -213,7 +221,7 @@ function (_Component) {
         }
       }, _react["default"].createElement("div", {
         className: "col-12"
-      }, _react["default"].createElement("h4", null, this.state.post_id ? _react["default"].createElement("span", null, "Edit") : _react["default"].createElement("span", null, "Create"), " ", this.state.loading_icon == true ? _react["default"].createElement(_reactSvgSpinner["default"], {
+      }, _react["default"].createElement("h4", null, post_id ? _react["default"].createElement("span", null, "Edit") : _react["default"].createElement("span", null, "Create"), "\xA0", loading_icon == true ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       }) : null)), _react["default"].createElement("div", {
         className: "col-12 col-sm-6 col-md-7 col-lg-8 col-xl-9"
@@ -222,8 +230,11 @@ function (_Component) {
         onChange: this.getValues,
         sendSlug: this.getSlug,
         defaultSlug: this.state.slug
-      }) : null, post_modules.indexOf('editor') > -1 ? _react["default"].createElement(_react2.Editor, {
-        get_input_by: function get_input_by(content) {
+      }) : null, !this.state.permalink ? null : _react["default"].createElement("p", null, _react["default"].createElement("small", null, _react["default"].createElement("b", null, "Post URL: "), _react["default"].createElement("a", {
+        href: this.state.permalink,
+        target: "_blank"
+      }, this.state.permalink))), post_modules.indexOf('editor') > -1 ? _react["default"].createElement(_react2.Editor, {
+        onChange: function onChange(content) {
           return _this3.getValues(content, true);
         },
         defaultValue: this.store_vals.post_content,
@@ -249,13 +260,13 @@ function (_Component) {
         onChange: this.getValues
       }) : null, _react["default"].createElement("p", {
         className: "text-right"
-      }, this.state.loading_icon ? _react["default"].createElement(_reactSvgSpinner["default"], {
+      }, loading_icon ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
       }) : null, " \xA0", _react["default"].createElement("button", {
         className: "btn btn-secondary btn-sm",
         onClick: this.saveContent,
-        disabled: this.state.loading_icon
-      }, "Save")))), _react["default"].createElement(_editorModules.LoadMetaBox, _extends({
+        disabled: loading_icon
+      }, post_id ? 'Update' : 'Create')))), _react["default"].createElement(_editorModules.LoadMetaBox, _extends({
         position: "right"
       }, meta_props))));
     }

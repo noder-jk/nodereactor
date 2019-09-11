@@ -3,9 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.get_hierarchy = exports.Pagination = exports.get_url_parameter = void 0;
+exports.get_hierarchy = exports.SpinIcon = exports.Pagination = exports.get_url_parameter = void 0;
 
 var _react = _interopRequireDefault(require("react"));
+
+var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -27,8 +29,8 @@ var Pagination = function Pagination(props) {
       activeClass = _props$activeClass === void 0 ? '' : _props$activeClass,
       _props$inactiveClass = props.inactiveClass,
       inactiveClass = _props$inactiveClass === void 0 ? '' : _props$inactiveClass,
-      _props$clickEvent = props.clickEvent,
-      clickEvent = _props$clickEvent === void 0 ? false : _props$clickEvent;
+      _props$onClick = props.onClick,
+      onClick = _props$onClick === void 0 ? false : _props$onClick;
 
   if (!pgn.pages || !Array.isArray(pgn.pages) || pgn.pages.length == 0) {
     return null;
@@ -36,22 +38,18 @@ var Pagination = function Pagination(props) {
 
   return _react["default"].createElement("div", {
     id: wrapperId
-  }, pgn.pages.length > 1 ? pgn.pages.map(function (item) {
+  }, pgn.pages.length == 0 ? null : pgn.pages.map(function (item) {
     var attr = {
       'href': '?page=' + item,
       'data-offset': item,
       'key': 'offset_' + item,
       'className': item == pgn.current ? activeClass : inactiveClass
     };
-
-    if (clickEvent) {
-      attr.onClick = function (e) {
-        return clickEvent(e, item);
-      };
-    }
-
+    onClick ? attr.onClick = function (e) {
+      return onClick(e, item);
+    } : 0;
     return _react["default"].createElement("a", attr, item);
-  }) : null);
+  }));
 };
 
 exports.Pagination = Pagination;
@@ -82,3 +80,19 @@ var get_hierarchy = function get_hierarchy(arg, parent, id, not_parent) {
 };
 
 exports.get_hierarchy = get_hierarchy;
+
+var SpinIcon = function SpinIcon(props) {
+  var show = props.show,
+      _props$space = props.space,
+      space = _props$space === void 0 ? true : _props$space,
+      _props$size = props.size,
+      size = _props$size === void 0 ? "15px" : _props$size;
+
+  var Sp = _react["default"].createElement(_reactSvgSpinner["default"], {
+    size: size
+  });
+
+  return show ? space ? _react["default"].createElement("span", null, "\xA0 ", Sp) : Sp : null;
+};
+
+exports.SpinIcon = SpinIcon;

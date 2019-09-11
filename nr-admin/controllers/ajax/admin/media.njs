@@ -8,7 +8,7 @@ function move_to_uploads($, oldpath, new_path, fname, real_pth, m_callback)
             return;
         }
         
-        get_available_slug($, {post_name:fname.toLowerCase()}, function($, got_slug)
+        $.get_available_slug({post_name:fname.toLowerCase()}, function($, got_slug)
         {
             var ttl =fname.trim();
             ttl =ttl.charAt(0).toUpperCase() + ttl.slice(1);
@@ -16,7 +16,7 @@ function move_to_uploads($, oldpath, new_path, fname, real_pth, m_callback)
             var media_post=
             {
                 action		: 'create',
-                user_id		: get_current_user_id($),
+                user_id		: $.get_current_user_id(),
                 post_title	: ttl,
                 post_name	: got_slug,
                 post_type	: 'attachment',
@@ -34,7 +34,7 @@ function move_to_uploads($, oldpath, new_path, fname, real_pth, m_callback)
 
 module.exports.upload=function($)
 {
-    if(!$._FILES.nr_media_file){exit($); return;}
+    if(!$._FILES.nr_media_file){$.exit(); return;}
     
     /* Firstly create year+month based directory if already not exist. */
     var d=new Date();
@@ -48,7 +48,7 @@ module.exports.upload=function($)
     {
         if(err)
         {
-            exit($); 
+            $.exit(); 
             return;
         }
 
@@ -76,7 +76,7 @@ module.exports.upload=function($)
         
         move_to_uploads($, oldpath, new_path,  fname, real_pth, function($, id)
         {
-            exit($, {'insertId':id});
+            $.exit( {'insertId':id});
         });
     });
 }
@@ -132,7 +132,7 @@ module.exports.gallery=function($)
 
     $.get_posts(query_param, function($, r)
     {
-        get_pagination($,query_param, function($, pgn)
+        $.get_pagination(query_param, function($, pgn)
         {
             var to_get=node_modules.deepcopy(r);
             
@@ -191,7 +191,7 @@ module.exports.gallery=function($)
 
                 $.echo(resp);
                 
-                exit($);
+                $.exit();
             });
         });
     });

@@ -18,29 +18,6 @@ const the_author=(item)=>
     return <FindActionHook hook="the_author" value={item.display_name} properties={{'post':item}}/>
 }
 
-const the_next_url=(pagination, key)=>
-{
-    let resp=false;
-
-    key = !key ? 'next' : key;
-
-    if(typeof pagination=='object' && pagination[key])
-    {
-        let q=window.location.search;
-        q=q.slice(1);
-        q=q.split('&').map(item=>item.split('=')).map(item=>item[0]=='page' ? false : item.join('=')).filter(item=>item!==false);
-        q.push('page='+pagination[key]);
-
-        resp='?'+q.filter(item=>(typeof item=='string' && /\S+/.test(item))).join('&');
-    } 
-
-    return resp;
-}
-
-const the_previous_url=(pagination)=>
-{
-    return the_next_url(pagination, 'previous');
-}
 
 const the_date=(item, format)=>
 {
@@ -59,14 +36,70 @@ const the_permalink=(item)=>
     return item.post_permalink;
 }
 
+// Pagination related functions
+const pager_helper=(key)=>
+{
+    var resp='';
+
+    if(!isNaN(key))
+    {
+        // It is multiple post in pages, like term category page
+        let q=window.location.search;
+        q=q.slice(1);
+        q=q.split('&').map(item=>item.split('=')).map(item=>item[0]=='page' ? false : item.join('=')).filter(item=>item!==false);
+        q.push('page='+key);
+        resp='?'+q.filter(item=>(typeof item=='string' && /\S+/.test(item))).join('&');
+    }
+    else
+    {
+        // It's individual post
+        resp=key;
+    }
+
+    return resp;
+}
+const the_next_url=(pagination, key)=>
+{
+    key = !key ? 'next' : key;
+    return (typeof pagination=='object' && pagination[key]) ? pager_helper(pagination[key]) : false;
+}
+
+const the_previous_url=(pagination)=>
+{
+    return the_next_url(pagination, 'previous');
+}
+
+const PaginateLinks=(props)=>
+{
+    let {pagination={}, Wrapper, hide_single=true}=props;
+    let {pages=[], current=false}=pagination || {};
+
+
+    return (pages.length<=1 && hide_single) ? null :
+    pages.map(content=>
+    {
+        // Get url and page number
+        let url=pager_helper(content.url || content);
+        let page=typeof content=='object' ? content.page+1 : content;
+
+        // Generate class name
+        let className=(current==(content.url || content) ? 'current' : '');
+
+        var anchor=<a key={url} href={url} className={className} {...props}>{page}</a>
+
+        return Wrapper ? <Wrapper>{anchor}</Wrapper> : anchor
+    });
+}
+
 export {
-            the_title, 
-            the_content, 
-            the_author, 
-            the_date,
-            the_permalink,
-            the_excerpt,
-            
-            the_next_url,
-            the_previous_url
-        }
+    the_title, 
+    the_content, 
+    the_author, 
+    the_date,
+    the_permalink,
+    the_excerpt,
+    
+    the_next_url,
+    the_previous_url,
+    PaginateLinks
+}

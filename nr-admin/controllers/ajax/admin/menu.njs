@@ -2,11 +2,11 @@ module.exports.get_for_admin=function($)
 {
     register_nav_menus($, function($)
     {
-        var nr_menus=$.get_option( 'nr_nav_menus', 0);
+        var nr_menus=$.get_option( 'nr_nav_menus', true);
     
         var locations=$.nr_menu_locations;
         
-        exit($, {locations, nr_menus});
+        $.exit( {locations, nr_menus});
     });
 }
 
@@ -14,20 +14,20 @@ module.exports.save_menus=function($)
 {
     if(typeof $._POST.menus=='object')
     {
-        var cur_menus=$.get_option( 'nr_nav_menus', 0);
+        var cur_menus=$.get_option( 'nr_nav_menus', true);
         typeof cur_menus!=='object' ? cur_menus={} : null;
 
         cur_menus=Object.assign(cur_menus, $._POST.menus);
         
-        $.add_option({'nr_nav_menus':cur_menus}, 0);
+        $.add_option({'nr_nav_menus':cur_menus}, true);
     }
     
-    exit($);
+    $.exit();
 }
 
 module.exports.get_menu_for_visitor=function($)
 {
-    var cr_menus=$.get_option( 'nr_nav_menus', 0);
+    var cr_menus=$.get_option( 'nr_nav_menus', true);
 
     var cur_menus = (!cr_menus || cr_menus==0) ? {} : node_modules.deepcopy(cr_menus);
 
@@ -85,7 +85,7 @@ module.exports.get_menu_for_visitor=function($)
                 cur_menus[k].items ? cm[k].items=rec(cur_menus[k].items) : 0;
             }
 
-            exit($, cm);
+            $.exit( cm);
         });
     });
 }
@@ -94,12 +94,12 @@ module.exports.del_menu=function($)
 {
     if($._POST.menu_name && typeof $._POST.menu_name=='string')
     {
-        var cur_menus=$.get_option( 'nr_nav_menus', 0);
+        var cur_menus=$.get_option( 'nr_nav_menus', true);
         
         delete cur_menus[$._POST.menu_name];
 
-        $.add_option({'nr_nav_menus':cur_menus}, 0);
+        $.add_option({'nr_nav_menus':cur_menus}, true);
     }
 
-    exit($);
+    $.exit();
 }

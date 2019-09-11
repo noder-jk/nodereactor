@@ -1,18 +1,3 @@
-
-global.meta_processor=function ($, mets, result, next)
-{
-	/* This function simply assign meta to post using post id. */
-	for(var i=0; i<mets.length; i++)
-	{
-		for(var n=0; n<result.length; n++)
-		{
-			(mets[i].owner_post_id==result[n].post_id) ? result[n].post_meta[mets[i].meta_key]=mets[i].meta_value : 0;
-		}
-	}
-	
-	next($, result);
-}
-
 module.exports.use_meta_box=function(ob)
 {
 	if(!ob.post_type || !ob.module){return;}
@@ -61,73 +46,47 @@ module.exports.register_meta_box=function(meta_ob)
 	}
 }
 
-
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~Post meta, pagination related functions~~~~~~~~~~~~~~~~~~~~~~~~~ */
-global.get_post_meta=function($, post_id, meta_k, meta_v, next)
+module.exports.get_post_meta=function(pst_id, meta_k, meta_v, next)
 {
-	post_id			= get_array(post_id);
+	var $=this;
+	
+	var post_id			= get_array(pst_id);
 
-	var meta_key 	= meta_k 	? " AND meta_key="+nr_db_pool.escape(meta_k) : '';
-	var meta_value	= meta_v	? " AND meta_value="+nr_db_pool.escape(meta_v) : "";
+	var meta_key 	= typeof meta_k=='string' ? " AND meta_key="+nr_db_pool.escape(meta_k) : '';
+	var meta_value	= typeof meta_v=='string' ? " AND meta_value="+nr_db_pool.escape(meta_v) : '';
 	
 	var q="SELECT * FROM "+nr_db_config.tb_prefix+"postmeta WHERE owner_post_id IN ("+post_id.join(',')+")" + meta_key + meta_value;
 	
 	nr_db_pool.query(q, function(e,r)
 	{
-		e ? r=[] : null;
-		
+		e ? r=[] : 0;
+
+		if(!Array.isArray(pst_id))
+		{
+			if(Array.isArray(r))
+			{
+				r=r[0] || {};
+			}
+		}
+
 		next($, r);
 	});
 }
 
-global.update_post_meta=function($, post_id, meta_ob, next)
+module.exports.update_post_meta=function(post_id, meta_ob, next)
 {
-	var meta=nr_db_config.tb_prefix+'postmeta';
-
-	/* delete existing */
-	var del_first=($, next)=>
-	{
-		var meta_key=Object.keys(meta_ob).map(key=>nr_db_pool.escape(key)).join(',');
-
-		var q='DELETE FROM '+meta+' WHERE owner_post_id='+post_id+' AND meta_key IN ('+meta_key+')';
-
-		nr_db_pool.query(q, function()
-		{
-			next($);
-		});
-	}
-
-	var insert_now=($, next)=>
-	{
-		var insert=Object.keys(meta_ob).map(key=>
-		{
-			var k=nr_db_pool.escape(key);
-			var v=meta_ob[key];
-
-			typeof v=='object' ? v=JSON.stringify(v) : null;
-			v=nr_db_pool.escape(v.toString());
-
-			return '('+post_id+', '+k+', '+v+')';
-		});
-
-
-		var q='INSERT INTO '+meta+' (owner_post_id, meta_key, meta_value) VALUES '+insert.join(',');
-
-		nr_db_pool.query(q, function(e,r)
-		{
-			next($);
-		});
-	}
-
-	$.series_fire( [del_first, insert_now, next]);
+	var helper=require('./helper.njs');
+	helper.meta_updater(this, 'postmeta', post_id, 'owner_post_id', meta_ob, next);
 }
 
-
-global.delete_post_meta=function($, post_id, meta_key, next)
+module.exports.delete_post_meta=function(post_id, meta_key, next)
 {
+	var $=this;
+
 	var post_ids=get_array(post_id);
 	
-	var and_clause=(meta_key && typeof meta_key=='string') ? ' AND meta_key="'+meta_key+'"' : '';
+	var and_clause=typeof meta_key=='string' ? ' AND meta_key="'+meta_key+'"' : '';
 
 	var q='DELETE FROM '+nr_db_config.tb_prefix+'postmeta WHERE owner_post_id IN ('+post_ids.join(',')+') '+and_clause;
 	

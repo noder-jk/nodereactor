@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Spinner from 'react-svg-spinner';
 import Swal from 'sweetalert2';
 
-import {ajaxRequest} from 'nodereactor/react';
+import {ajax_request} from 'nodereactor/react';
 
 import './style.scss';
 
@@ -73,7 +73,7 @@ class Users extends Component
 
             /* Now request to server to delete. */
             this.setState({'loading':true});
-            ajaxRequest('nr_delete_users', {'user_ids':selected, user_action}, (r, d, e)=>
+            ajax_request('nr_delete_users', {'user_ids':selected, user_action}, (r, d, e)=>
             {
                 let ob={'loading':true};
 
@@ -88,7 +88,7 @@ class Users extends Component
     {
         this.setState({'loading':true});
 
-        ajaxRequest('nr_get_users', r=>
+        ajax_request('nr_get_users', r=>
         {
             let {users, current_user_id}=r;
 

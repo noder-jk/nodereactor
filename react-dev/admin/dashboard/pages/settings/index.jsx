@@ -1,101 +1,61 @@
-import React, {Component} from "react";
-import Swal from 'sweetalert2';
-import Spinner from 'react-svg-spinner';
+import React from "react";
 
-import {Placeholder, ajaxRequest} from 'nodereactor/react';
+import {BasicSettings, Placeholder} from 'nodereactor/react';
+import {PermalinkSetting} from './permalink';
 
-import {GSetting} from './general';
-import {PSetting} from './permalink';
-import {RSetting} from './reading';
-
-class FormProcess extends Component
+let general_fields=
 {
-    constructor(props)
+    name                : {title:'Site Title'},
+    description         : {title:'Tagline'},
+    time_zone           : {title:'Timezone', type:'select', values:[], default_value:'UTC'},
+    max_upload_size     : {title:'Max Upload Size (Byte)'},
+    max_db_connection   : {title:'Max DB Connection'},
+    nr_session_cookie_name:{title:'Session Cookie Name Key', type:'text', hint:'All users will be logged out upon change.'},
+    nr_session_cookie_pass:{title:'Session Cookie Pass Key', type:'text', hint:'All users will be logged out upon change.'},
+    session_max_age     : {title:'Default Session Expiry (Seconds)', type:'number'},
+    nr_cookie_expiry    : {title:'Default Cookie Expiry (Seconds)', type:'number'},
+    nr_login_expiry     : {title:'Default Login Expiry (Seconds)', type:'number'},
+    hot_linking_pattern : 
     {
-        super(props);
-
-        this.state=
-        {
-            'components':
-            {
-                'GeneralSetting':GSetting,
-                'PermalinkSetting':PSetting,
-                'ReadingSetting':RSetting
-            },
-            'loading':false
-        }
-
-        this.saveOption=this.saveOption.bind(this);
-        this.storeVal=this.storeVal.bind(this);
+        title:'Allowed Hot Linker Patterns (Regex)', 
+        type:'textarea', 
+        hint:'Separate multiple patterns by new line without delimiter. Only matched linkers will be allowed to embed contents.'
     }
+}
 
-    storeVal(e)
-    {
-        let el=e.currentTarget;
+let reading_fields=
+{
+    posts_per_page:{title:'Post Per Page Default', type:'number', min:1, default_value:10},
+    media_per_page:{title:'Media per page in Media Dashboard', type:'number', min:1, default_value:30}
+}
 
-        let state={};
+const GeneralSettingProcess=(props)=>
+{
+    let {response}=props;
+    let {time_zones=[]}=response;
 
-        if(el.type=='radio' && !el.checked)
-        {
-            return;
-        }
+    general_fields.time_zone.values=time_zones;
 
-        state[el.name]=el.value;
-            
-        this.setState(state);
-    }
-
-    saveOption()
-    {
-        let vals=Object.assign({}, this.state);
-        delete vals.components;
-        delete vals.loading;
-
-        this.setState({'loading':true});
-        ajaxRequest('nr_save_general_settings', {...vals}, (r, d, e)=>
-        {
-            this.setState({'loading':false});
-
-            let {status='failed'}=r;
-        
-            Swal.fire(status=='done' ? 'Saved' : 'Could not saved');
-        });
-    }
-
-    render()
-    {
-        let {settingPage, ResponseData}=this.props;
-        let {components, loading}=this.state;
-
-        let Comp=components[settingPage];
-
-        return <div>
-            <Comp onChange={this.storeVal} ResponseData={ResponseData}/>
-            <div className="row">
-                <div className="col-12 col-sm-4 col-md-3 col-lg-2"></div>
-                <div className="col-12 col-sm-8 col-md-6 col-lg-4">
-                    <button data-button="save" className="btn btn-secondary btn-sm" disabled={loading} onClick={this.saveOption}>
-                        Save {loading ? <span>&nbsp;<Spinner size="15px" color="white"/></span> : null}
-                    </button>
-                </div>
-            </div>
-        </div>
-    }
+    return <BasicSettings 
+                title="General Settings"
+                package_name={true}
+                get_data_action="nr_get_general_settings"
+                save_data_action="nr_save_general_settings"
+                fields={general_fields}/>
 }
 
 const GeneralSetting=()=>
 {
-    return <Placeholder Data={{'action':'nr_get_general_settings'}} Component={FormProcess} settingPage="GeneralSetting"/>
-}
-
-const PermalinkSetting=()=>
-{
-    return <Placeholder Data={{'action':'nr_get_general_settings'}} Component={FormProcess} settingPage="PermalinkSetting"/>
+    console.log('Loaded');
+    return <Placeholder action="nr_get_gen_settings" component={GeneralSettingProcess}/>
 }
 
 const ReadingSetting=()=>
 {
-    return <Placeholder Data={{'action':'nr_get_general_settings'}} Component={FormProcess} settingPage="ReadingSetting"/>
+    return <BasicSettings 
+                title="Reading Settings"
+                package_name={true}
+                fields={reading_fields}/>
 }
 
 export {GeneralSetting, PermalinkSetting, ReadingSetting}

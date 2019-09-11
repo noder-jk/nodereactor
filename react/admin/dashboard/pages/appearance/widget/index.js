@@ -19,7 +19,9 @@ require("./style.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -129,13 +131,13 @@ function (_Component) {
     _classCallCheck(this, WidgetProcess);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(WidgetProcess).call(this, props));
-    var _this$props$ResponseD = _this.props.ResponseData,
-        _this$props$ResponseD2 = _this$props$ResponseD.widgets,
-        widgets = _this$props$ResponseD2 === void 0 ? {} : _this$props$ResponseD2,
-        _this$props$ResponseD3 = _this$props$ResponseD.sidebars,
-        sidebars = _this$props$ResponseD3 === void 0 ? {} : _this$props$ResponseD3,
-        _this$props$ResponseD4 = _this$props$ResponseD.widget_in_sidebar,
-        widget_in_sidebar = _this$props$ResponseD4 === void 0 ? {} : _this$props$ResponseD4;
+    var _this$props$response = _this.props.response,
+        _this$props$response$ = _this$props$response.widgets,
+        widgets = _this$props$response$ === void 0 ? {} : _this$props$response$,
+        _this$props$response$2 = _this$props$response.sidebars,
+        sidebars = _this$props$response$2 === void 0 ? {} : _this$props$response$2,
+        _this$props$response$3 = _this$props$response.widget_in_sidebar,
+        widget_in_sidebar = _this$props$response$3 === void 0 ? {} : _this$props$response$3;
     Object.keys(widget_in_sidebar).forEach(function (k) {
       if (Array.isArray(widget_in_sidebar[k])) {
         widget_in_sidebar[k].forEach(function (it, i) {
@@ -183,7 +185,7 @@ function (_Component) {
           var widget_id = widget[n].dataset.widget_id;
           var pkg = widget[n].dataset.nr_package;
           pkg = pkg == 'true' ? true : pkg;
-          var properties = (0, _react2.parse_form)(widget[n]);
+          var properties = (0, _react2.parse_dom_form)(widget[n]);
           widget_value_array.push({
             'key': Math.random().toString(36),
             'widget_id': widget_id,
@@ -198,7 +200,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _react2.ajaxRequest)('nr_widget_save', {
+      (0, _react2.ajax_request)('nr_widget_save', {
         'widget_and_areas': widget_in_sidebar
       }, function (r, d, e) {
         _this2.setState({
@@ -352,10 +354,8 @@ function (_Component) {
 
 var AdminWidget = function AdminWidget(props) {
   return _react["default"].createElement(_react2.Placeholder, {
-    Data: {
-      'action': 'nr_get_widget_list'
-    },
-    Component: WidgetProcess
+    action: "nr_get_widget_list",
+    component: WidgetProcess
   });
 };
 

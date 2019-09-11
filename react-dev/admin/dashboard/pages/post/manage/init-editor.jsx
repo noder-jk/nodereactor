@@ -17,7 +17,11 @@ const InitPostEditor=(props)=>
 
     let p_id=pt[3] ? pt[3] : false;
 
-    let ob={'action':'nr_get_post_create_edit', 'post_type':type, 'c_or_e':c_or_e}
+    let ob=
+    {
+        'post_type':type, 
+        'c_or_e':c_or_e
+    }
     
     if(p_id)
     {
@@ -29,7 +33,7 @@ const InitPostEditor=(props)=>
         return;
     }
 
-    return <Placeholder Data={ob} Component={PostProcess}/>
+    return <Placeholder action="nr_get_post_create_edit" data={ob} component={PostProcess}/>
 }
 
 export {InitPostEditor}

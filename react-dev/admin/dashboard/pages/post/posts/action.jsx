@@ -44,8 +44,8 @@ class Action extends Component
                     <option value="draft">Draft</option>
                 </select>
                 <input name="keyword" type="text" placeholder="Search" className="form-control form-control-sm float-left" title="Search by keyword" onChange={this.passValue}/>
-                <input name="page" type="number" min="1" defaultValue={1} placeholder="Page Number" className="form-control form-control-sm float-left" defaultValue={1} ref={el=>this.c_page=el} onChange={this.passValue}/>
-                <input name="posts_per_page" type="number" min="1" defaultValue={30} placeholder="Posts Per Page" className="form-control form-control-sm float-left" onChange={this.passValue}/>
+                <input name="page" type="number" min="1" defaultValue={1} placeholder="Page Number" title="Page Number" className="form-control form-control-sm float-left nr_pagination_page_number" defaultValue={1} ref={el=>this.c_page=el} onChange={this.passValue}/>
+                <input name="posts_per_page" type="number" min="1" defaultValue={30} placeholder="Posts Per Page" title="Posts Per Page" className="form-control form-control-sm float-left" onChange={this.passValue}/>
                 <button className="btn btn-sm btn-outline-secondary" onClick={fetchPosts} title="Press to filter">Filter</button>
             </div>
         </div>

@@ -4,7 +4,7 @@ import Spinner from "react-svg-spinner";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as FaIcons from '@fortawesome/free-solid-svg-icons';
 
-import {ajaxRequest} from 'nodereactor/react';
+import {ajax_request} from 'nodereactor/react';
 
 import './style.scss';
 
@@ -23,7 +23,7 @@ const getNavList=(cback)=>
     }
 
     /* Get all admin menus and decide which component will be used to render admin page. */
-    ajaxRequest('nr_get_admin_nav', (r, d, e)=>
+    ajax_request('nr_get_admin_nav', (r, d, e)=>
     {
         if(e)
         {

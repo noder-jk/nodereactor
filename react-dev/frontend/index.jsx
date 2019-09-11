@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import Spinner from 'react-svg-spinner';
 
-import {ajaxRequest} from 'nodereactor/react';
+import {ajax_request} from 'nodereactor/react';
 import {FindComp} from '../helper/comp-finder';
+import {InitTheme} from '../hooks/core';
 
 class InitFrontEnd extends Component
 {
@@ -20,7 +21,7 @@ class InitFrontEnd extends Component
     {
         let pathname=window.location.pathname;
 
-        ajaxRequest('get_init_frontend'+window.location.search, {pathname}, (r, d, e)=>
+        ajax_request('get_init_frontend'+window.location.search, {pathname}, (r, d, e)=>
         {
             if(e)
             {
@@ -47,9 +48,18 @@ class InitFrontEnd extends Component
                 'component':component, 
                 'fallback_component':'Index'
             }
-            
+
+            // Store contents in global scope
+            window.nr_contents=params;
+
             /* Now load the theme component */
-            this.setState({'content': <FindComp comp_props={find_params} {...params}/>});
+            this.setState
+            ({
+                'content': <div>
+                    <InitTheme/>
+                    <FindComp comp_props={find_params} {...params}/>
+                </div>
+            });
         });
     }
 

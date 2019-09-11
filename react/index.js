@@ -9,12 +9,6 @@ Object.defineProperty(exports, "Placeholder", {
     return _compPlaceholder.Placeholder;
   }
 });
-Object.defineProperty(exports, "parse_form", {
-  enumerable: true,
-  get: function get() {
-    return _formParser.parse_form;
-  }
-});
 Object.defineProperty(exports, "get_url_parameter", {
   enumerable: true,
   get: function get() {
@@ -31,6 +25,12 @@ Object.defineProperty(exports, "get_hierarchy", {
   enumerable: true,
   get: function get() {
     return _utility.get_hierarchy;
+  }
+});
+Object.defineProperty(exports, "SpinIcon", {
+  enumerable: true,
+  get: function get() {
+    return _utility.SpinIcon;
   }
 });
 Object.defineProperty(exports, "LoginRegistration", {
@@ -57,10 +57,10 @@ Object.defineProperty(exports, "Media", {
     return _media.Media;
   }
 });
-Object.defineProperty(exports, "RenderMediaFile", {
+Object.defineProperty(exports, "FileChooser", {
   enumerable: true,
   get: function get() {
-    return _renderMedia.RenderMediaFile;
+    return _fileChooser.FileChooser;
   }
 });
 Object.defineProperty(exports, "array_pull_down", {
@@ -75,53 +75,76 @@ Object.defineProperty(exports, "array_pull_up", {
     return _array.array_pull_up;
   }
 });
-Object.defineProperty(exports, "ajaxRequest", {
+Object.defineProperty(exports, "ajax_request", {
   enumerable: true,
   get: function get() {
-    return _ajax.ajaxRequest;
+    return _ajax.ajax_request;
   }
 });
-exports.nr_socket_event = exports.nr_ajax_url = void 0;
+Object.defineProperty(exports, "Input", {
+  enumerable: true,
+  get: function get() {
+    return _inputField.Input;
+  }
+});
+Object.defineProperty(exports, "BasicSettings", {
+  enumerable: true,
+  get: function get() {
+    return _basicSettings.BasicSettings;
+  }
+});
+exports.socket_event = exports.ajax_url = void 0;
 
 var _compPlaceholder = require("./helper/comp-placeholder");
 
-var _formParser = require("./helper/form-parser");
-
 var _utility = require("./helper/utility");
 
-var _auth = require("./tools/auth");
+var _auth = require("./apis/auth");
 
-var _adminBar = require("./tools/admin-bar");
+var _adminBar = require("./apis/admin-bar");
 
-var _editor = require("./tools/editor");
+var _editor = require("./apis/editor");
 
-var _media = require("./tools/media");
+var _media = require("./apis/media");
 
-var _renderMedia = require("./helper/render-media");
+var _fileChooser = require("./templates/file-chooser");
 
 var _array = require("./helper/array");
 
 var _ajax = require("./helper/ajax");
 
-var ScodeHooks = _interopRequireWildcard(require("./hooks/shortcode"));
+var _inputField = require("./templates/input/input-field");
 
-var MenuHooks = _interopRequireWildcard(require("./hooks/menu"));
+var _basicSettings = require("./templates/basic-settings");
+
+var Parser = _interopRequireWildcard(require("./helper/form-parser"));
+
+var Cookies = _interopRequireWildcard(require("./helper/cookie"));
+
+var Auth = _interopRequireWildcard(require("./hooks/auth"));
+
+var PartsHooks = _interopRequireWildcard(require("./hooks/parts"));
 
 var PostHooks = _interopRequireWildcard(require("./hooks/post"));
 
-var SidebarHooks = _interopRequireWildcard(require("./hooks/sidebar"));
+var ScodeHooks = _interopRequireWildcard(require("./templates/shortcode"));
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+var MenuHooks = _interopRequireWildcard(require("./templates/menu"));
 
-var hooks = [PostHooks, SidebarHooks, MenuHooks, ScodeHooks];
-var nr_ajax_url = '/admin-ajax';
-exports.nr_ajax_url = nr_ajax_url;
-var nr_socket_event = 'nr-socket-io-core-channel';
-exports.nr_socket_event = nr_socket_event;
+var SidebarHooks = _interopRequireWildcard(require("./templates/sidebar"));
 
-/* Export various hooks dynamically */
-for (var i = 0; i < hooks.length; i++) {
-  for (var k in hooks[i]) {
-    module.exports[k] = hooks[i][k];
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var bulk_export = [Auth, Parser, PartsHooks, PostHooks, SidebarHooks, MenuHooks, ScodeHooks, Cookies];
+var ajax_url = '/admin-ajax';
+exports.ajax_url = ajax_url;
+var socket_event = 'nr-socket-io-core-channel';
+exports.socket_event = socket_event;
+
+for (var i = 0; i < bulk_export.length; i++) {
+  for (var k in bulk_export[i]) {
+    module.exports[k] = bulk_export[i][k];
   }
 }

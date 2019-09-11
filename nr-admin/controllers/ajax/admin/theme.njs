@@ -22,5 +22,5 @@ module.exports.get=function($)
 		theme_data[k]=dt;
 	}
 	
-	exit($, {'themes':theme_data});
+	$.exit( {'themes':theme_data});
 }

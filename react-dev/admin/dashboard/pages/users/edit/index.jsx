@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import Spinner from "react-svg-spinner";
 
-import {ajaxRequest , Placeholder} from 'nodereactor/react';
+import {ajax_request , Placeholder} from 'nodereactor/react';
 
 const InputFields=(props)=>
 {
@@ -24,10 +24,9 @@ class ProcessUser extends Component
 
         let ob={};
 
-        if(this.props.ResponseData.user)
-        {
-            ob=this.props.ResponseData.user
-        }
+        let {response={}}=this.props;
+
+        response.user ? ob=response.user : 0;
 
         this.state=
         {
@@ -66,7 +65,7 @@ class ProcessUser extends Component
 		delete values.submitable;
         delete values.user_username;
         
-        ajaxRequest('nr_update_user', {values}, r=>
+        ajax_request('nr_update_user', {values}, r=>
 		{
             let {message='Request Failed'}=r;
 
@@ -149,7 +148,7 @@ const EditUser=(props)=>
         user_id=user_id[user_id.length-1];
     }
     
-    return <Placeholder Data={{'action':'nr_get_edit_user', 'user_id':user_id}} Component={ProcessUser}/>
+    return <Placeholder action="nr_get_edit_user" data={{'user_id':user_id}} component={ProcessUser}/>
 }
 
 export {EditUser}

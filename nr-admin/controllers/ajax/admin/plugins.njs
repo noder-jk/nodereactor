@@ -15,11 +15,13 @@ module.exports.get=function($)
 		dt.license		= p.license || '';
 		dt.tags			= p.tags || '';
 		dt.version		= p.version;
+		dt.dependents	= nr_plugins[k].dependents;
+		dt.dependencies	= nr_plugins[k].dependencies;
 
 		dt.activated	= $.nr_active_plugins.indexOf(k)>-1;
 
 		plug_data[k]=dt;
 	}
 	
-	exit($, plug_data);
+	$.exit( plug_data);
 }

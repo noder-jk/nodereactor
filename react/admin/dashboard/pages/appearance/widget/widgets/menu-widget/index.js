@@ -11,20 +11,20 @@ var _react2 = require("nodereactor/react");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 var ProcessMenuInput = function ProcessMenuInput(props) {
-  var menu_widget = props.ResponseData;
-  var _props$ul_class = props.ul_class,
-      ul_class = _props$ul_class === void 0 ? '' : _props$ul_class,
-      _props$li_class = props.li_class,
-      li_class = _props$li_class === void 0 ? '' : _props$li_class,
-      _props$li_active_clas = props.li_active_class,
-      li_active_class = _props$li_active_clas === void 0 ? '' : _props$li_active_clas,
-      _props$anchor_class = props.anchor_class,
-      anchor_class = _props$anchor_class === void 0 ? '' : _props$anchor_class,
-      _props$menu_names = props.menu_names,
-      menu_names = _props$menu_names === void 0 ? [] : _props$menu_names;
+  var response = props.response,
+      properties = props.properties;
+  var menu_widget = response;
+  var _properties$ul_class = properties.ul_class,
+      ul_class = _properties$ul_class === void 0 ? '' : _properties$ul_class,
+      _properties$li_class = properties.li_class,
+      li_class = _properties$li_class === void 0 ? '' : _properties$li_class,
+      _properties$li_active = properties.li_active_class,
+      li_active_class = _properties$li_active === void 0 ? '' : _properties$li_active,
+      _properties$anchor_cl = properties.anchor_class,
+      anchor_class = _properties$anchor_cl === void 0 ? '' : _properties$anchor_cl,
+      _properties$menu_name = properties.menu_names,
+      menu_names = _properties$menu_name === void 0 ? [] : _properties$menu_name;
   return _react["default"].createElement("div", null, _react["default"].createElement("small", null, "Menu Name"), Object.keys(menu_widget).map(function (menu_name) {
     return _react["default"].createElement("div", {
       key: menu_name
@@ -58,19 +58,18 @@ var ProcessMenuInput = function ProcessMenuInput(props) {
 };
 
 var MenuWidgetInput = function MenuWidgetInput(props) {
-  return _react["default"].createElement(_react2.Placeholder, _extends({
-    Data: {
-      'action': 'nr_get_menu_for_visitor'
-    },
-    Component: ProcessMenuInput
-  }, props));
+  return _react["default"].createElement(_react2.Placeholder, {
+    action: "nr_get_menu_for_visitor",
+    component: ProcessMenuInput,
+    properties: props
+  });
 };
 
 exports.MenuWidgetInput = MenuWidgetInput;
 
 var MenuWidgetOutput = function MenuWidgetOutput(props) {
-  var _props$menu_names2 = props.menu_names,
-      menu_names = _props$menu_names2 === void 0 ? [] : _props$menu_names2;
+  var _props$menu_names = props.menu_names,
+      menu_names = _props$menu_names === void 0 ? [] : _props$menu_names;
   return menu_names.map(function (item) {
     return (0, _react2.nav_menu)({
       'menu_name': item

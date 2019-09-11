@@ -220,15 +220,17 @@ var mods=
     'wp/menu.njs',
     'php/cookie.njs',
     'php/session.njs',
-    'wp/post/meta.njs',
     'wp/option.njs',
+    'wp/user.njs',
     'php/response.njs',
-    'wp/post/post.njs',
-    'wp/post/helper.njs',
     'wp/taxonomy/terms.njs',
-    'wp/post/permalink.njs',
     'nr/helper.njs',
-    'wp/post/media.njs'
+
+    'wp/post/permalink.njs',
+    'wp/post/post.njs',
+    'wp/post/media.njs',
+    'wp/post/meta.njs',
+    'wp/post/pagination.njs',
 ];
 
 var nr_funcs={};

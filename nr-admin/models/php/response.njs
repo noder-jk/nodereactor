@@ -26,9 +26,9 @@ module.exports.http_response_code=function(code)
 }
 
 /* This function remove temporary scripts from cache. */
-global.exit=function ($, resp)
+module.exports.exit=function(resp)
 {
-	terminate($, function($)
+	terminate(this, function($)
 	{
 		var send_str=false;
 
@@ -37,14 +37,7 @@ global.exit=function ($, resp)
 			typeof resp=='string' ? send_str=resp : $.echo(resp);
 		}
 		
-		/* It's impossible to save session and option and session if NR is not installed yet. */
-		if(!nr_db_config)
-		{
-			$.nr_call_real_set_option=false;
-			$.nr_call_real_set_session=false;
-		}
-
-		var send_resp_now=($)=>
+		var send_resp_now=($, bummer)=>
 		{
 			/* Convert cookies to response header */
 			$=real_set_cookie($);
@@ -75,6 +68,7 @@ global.exit=function ($, resp)
 			
 			var c_type	=	send_str ? 'text/html' : 'application/json';
 			var rsp_t	=	send_str || JSON.stringify($.nr_response_queue);
+
 
 			/* Send json response */
 			$.nr_response.set('Content-Type', c_type);

@@ -5,7 +5,7 @@ import Spinner from 'react-svg-spinner';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
-import {ajaxRequest} from 'nodereactor/react';
+import {ajax_request} from 'nodereactor/react';
 
 import {ObjectContents} from './objects';
 import {CustomLink} from './custom';
@@ -79,7 +79,7 @@ class Menus extends Component
 
             /* Now request to server to delete. */
             this.setState({'loading':true});
-            ajaxRequest('nr_delete_menu', {menu_name}, (r, d, e)=>
+            ajax_request('nr_delete_menu', {menu_name}, (r, d, e)=>
             {
                 this.setState({'loading':false}, this.fetchMenuContents);
                 
@@ -92,7 +92,7 @@ class Menus extends Component
     {
         this.setState({'loading':true});
 
-        ajaxRequest('nr_get_menu_items', r=>
+        ajax_request('nr_get_menu_items', r=>
         {
             let {locations={}, nr_menus={}}=r;
 

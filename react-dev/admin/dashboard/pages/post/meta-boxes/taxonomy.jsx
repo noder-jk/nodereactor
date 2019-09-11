@@ -3,7 +3,7 @@ import Spinner from "react-svg-spinner";
 
 import Swal from 'sweetalert2';
 
-import {ajaxRequest, get_hierarchy} from 'nodereactor/react';
+import {ajax_request, get_hierarchy} from 'nodereactor/react';
 import {Editor as TaxonomyManager} from '../taxonomy/index';
 
 class PostTaxonomy extends Component
@@ -40,7 +40,7 @@ class PostTaxonomy extends Component
 
         let {post_id, meta_box_id}=this.props;
         
-        ajaxRequest('nr_get_taxonomy_in_editor', {'taxonomy':meta_box_id, post_id}, (r, d, e)=>
+        ajax_request('nr_get_taxonomy_in_editor', {'taxonomy':meta_box_id, post_id}, (r, d, e)=>
         {
             if(e)
             {
@@ -139,7 +139,7 @@ class PostTaxonomy extends Component
 
         this.setState({'loading':true});
 
-        ajaxRequest('nr_save_post_editor_taxonomy', req_ob, r=>
+        ajax_request('nr_save_post_editor_taxonomy', req_ob, r=>
         {
             this.setState({'loading':false});
         });
@@ -154,21 +154,31 @@ class PostTaxonomy extends Component
     {
         let {meta_box_id}=this.props;
 
+        let {
+                hierarchical, 
+                all_terms, 
+                current_terms=[],
+                loading,
+                multiple,
+                primary_term_key,
+                primary_term,
+                create
+            
+            }=this.state;
+
         let pass_prop=
         {
             'taxonomy':meta_box_id, 
-            'hierarchical':this.state.hierarchical, 
+            'hierarchical':hierarchical, 
             'taxonomy_title':false,
-            'taxonomies':this.state.all_terms
+            'taxonomies':all_terms
         }
 
-        let {all_terms, current_terms=[]}=this.state;
-
-        return <div>
+        return <div id="nr_taxonomy_metabox">
             {
-                this.state.loading ? <Spinner size="15px"/> : null
+                loading ? <Spinner size="15px"/> : null
             }
-
+            <i><small>Don't forget to select primary term.</small></i>
             <form onSubmit={(e)=>e.preventDefault()} style={{'maxHeight':'500px', 'overflow':'auto'}}>
                 <table style={{'width':'100%'}}>
                     <tbody>
@@ -178,20 +188,27 @@ class PostTaxonomy extends Component
                                 return <tr key={item.term_id}>
                                     <td>
                                         <div style={{'paddingLeft':(item.nest_level*12)+'px'}}>
-                                        <input
-                                            type={this.state.multiple==true ? "checkbox" : "radio"}
-                                            data-ignore={true} 
-                                            name={"taxonomy_"+meta_box_id} 
-                                            value={item.term_id} 
-                                            defaultChecked={current_terms.indexOf(item.term_id)>-1}
-                                            onChange={this.toggleCurrentTerms}/> {item.name} 
+                                            <label className="label-pointer mb-0">
+                                                <input
+                                                    type={multiple==true ? "checkbox" : "radio"}
+                                                    data-ignore={true} 
+                                                    name={"taxonomy_"+meta_box_id} 
+                                                    value={item.term_id} 
+                                                    defaultChecked={current_terms.indexOf(item.term_id)>-1}
+                                                    onChange={this.toggleCurrentTerms}/> {item.name} 
+                                            </label>
                                         </div>
                                     </td>
                                     <td className="text-right">
                                         {
-                                            current_terms.indexOf(item.term_id)>-1 ?
-                                            <input type="radio" title="Select Primary Term" name={this.state.primary_term_key} value={item.term_id} defaultChecked={this.state.primary_term==item.term_id} onChange={this.setPrimaryTerm}/> 
-                                            : null
+                                            current_terms.indexOf(item.term_id)==-1 ? null :
+                                            <input 
+                                                type="radio" 
+                                                title="Select Primary Term" 
+                                                name={primary_term_key} 
+                                                value={item.term_id} 
+                                                defaultChecked={primary_term==item.term_id} 
+                                                onChange={this.setPrimaryTerm}/> 
                                         }
                                     </td>
                                 </tr>
@@ -202,7 +219,7 @@ class PostTaxonomy extends Component
             </form>
 
             {
-                this.state.create ? 
+                create ? 
                 <div className="mt-2">
                     <TaxonomyManager {...pass_prop} fetchTaxonomies={this.fetchTaxonomy} closeEditor={this.toggleEditor} cls="container-fluid"/>
                 </div> : 

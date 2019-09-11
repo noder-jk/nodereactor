@@ -1,4 +1,4 @@
-const get_commons=function($)
+const get_commons=function()
 {
 	/* Define table name using prefix */
 	var terms			=	nr_db_config.tb_prefix+'terms';
@@ -29,19 +29,14 @@ const get_commons=function($)
 	return query_object;
 }
 
-
-global.pre_get_terms=function($, callback)
+module.exports.before_get_terms=function($, callback)
 {
-	var commons=get_commons($);
-	
-	$.query=commons;
-
-	$.do_action('pre_get_terms', callback);
+	$.do_action('before_get_terms', get_commons(), callback);
 }
 
 module.exports.nr_fill_term_cond=function(nr_cond, args)
 {
-	/* Loop through all hook and pre_get provided params, and fill the condition */
+	/* Loop through all hook and before_get provided params, and fill the condition */
 	for(var k in args)
 	{
 		/* Store the first level value to condition, if not exist already. */
@@ -69,6 +64,8 @@ module.exports.nr_term_condition_processor=function(args,condition)
 	
 	var clause={'intersect':[],'unite':[], 'exclude':[]};
 
+	var p_helper=require('../post/helper.njs');
+
 	/* Generate conditions for where clauses. */
 	for(var key in condition)
 	{
@@ -89,25 +86,25 @@ module.exports.nr_term_condition_processor=function(args,condition)
                     case 'description'  :
                     case 'parent'       :
                     case 'slug'         :
-                    case 'taxonomy'     :   var c=get_sql_clauses(condition[key][column], key, column, terms);
+                    case 'taxonomy'     :   var c=p_helper.get_sql_clauses(condition[key][column], key, column, terms);
 											clause[key]=clause[key].concat(c.clause);
 											condition[key][column]=c.column;
 											break;
 											
-                    case 'post_id'     :   	var c=get_sql_clauses(condition[key][column], key, column, pst);
+                    case 'post_id'     :   	var c=p_helper.get_sql_clauses(condition[key][column], key, column, pst);
 											clause[key]=clause[key].concat(c.clause);
 											condition[key][column]=c.column;
                                             break;
                                             
                     case 'meta_key'     :
-                    case 'meta_value'   :	var c=get_sql_clauses(condition[key][column], key, column, mets);
+                    case 'meta_value'   :	var c=p_helper.get_sql_clauses(condition[key][column], key, column, mets);
 											clause[key]=clause[key].concat(c.clause);
 											condition[key][column]=c.column;
 											break;
 				}
 			}
 		}
-		
+
 		args[key]!==undefined ? args[key]=condition[key] : 0;
 	}
 

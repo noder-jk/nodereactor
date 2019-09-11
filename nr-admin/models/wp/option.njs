@@ -23,7 +23,7 @@ module.exports.update_option=function(option, nr_package)
 module.exports.add_option=function(option, nr_package)
 {
 	/* to_set parameter is json, key value paired data. */
-	if(nr_package===0)
+	if(nr_package===true)
 	{
 		for(var k in option)
 		{
@@ -47,7 +47,7 @@ module.exports.add_option=function(option, nr_package)
 
 module.exports.get_option=function(key, nr_package)
 {
-	if(nr_package===0)
+	if(nr_package===true)
 	{
 		return this.nr_set_option_queue.core.c[key];
 	}
@@ -62,7 +62,7 @@ module.exports.get_option=function(key, nr_package)
 
 module.exports.delete_option=function(key, nr_package)
 {
-	if(nr_package===0)
+	if(nr_package===true)
 	{
 		if(this.nr_set_option_queue.core.c[key])
 		{
@@ -86,9 +86,9 @@ module.exports.delete_option=function(key, nr_package)
 global.real_set_option=function($, resp_next)
 {
 	// for core functions. Not for developers.
-	if($.nr_call_real_set_option!==true && typeof resp_next=='function')
+	if(!nr_db_config)
 	{
-		resp_next($);
+		typeof resp_next=='function' ? resp_next($) : 0;
 		return;
 	}
 	
@@ -126,8 +126,7 @@ global.real_set_option=function($, resp_next)
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Other necessary functions.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-global.bloginfo=function($, key, fallback)
+module.exports.bloginfo=function(key)
 {
-	// All the option values owned by core can be retrieved by bloginfo. OR get_option('option_name', 0). 0 means the owner core.
-	return $.nr_set_option_queue.core.c[key]==undefined ? (fallback!==undefined ? fallback : false) : $.nr_set_option_queue.core.c[key];
+	return this.get_option(key, true);
 }

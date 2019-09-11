@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Swal from 'sweetalert2';
 import Spinner from 'react-svg-spinner';
 
-import {ajaxRequest} from 'nodereactor/react';
+import {ajax_request} from 'nodereactor/react';
 
 import './style.scss';
 
@@ -26,7 +26,7 @@ class InstalledThemes extends Component
     {
         this.setState({'loading':true});
 
-        ajaxRequest('nr_get_installed_themes', r=>
+        ajax_request('nr_get_installed_themes', r=>
         {
             let ob={'loading':false};
 
@@ -47,7 +47,7 @@ class InstalledThemes extends Component
 
         this.setState({'loading':true});
 
-        ajaxRequest('nr_theme_plugin_action', dt, (r,d,e)=>
+        ajax_request('nr_theme_plugin_action', dt, (r,d,e)=>
         {
             if(!e)
             {

@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowCircleRight, faArrowAltCircleDown} from '@fortawesome/free-solid-svg-icons';
 
-import {ajaxRequest, get_hierarchy} from 'nodereactor/react';
+import {ajax_request, get_hierarchy} from 'nodereactor/react';
 
 class ObjectContents extends Component
 {
@@ -83,7 +83,7 @@ class ObjectContents extends Component
     {
         let {action}=this.props.properties;
         
-        ajaxRequest(action, r=>
+        ajax_request(action, r=>
         {
             let {objects={}}=r;
 

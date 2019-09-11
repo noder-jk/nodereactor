@@ -16,15 +16,9 @@ class DashboardContainer extends Component
 
     componentDidMount()
     {
-        getNavList((r,c)=>{
-            if(r)
-            {
-                this.setState({'content':<FindComp comp_props={c}/>})
-            }
-            else
-            {
-                this.setState({'content':<div>Something went wrong.</div>});
-            }
+        getNavList((r,c)=>
+        {
+            this.setState({'content':r ? <FindComp comp_props={c}/> : <div>Something went wrong.</div>});
         })
     }
 

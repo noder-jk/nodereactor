@@ -3,12 +3,14 @@ module.exports.run=function($, next)
 	var routes=
 	{
 		'nr_ajax_nopriv_nr_get_init_component'    	:{'path':'init.njs',                      	'method':'dispatch'},
-		
 		'nr_ajax_nopriv_get_init_frontend'    		:{'path':'frontend/init.njs',               'method':'init'},
 		
 		'nr_ajax_nopriv_nr_install_check' 	    	:{'path':'installer/installer.njs',         'method':'run'},
 		'nr_ajax_nr_get_admin_nav' 		        	:{'path':'admin/navs.njs',                  'method':'navs'},
 
+		'nr_ajax_nr_get_gen_settings' 	    		:{'path':'admin/settings.njs',              'method':'gen'},
+		'nr_ajax_nr_basic_settings_getter' 	    	:{'path':'admin/settings.njs',              'method':'basic_get'},
+		'nr_ajax_nr_basic_settings_saver' 	    	:{'path':'admin/settings.njs',              'method':'basic_save'},
 		'nr_ajax_nr_get_general_settings' 	    	:{'path':'admin/settings.njs',              'method':'get'},
 		'nr_ajax_nr_save_general_settings'        	:{'path':'admin/settings.njs',              'method':'save'},
 		'nr_ajax_nr_get_permalink_settings'        	:{'path':'admin/settings.njs',              'method':'permalink_page'},
@@ -38,7 +40,7 @@ module.exports.run=function($, next)
 		'nr_ajax_nr_save_post' 			        	:{'path':'admin/post.njs', 					'method':'save'},
 		'nr_ajax_nr_get_nav_posts' 			        :{'path':'admin/post.njs', 					'method':'p_for_nav'},
 
-		'nr_ajax_create_update_category'			:{'path':'admin/taxonomy.njs', 				'method':'save'},
+		'nr_ajax_nr_create_update_category'			:{'path':'admin/taxonomy.njs', 				'method':'save'},
 		'nr_ajax_nr_get_taxonomy'					:{'path':'admin/taxonomy.njs', 				'method':'get_taxonomy'},
 		'nr_ajax_nr_delete_taxonomy'				:{'path':'admin/taxonomy.njs', 				'method':'delete'},
 		'nr_ajax_nr_get_taxonomy_in_editor'			:{'path':'admin/taxonomy.njs', 				'method':'get_for_editor'},

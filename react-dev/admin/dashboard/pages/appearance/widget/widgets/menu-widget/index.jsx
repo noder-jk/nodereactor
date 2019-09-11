@@ -4,9 +4,11 @@ import {Placeholder, nav_menu} from 'nodereactor/react';
 
 const ProcessMenuInput=(props)=>
 {
-    let menu_widget=props.ResponseData;
+    let {response, properties}=props;
 
-    let {ul_class='', li_class='', li_active_class='', anchor_class='', menu_names=[]}=props;
+    let menu_widget=response;
+
+    let {ul_class='', li_class='', li_active_class='', anchor_class='', menu_names=[]}=properties;
 
     return <div>
         <small>Menu Name</small>
@@ -34,7 +36,7 @@ const ProcessMenuInput=(props)=>
 
 const MenuWidgetInput=(props)=>
 {
-    return <Placeholder Data={{'action':'nr_get_menu_for_visitor'}} Component={ProcessMenuInput} {...props}/>
+    return <Placeholder action="nr_get_menu_for_visitor" component={ProcessMenuInput} properties={props}/>
 }
 
 const MenuWidgetOutput=(props)=>

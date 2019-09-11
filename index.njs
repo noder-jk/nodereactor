@@ -1,82 +1,41 @@
-const nr_path_mod=require('path');
-const get_nodes_path=function(nodes)
+require('./nr-utilities/console-info.njs');
+
+const path_finder		= require('./nr-utilities/path.njs');
+const utility_configs	= require('./nr-utilities/configs.njs');
+
+module.exports.app=function(project_root)
 {
-    var resp={};
-
-	nodes.forEach(item=>
-	{
-		try
-		{
-			var pt=require.resolve(item+'/package.json'); 
-
-			var pk=require(item+'/package.json');
-
-            resp[item]=
-            {
-                'dir':nr_path_mod.dirname(pt), 
-                'package':pk
-            }
-		}
-        catch(e){}
-
-    });
-    
-    return resp;
-}
-
-module.exports=function(project_root, extensions)
-{
-	console.log('');
-	console.log('-> Package Source');
-	console.log('https://github.com/noder-jk/nodereactor');
-	console.log('https://www.npmjs.com/package/nodereactor');
-	console.log('');
-	console.log('-> Documentations');
-	console.log('https://NodeReactor.com');
-	console.log('');
-	console.log('-> Add-ons');
-	console.log('https://nodereactor.com/add-ons/themes/');
-	console.log('https://nodereactor.com/add-ons/plugins/');
-	console.log('');
-	console.log('-> Communities');
-	console.log('https://facebook.com/NodeReactorCMS');
-	console.log('https://facebook.com/groups/NodeReactorDevs');
-	console.log('');
-	console.log('');
-
 	var ini_errors=[];
 
 	/* Server configs */
 	var pack=require(project_root+'/package.json');
 	
-	pack.homepage!=='/' 		? ini_errors.push('You must add homepage:"/" in package.json located in project root.') : null;
-	!pack.nr_configs 			? ini_errors.push('Configs for NodeReactor not found in package.json') 	: null;
+	// Check homepage, proxy for react build
+	pack.homepage!=='/' 		? ini_errors.push('You must set homepage:"/"') : null;
+	!pack.proxy			 		? ini_errors.push('You must set proxy for React dev server.') : null;
 
+	// Check config object for NR server
+	!pack.nr_configs 			? ini_errors.push('NodeReactor configs not found.') 	: null;
 	!pack.nr_configs 			? pack.nr_configs={} : null;
 
-	pack.nr_configs.port 		= process.env.PORT || pack.nr_configs.port;
-	!pack.nr_configs.port 		? ini_errors.push('Dynamic port is not available. Explicit one also omitted.') : null;
-
+	// Check port
+	!pack.nr_configs.port 		? ini_errors.push('Port is required.') : null;
 	!pack.nr_configs.url 		? ini_errors.push('Home URL is required.') : null;
 
-	/* Utility configs */
-	global.max_db_connection	= 50;
-	global.max_upload_size		= ((1024*1) * 1024 * 1024); // 1 GB
-	global.session_max_age		= 86400; // One Day
-	global.track_file_request	= false;
-	global.file_request_pattern	= '';
-	global.hot_linking_pattern	= '.*';
-	global.refresh_utility_config=true;
-	global.project_mode_dev		= process.argv.indexOf('mode=development')>-1;
-
-
+	
 	if(ini_errors.length>0)
 	{
 		ini_errors.forEach(item=>console.log(item+'\n'));
 
-		console.log('\x1b[41m', '-> NodeReactor has been terminated', '\x1b[0m');
+		console.log('\x1b[7m', '-> NodeReactor has been terminated', '\x1b[0m');
 		
 		process.exit(1);
+	}
+
+	// Set other configs
+	for(var k in utility_configs)
+	{
+		global[k]=utility_configs[k];
 	}
 
 	/* Init configs of theme, plugins etc */
@@ -84,9 +43,7 @@ module.exports=function(project_root, extensions)
 	{
 		nr_port			: pack.nr_configs.port,
 		nr_home_url		: pack.nr_configs.url,
-		nr_project_root	: project_root,
-		nr_plugins		: [],
-		nr_themes		: ['semplicemente']
+		nr_project_root	: project_root
 	}
 
 	global.nrg						= {};
@@ -94,15 +51,6 @@ module.exports=function(project_root, extensions)
 
 	global.nr_home_url				= data_ob.nr_home_url; // including trailing slash
 
-	global.nr_session_cookie_name	= 'f8376410e97a1357a406';
-	global.nr_session_cookie_pass	= 'c0ae6e2891174443aeb2';
-
-	global.nr_cookie_expiry			= data_ob.nr_cookie_expiry ? data_ob.nr_cookie_expiry : (60*60*24); // Second
-	global.nr_login_expiry			= data_ob.nr_login_expiry ? data_ob.nr_login_expiry : (60*60*24); // Second
-
-	global.default_gallery_limit	= 25;
-	global.default_pagination		= 7;
-	
 	global.node_modules				= {path:require('path')};
 
 	global.nr_project_root			= data_ob.nr_project_root;
@@ -116,9 +64,6 @@ module.exports=function(project_root, extensions)
 	global.nr_modules		= nr_package_root+'/nr-admin/modules/';
 
 	global.nr_configs		= data_ob.nr_project_root+'/nr-content/configs/';
-	
-	global.nr_themes		= Object.assign(extensions.themes, get_nodes_path(data_ob.nr_themes));
-	global.nr_plugins		= Object.assign(extensions.plugins, get_nodes_path(data_ob.nr_plugins)) ;
 
 	global.nr_contents		= data_ob.nr_project_root+'/nr-content/';
 	global.nr_uploads		= data_ob.nr_project_root+'/nr-content/uploads/';
@@ -128,17 +73,54 @@ module.exports=function(project_root, extensions)
 	global.nr_uploads_url	= nr_home_url+'nr-content/uploads/';
 	global.nr_includes_url	= nr_home_url+'nr-includes/';
 
-	/* Process dependencies */
+	// NR dependency keeper
+	global.nr_themes		= {};
+	global.nr_plugins		= {};
+
+	// get NR dependencies from project root 
+	var pr_d={};
+	// Loop through all NR dependencies
+	pack.nr_configs.dependencies.forEach(function(d)
+	{
+		// Check if the add-on is really installed.
+		// Check if exists in either core dependency or devDependency object. 
+		var deps=pack.dependencies || {};
+
+		// It would be relative file path in case of local install,  otherwise version number if installed from npm.
+		var packg=deps[d]; 
+
+		// Put it in temporary dependency keeper object 'pr_d';
+		packg ? pr_d[d]={rel_path:packg} : 0;
+	});
+
+	// Get NR dependencies recursively using 'path_finder' function.
+	var ad_deps				= Object.assign(path_finder({'semplicemente':{}}, nr_project_root), path_finder(pr_d, nr_project_root));
+	
+	// Loop through all dependencies and put in global objects accordingly
+	for(var k in ad_deps)
+	{
+		ad_deps[k].type=='theme' ? nr_themes[k]=ad_deps[k] : 0;
+		ad_deps[k].type=='plugin' ? nr_plugins[k]=ad_deps[k] : 0;
+	}
+	// console.log(Object.keys(nr_themes));
+	// console.log(Object.keys(nr_plugins));
+
+
+	/* Load server modules and initialize */
+	return require('express')();
+}
+
+module.exports.init=function(nr_app)
+{
+	/* Process app dependencies */
 	var deps=require(node_modules.path.normalize(nr_models+'nr/dependencies.njs'));
 	deps.deploy_vendor_scripts();
 	deps.deploy_custom_scripts();
-	deps.deploy_src(data_ob);
+	deps.deploy_src();
 	deps.deploy_db();
-	
+
 	var blues=require(node_modules.path.normalize(nr_models+'nr/blueprint.njs'));
 
-	/* Load server modules and initialize */
-	var nr_app				= node_modules.express();
 	var nr_server 			= node_modules.http.Server(nr_app);
 
 	global.nr_socket 		= node_modules['socket.io']();
@@ -147,6 +129,7 @@ module.exports=function(project_root, extensions)
 
 	global.nr_db_pool			= get_pool();
 
+	// All the post request here
 	nr_app.all('/*', function(request, response) 
 	{
 		var $=blues.get_nr_blueprint(request, response);
@@ -154,17 +137,18 @@ module.exports=function(project_root, extensions)
 		deps.handle_route($);
 	});
 
-	/* Set router for all the socket activity.  */
+	// All the socket request here
 	nr_socket.on('connection', function(socket)
 	{
 		var $=blues.get_socket_blueprint(socket.request, socket);
 
 		$.socket_event='connected';
 		
-		$.set_cookie( 'socketCookie', 'socket cookie value', 3600);
+		$.set_cookie( 'test-socketCookie', 'test-socket cookie value', 3600);
 
 		deps.handle_route($);
 
+		// Socket response receive
 		socket.on('nr-socket-io-core-channel', function(data)
 		{
 
@@ -173,6 +157,7 @@ module.exports=function(project_root, extensions)
 			$._IO=data;
 
 			deps.handle_route($);
+
 		}).on('disconnect', function()
 		{
 			$.socket_event='disconnected';
@@ -181,13 +166,13 @@ module.exports=function(project_root, extensions)
 		});
 	});
 	
-
 	/* Now finally start listening. */
 	nr_server.listen(nr_port,function()
 	{
 		console.log('');
-		console.log('-> NodeReactor listening '+nr_server.address().port);
+		console.log('-> Node Reactor is listening on '+nr_server.address().port);
 		console.log('-> Defined home url is '+nr_home_url);
+		console.log('-> React dev server url will be different.');
 		console.log('');
 	});
 }

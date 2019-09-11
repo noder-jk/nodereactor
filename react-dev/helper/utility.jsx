@@ -1,4 +1,5 @@
 import React from 'react';
+import Spinner from 'react-svg-spinner';
 
 const get_url_parameter=(name)=>
 {
@@ -11,7 +12,7 @@ const get_url_parameter=(name)=>
 
 const Pagination=(props)=>
 {
-    let {pgn={}, wrapperId='', activeClass='', inactiveClass='', clickEvent=false}=props;
+    let {pgn={}, wrapperId='', activeClass='', inactiveClass='', onClick=false}=props;
 
     if(!pgn.pages || !Array.isArray(pgn.pages) || pgn.pages.length==0)
     {
@@ -21,24 +22,21 @@ const Pagination=(props)=>
     return(
         <div id={wrapperId}>
             {
-                pgn.pages.length>1 ? 
+                pgn.pages.length==0 ? null :
                 pgn.pages.map(item=>
                 {
                     let attr=
                     {
-                        'href':'?page='+item,
-                        'data-offset':item,
-                        'key':'offset_'+item,
-                        'className':item==pgn.current ? activeClass : inactiveClass
+                        'href'          :   '?page='+item,
+                        'data-offset'   :   item,
+                        'key'           :   'offset_'+item,
+                        'className'     :   item==pgn.current ? activeClass : inactiveClass
                     }
 
-                    if(clickEvent)
-                    {
-                        attr.onClick=(e)=>clickEvent(e, item);
-                    }
+                    onClick ? attr.onClick=(e)=>onClick(e, item) : 0;
 
                     return <a {...attr}>{item}</a>
-                }) : null
+                })
             }
         </div>
     )
@@ -79,4 +77,13 @@ const get_hierarchy=function(arg, parent, id, not_parent)
 	return ar;
 }
 
-export {get_url_parameter, Pagination, get_hierarchy}
+const SpinIcon=(props)=>
+{
+    let {show, space=true, size="15px"}=props;
+
+    let Sp=<Spinner size={size}/>
+
+    return show ? (space ? <span>&nbsp; {Sp}</span> : Sp) : null
+}
+
+export {get_url_parameter, Pagination, SpinIcon, get_hierarchy}

@@ -4,7 +4,7 @@ import Spinner from 'react-svg-spinner';
 
 import {FindComp} from 'nodereactor/react/helper/comp-finder';
 
-import {ajaxRequest , Placeholder, parse_form, array_pull_down, array_pull_up} from 'nodereactor/react';
+import {ajax_request , Placeholder, parse_dom_form, array_pull_down, array_pull_up} from 'nodereactor/react';
 
 import './style.scss';
 
@@ -72,7 +72,7 @@ class WidgetProcess extends Component
     {
         super(props);
 
-        const {widgets={}, sidebars={}, widget_in_sidebar={}}=this.props.ResponseData;
+        const {widgets={}, sidebars={}, widget_in_sidebar={}}=this.props.response;
         
         Object.keys(widget_in_sidebar).forEach(k=>
         {
@@ -122,7 +122,7 @@ class WidgetProcess extends Component
                 let pkg=widget[n].dataset.nr_package; 
                 pkg=pkg=='true' ? true : pkg;
 
-                let properties=parse_form(widget[n])
+                let properties=parse_dom_form(widget[n])
 
                 widget_value_array.push
                 ({
@@ -137,7 +137,7 @@ class WidgetProcess extends Component
         }
 
         this.setState({'loading':true});
-        ajaxRequest('nr_widget_save', {'widget_and_areas':widget_in_sidebar}, (r, d, e)=>
+        ajax_request('nr_widget_save', {'widget_and_areas':widget_in_sidebar}, (r, d, e)=>
         {
             this.setState({'loading':false});
             Swal.fire(!e ? 'Changes Saved.' : 'Request Error');
@@ -274,7 +274,7 @@ class WidgetProcess extends Component
 
 const AdminWidget=(props)=>
 {
-    return <Placeholder Data={{'action':'nr_get_widget_list'}} Component={WidgetProcess}/>
+    return <Placeholder action="nr_get_widget_list" component={WidgetProcess}/>
 }
 
 export {AdminWidget} 

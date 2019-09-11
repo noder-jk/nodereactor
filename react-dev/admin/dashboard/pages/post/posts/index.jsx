@@ -3,9 +3,7 @@ import Spinner from "react-svg-spinner";
 import Swal from 'sweetalert2';
 
 import {
-        ajaxRequest,
-        Placeholder, 
-        parse_form, 
+        ajax_request,
         get_url_parameter, 
         Pagination,
         get_hierarchy
@@ -114,11 +112,11 @@ class PostList extends Component
             /* Request delete action */
             this.setState({loading_icon:true});
 
-            ajaxRequest('nr_delete_posts', {'post_id':checked_posts}, r=>
+            ajax_request('nr_delete_posts', {'post_id':checked_posts}, r=>
             {
                 this.setState({'loading_icon':false});  
 
-                r.status=='done' ? this.fetchPosts() : Swal.fire('Error', 'Something went wrong.', 'error'); 
+                r.status=='success' ? this.fetchPosts() : Swal.fire('Error', 'Something went wrong.', 'error'); 
             });
         })
     }
@@ -134,13 +132,15 @@ class PostList extends Component
             /* This block will be called when user click pagination buttons */
             e.preventDefault();
 
-            let el=this.page_number;
+            console.log(this.list_container)
+
+            let el=this.list_container.getElementsByClassName('nr_pagination_page_number')[0];
             el.value=page_num;
             form.page=page_num;
         }
 
         this.setState({loading_icon:true});
-        ajaxRequest('nr_get_post_list', {'query':JSON.stringify(form)}, (r, d, e)=>
+        ajax_request('nr_get_post_list', {'query':JSON.stringify(form)}, (r, d, e)=>
         {
             if(e)
             {
@@ -164,7 +164,7 @@ class PostList extends Component
         
         posts=get_hierarchy(posts, 'post_parent', 'post_id');
 
-        return <div id="post_list_container">
+        return <div id="post_list_container" ref={el=>this.list_container=el}>
             <h4>All Posts {loading_icon ? <Spinner size="15px"/> : null}</h4>
             
             <Action 
@@ -182,7 +182,7 @@ class PostList extends Component
                 <Pagination 
                     pgn={pagination} 
                     activeClass="btn btn-outline-secondary btn-sm ml-1 mr-1" 
-                    clickEvent={this.fetchPosts} 
+                    onClick={this.fetchPosts} 
                     inactiveClass="btn btn-secondary btn-sm ml-1 mr-1"/>
             </div>
         </div>

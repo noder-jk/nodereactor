@@ -36,41 +36,57 @@ module.exports.use_taxonomy=function(ob)
     }
 }
 
-module.exports.delete_term=function(term_ids, next)
+module.exports.delete_term=function(term_ids_ar, d_next)
 {
-	this.do_action('pre_delete_term', term_ids, function($)
+	this.do_action('before_delete_term', term_ids_ar, function($)
 	{
-		term_ids=term_ids.join(',');
+		term_ids=term_ids_ar.join(',');
 
+		// Firstly delete term meta
 		var delete_meta=($, next)=>
 		{
 			var q='DELETE FROM '+nr_db_config.tb_prefix+'termmeta WHERE owner_term_id IN ('+term_ids+')';
-
 			nr_db_pool.query(q, e=>{next($)});
 		}
 
+		// Then delete term+post relationship
 		var delete_rel=($, next)=>
 		{
 			var q='DELETE FROM '+nr_db_config.tb_prefix+'term_relationships WHERE owner_term_id IN ('+term_ids+')';
-
 			nr_db_pool.query(q, e=>{next($)});
 		}
 
+		// Now set orphan posts term parent
 		var set_parent=($, next)=>
 		{
 			var q='UPDATE '+nr_db_config.tb_prefix+'terms SET parent=0 WHERE parent IN ('+term_ids+')';
-
 			nr_db_pool.query(q, e=>{next($)});
 		}
 
+		// Finally delete term
 		var delete_term=($, next)=>
 		{
 			var q='DELETE FROM '+nr_db_config.tb_prefix+'terms WHERE term_id IN ('+term_ids+')';
-
 			nr_db_pool.query(q, e=>{next($)});
 		}
 
-		$.series_fire([delete_meta, delete_rel, set_parent, delete_term, next]);
+		// At last invoke delete term hook
+		var finalize=function ($, next)
+		{
+			$.do_action('delete_term', term_ids_ar, function($, id_bummer, nxt_bummer)
+			{
+				d_next($);
+			});
+		}
+
+		$.series_fire
+		([
+			delete_meta, 
+			delete_rel, 
+			set_parent, 
+			delete_term, 
+			finalize
+		]);
 	});
 }
 
@@ -146,20 +162,19 @@ module.exports.set_post_terms=function(post_id, term_id, taxonomy, append, next)
 	this.series_fire(funcs);
 }
 
-module.exports.insert_term=function(term, taxonomy, args, next)
+module.exports.insert_term=function(args, i_next)
 {
-	/* Store values firstly */
-	var slug		= args.slug || term;
-	slug			= slug.trim().toLowerCase().replace(/\s/g, '-');
-
+	var taxonomy	= args.taxonomy;
+	var term		= args.name;
 	var term_id		= args.term_id || false;
 	var parent		= args.parent || 0;
 	var description	= args.description || '';
+	var slug		= args.slug || term;
+	slug			= slug.trim().toLowerCase().replace(/\s/g, '-');
 
     var term_tbl=nr_db_config.tb_prefix+'terms';
 
-	var slug_exist=false;
-
+	// Check if same slug is exist in same level
 	var check_slug=($, next)=>
 	{
 		var t_id=(term_id && term_id>0) ? 'term_id!='+term_id+' AND ' : '';
@@ -168,49 +183,60 @@ module.exports.insert_term=function(term, taxonomy, args, next)
 
 		nr_db_pool.query(q, function(e,r)
 		{
-			slug_exist=(!e && r.length>0);
-			next($);
+			next($, (!e && r.length>0));
 		});
 	}
 
+	// Insert if not exist
 	var insert_term=($, next)=>
 	{
-		if(slug_exist)
-		{
-			next($, false);
-			return;
-		}
-
 		var q='INSERT INTO '+term_tbl+' (name, slug , description, parent, taxonomy) values ("'+term+'", "'+slug+'", "'+description+'", "'+parent+'", "'+taxonomy+'")';
 
-		nr_db_pool.query(q, (e,r)=>
+		nr_db_pool.query(q, (e, r)=>
 		{
-			next($, !e);
+			if(!r || !r.insertId)
+			{
+				next($, false, e);
+				return;
+			}
+
+			$.do_action('insert_term', r.insertId, function($, id, bummer)
+			{
+				next($, r.insertId, e);
+			});
 		});
 	}
 
+	// or update existing one
 	var update_term=($, next)=>
 	{
-		if(slug_exist)
+		var q='UPDATE '+term_tbl+' SET name="'+term+'", slug="'+slug+'", description="'+description+'", parent="'+parent+'" WHERE term_id='+term_id;
+		
+		nr_db_pool.query(q, (e, r)=>
 		{
-			next($, false);
+			if(!r)
+			{
+				next($, false, e);
+				return;
+			}
+
+			$.do_action('insert_term', term_id, function($, id, bummer)
+			{
+				next($, term_id, !e);
+			});
+		});
+	}
+
+	check_slug(this, function($, exist)
+	{
+		if(exist)
+		{
+			i_next($, false, {'message':'Slug Exist'});
 			return;
 		}
 
-		var q='UPDATE '+term_tbl+' SET name="'+term+'", slug="'+slug+'", description="'+description+'", parent="'+parent+'" WHERE term_id='+term_id;
-		
-		nr_db_pool.query(q, (e,r)=>
-		{
-			next($, !e);
-		});
-	}
-
-	var funcs=[check_slug];
-
-	funcs.push(!term_id ? insert_term : update_term);
-	funcs.push(next);
-
-	this.series_fire(funcs);
+		!term_id ? insert_term($, i_next) : update_term($, i_next);
+	});
 }
 
 module.exports.get_term_link=function(by, arg, taxonomy, t_next)
@@ -220,7 +246,7 @@ module.exports.get_term_link=function(by, arg, taxonomy, t_next)
 
 	var ob={'intersect':{[by]:arg}};
 
-	var term_structure=bloginfo(this, 'term_permalink', 'tt');
+	var term_structure=this.bloginfo('term_permalink') || 'tt';
 	
 	if(term_structure=='tt' && taxonomy)
 	{
@@ -262,7 +288,7 @@ module.exports.get_term_link=function(by, arg, taxonomy, t_next)
 				/* Get ancestors post names through hierarchy function */
 				var get_nest=(term_item)=>
 				{
-					$.get_term_by('term_id', term_item.parent, function($, r)
+					$.get_terms_by('term_id', term_item.parent, function($, r)
 					{
 						if(Array.isArray(r) && r.length>0)
 						{
@@ -292,6 +318,7 @@ module.exports.get_term_link=function(by, arg, taxonomy, t_next)
 
 		funcs.push(($, next)=>
 		{
+			!Array.isArray(arg) ? perm_urls=perm_urls[arg] : 0;
 			t_next($, perm_urls);
 		});
 
@@ -299,17 +326,17 @@ module.exports.get_term_link=function(by, arg, taxonomy, t_next)
 	});
 }
 
-module.exports.get_term_by=function(by, arg, next)
+module.exports.get_terms_by=function(by, arg, next)
 {
 	this.get_terms({'intersect':{[by]:arg}}, next);
 }
 
-module.exports.get_term_meta=function(term_id, meta_k, meta_v, next)
+module.exports.get_term_meta=function(trm_id, meta_k, meta_v, next)
 {
-	term_id			= get_array(term_id);
+	term_id			= get_array(trm_id);
 
-	var meta_key 	= meta_k 	? " AND meta_key="+this.nr_db.escape(meta_k) : '';
-	var meta_value	= meta_v	? " AND meta_value="+this.nr_db.escape(meta_v) : "";
+	var meta_key 	= meta_k 	? " AND meta_key="+nr_db_pool.escape(meta_k) : '';
+	var meta_value	= meta_v	? " AND meta_value="+nr_db_pool.escape(meta_v) : "";
 	
 	var q="SELECT * FROM "+nr_db_config.tb_prefix+"termmeta WHERE owner_term_id IN ("+term_id.join(',')+")" + meta_key + meta_value;
 	
@@ -317,38 +344,33 @@ module.exports.get_term_meta=function(term_id, meta_k, meta_v, next)
 	
 	nr_db_pool.query(q, function(e,r)
 	{
-		e ? r=[] : null;
-		
+		e ? r=[] : 0;
+
+		if(!Array.isArray(trm_id))
+		{
+			if(Array.isArray(r))
+			{
+				r=r[0] || {};
+			}
+		}
+
 		next($, r);
 	});
-}
-
-const meta_processor=function (mets, result)
-{
-	/* This function simply assign meta to post using post id. */
-	for(var i=0; i<mets.length; i++)
-	{
-		for(var n=0; n<result.length; n++)
-		{
-			(mets[i].owner_term_id==result[n].term_id) ? result[n].termmeta[mets[i].meta_key]=mets[i].meta_value : 0;
-		}
-	}
-	
-	return result;
 }
 
 module.exports.get_terms=function(nr_condition, get_p_n)
 {
 	var helper=require('./helper.njs');
+	var pst_helper=require('../post/helper.njs');
 	
 	/* Get query object, that will come through registered hooks too. [Oh god! what a complicated function. Need refactoring.] */
-	pre_get_terms(this, function($)
+	helper.before_get_terms(this, function($, query, not_appl)
 	{
 		typeof nr_condition!=='object' ? nr_condition={} : 0;
 
-		nr_condition			= helper.nr_fill_term_cond(nr_condition, $.query);
+		nr_condition			= helper.nr_fill_term_cond(nr_condition, query);
 		
-		var processed_condition	= helper.nr_term_condition_processor($.query,nr_condition);
+		var processed_condition	= helper.nr_term_condition_processor(query,nr_condition);
 		var args				= processed_condition.args;
 		var where_clause		= processed_condition.clause;
 		
@@ -382,7 +404,7 @@ module.exports.get_terms=function(nr_condition, get_p_n)
 		sql = sql + where_word + clause_parent.join(' AND ') + orderby + order;
 		
 		
-		nr_db_pool.query(sql,function(e,result)
+		nr_db_pool.query(sql,function(e, result)
 		{
 			if(e)
 			{
@@ -405,7 +427,7 @@ module.exports.get_terms=function(nr_condition, get_p_n)
 			/* get term meta and attach to terms list */
 			$.get_term_meta(all_term_id, false, false, function($, mets)
 			{
-				var attached=meta_processor(mets, result);
+				var attached=pst_helper.meta_processor(mets, 'owner_term_id', 'term_id', 'termmeta', result);
 				
 				get_p_n($, attached);
 			});
@@ -413,7 +435,42 @@ module.exports.get_terms=function(nr_condition, get_p_n)
 	});
 }
 
+
+module.exports.get_the_term_thumbnail_url=function(id, callback)
+{
+	var ids=!Array.isArray(id) ? [id] : id;
+
+	this.get_term_meta(ids, 'featured_image', false, function($, meta)
+	{
+		var attachment=meta.map(m=>m.meta_value);
+		
+		$.get_attachment_url(attachment, function($, url)
+		{
+			var urls_={};
+
+			// Manage middle man connection among term id and attachment post id
+			for(var u in url)
+			{
+				meta.forEach(function(m)
+				{
+					u==m.meta_value ? urls_[m.owner_term_id]=url[u] : 0;
+				})
+			}
+			
+			!Array.isArray(id) ? urls_=urls_[id] : 0;
+
+			callback($, urls_);
+		});
+	});
+}
+
 module.exports.get_taxonomies=function()
 {
 	return this.nr_registered_taxonomies;
+}
+
+module.exports.update_term_meta=function(term_id, meta_ob, next)
+{
+	var helper=require('../post/helper.njs');
+	helper.meta_updater(this, 'termmeta', term_id, 'owner_term_id', meta_ob, next);
 }

@@ -1,0 +1,26 @@
+.nr-core-input-component
+{
+    label
+    {
+        display: inline-block;
+        margin: 0;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+
+    small
+    {
+        display: block;
+    }
+
+    b{font-weight: 600}
+    
+    img
+    {
+        width: auto;
+        height: auto;
+        
+        max-height: 140px;
+        max-width: 100%;
+    }
+}

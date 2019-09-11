@@ -23,7 +23,6 @@ var InitPostEditor = function InitPostEditor(props) {
   var c_or_e = pt[2];
   var p_id = pt[3] ? pt[3] : false;
   var ob = {
-    'action': 'nr_get_post_create_edit',
     'post_type': type,
     'c_or_e': c_or_e
   };
@@ -36,8 +35,9 @@ var InitPostEditor = function InitPostEditor(props) {
   }
 
   return _react["default"].createElement(_react2.Placeholder, {
-    Data: ob,
-    Component: _editor.PostProcess
+    action: "nr_get_post_create_edit",
+    data: ob,
+    component: _editor.PostProcess
   });
 };
 

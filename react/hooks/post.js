@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.the_previous_url = exports.the_next_url = exports.the_excerpt = exports.the_permalink = exports.the_date = exports.the_author = exports.the_content = exports.the_title = void 0;
+exports.PaginateLinks = exports.the_previous_url = exports.the_next_url = exports.the_excerpt = exports.the_permalink = exports.the_date = exports.the_author = exports.the_content = exports.the_title = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -12,6 +12,8 @@ var _hookFinder = require("../helper/hook-finder");
 var _momentTimezone = _interopRequireDefault(require("moment-timezone"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -52,37 +54,6 @@ var the_author = function the_author(item) {
 
 exports.the_author = the_author;
 
-var the_next_url = function the_next_url(pagination, key) {
-  var resp = false;
-  key = !key ? 'next' : key;
-
-  if (_typeof(pagination) == 'object' && pagination[key]) {
-    var q = window.location.search;
-    q = q.slice(1);
-    q = q.split('&').map(function (item) {
-      return item.split('=');
-    }).map(function (item) {
-      return item[0] == 'page' ? false : item.join('=');
-    }).filter(function (item) {
-      return item !== false;
-    });
-    q.push('page=' + pagination[key]);
-    resp = '?' + q.filter(function (item) {
-      return typeof item == 'string' && /\S+/.test(item);
-    }).join('&');
-  }
-
-  return resp;
-};
-
-exports.the_next_url = the_next_url;
-
-var the_previous_url = function the_previous_url(pagination) {
-  return the_next_url(pagination, 'previous');
-};
-
-exports.the_previous_url = the_previous_url;
-
 var the_date = function the_date(item, format) {
   var date = (0, _momentTimezone["default"])(item.post_date).tz(window.nr_configs.time_zone).format(format ? format : 'YYYY-MM-DD HH:mma z');
   return _react["default"].createElement(_hookFinder.FindActionHook, {
@@ -110,6 +81,78 @@ exports.the_excerpt = the_excerpt;
 
 var the_permalink = function the_permalink(item) {
   return item.post_permalink;
-};
+}; // Pagination related functions
+
 
 exports.the_permalink = the_permalink;
+
+var pager_helper = function pager_helper(key) {
+  var resp = '';
+
+  if (!isNaN(key)) {
+    // It is multiple post in pages, like term category page
+    var q = window.location.search;
+    q = q.slice(1);
+    q = q.split('&').map(function (item) {
+      return item.split('=');
+    }).map(function (item) {
+      return item[0] == 'page' ? false : item.join('=');
+    }).filter(function (item) {
+      return item !== false;
+    });
+    q.push('page=' + key);
+    resp = '?' + q.filter(function (item) {
+      return typeof item == 'string' && /\S+/.test(item);
+    }).join('&');
+  } else {
+    // It's individual post
+    resp = key;
+  }
+
+  return resp;
+};
+
+var the_next_url = function the_next_url(pagination, key) {
+  key = !key ? 'next' : key;
+  return _typeof(pagination) == 'object' && pagination[key] ? pager_helper(pagination[key]) : false;
+};
+
+exports.the_next_url = the_next_url;
+
+var the_previous_url = function the_previous_url(pagination) {
+  return the_next_url(pagination, 'previous');
+};
+
+exports.the_previous_url = the_previous_url;
+
+var PaginateLinks = function PaginateLinks(props) {
+  var _props$pagination = props.pagination,
+      pagination = _props$pagination === void 0 ? {} : _props$pagination,
+      Wrapper = props.Wrapper,
+      _props$hide_single = props.hide_single,
+      hide_single = _props$hide_single === void 0 ? true : _props$hide_single;
+
+  var _ref = pagination || {},
+      _ref$pages = _ref.pages,
+      pages = _ref$pages === void 0 ? [] : _ref$pages,
+      _ref$current = _ref.current,
+      current = _ref$current === void 0 ? false : _ref$current;
+
+  return pages.length <= 1 && hide_single ? null : pages.map(function (content) {
+    // Get url and page number
+    var url = pager_helper(content.url || content);
+    var page = _typeof(content) == 'object' ? content.page + 1 : content; // Generate class name
+
+    var className = current == (content.url || content) ? 'current' : '';
+
+    var anchor = _react["default"].createElement("a", _extends({
+      key: url,
+      href: url,
+      className: className
+    }, props), page);
+
+    return Wrapper ? _react["default"].createElement(Wrapper, null, anchor) : anchor;
+  });
+};
+
+exports.PaginateLinks = PaginateLinks;

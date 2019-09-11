@@ -5,7 +5,7 @@ function insert_theme_plugin($, nr_package, call_back)
 		'INSERT INTO '+nr_db_config.tb_prefix+'nodes (nr_package,type,active) VALUES ("'+nr_package+'","'+$.node_type+'",1)',
 		function(e,r)
 		{
-			e ? exit($, {'status':'failed','message':'Error in inserting.'}) : call_back($, r.insertId);
+			e ? $.exit( {'status':'error','message':'Error in inserting.'}) : call_back($, r.insertId);
 		}
 	);
 }
@@ -30,13 +30,13 @@ function deactivate_other_node($, node_package)
 			q,
 			function(e,r)
 			{
-				exit($, (e ? {'status':'failed','message':'Error in deactivating.'} : {'status':'done'}));
+				$.exit( (e ? {'status':'error','message':'Error in deactivating.'} : {'status':'success'}));
 			}
 		);
 	}
 	else
 	{
-		exit($,{'status':'failed','message':'Unknown error'});
+		$.exit({'status':'error','message':'Unknown error'});
 	}
 }
 
@@ -47,7 +47,7 @@ function check_if_node_exist_in_db($, nr_package,call_back)
 		'SELECT * FROM '+nr_db_config.tb_prefix+'nodes WHERE type="'+$.node_type+'" AND nr_package="'+nr_package+'"',
 		function(e,r)
 		{
-			e ? exit($,{'status':'failed','message':'Error in checking if '+$.node_type+' exist.'}) : call_back($, (r.length>0 ? true : false));
+			e ? $.exit({'status':'error','message':'Error in checking if '+$.node_type+' exist.'}) : call_back($, (r.length>0 ? true : false));
 		}
 	);
 }
@@ -59,7 +59,7 @@ function activate_existing($, nr_package,call_back)
 		'UPDATE '+nr_db_config.tb_prefix+'nodes SET active=1 WHERE type="'+$.node_type+'" AND nr_package="'+nr_package+'"',
 		function(e,r)
 		{
-			e ? exit($,{'status':'failed','message':'Error in updating/activating'}) : call_back($, true);
+			e ? $.exit({'status':'error','message':'Error in updating/activating'}) : call_back($, true);
 		}
 	);
 }
@@ -128,7 +128,7 @@ module.exports.run=function($)
 							node_package,
 							function($,result)
 							{
-								$.node_type=='plugin' ? exit($, {'status':'done'}) : deactivate_other_node($,node_package);
+								$.node_type=='plugin' ? $.exit( {'status':'success'}) : deactivate_other_node($,node_package);
 							}
 						);
 					}
@@ -141,7 +141,7 @@ module.exports.run=function($)
 							node_package,
 							function($,ins_id)
 							{
-								$.node_type=='plugin' ? exit($, {'status':'done'}) : deactivate_other_node($,node_package);
+								$.node_type=='plugin' ? $.exit( {'status':'success'}) : deactivate_other_node($,node_package);
 							}
 						);
 					}

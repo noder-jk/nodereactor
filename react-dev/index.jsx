@@ -1,63 +1,77 @@
 import {Placeholder} from './helper/comp-placeholder';
-import {parse_form} from './helper/form-parser';
+import {get_url_parameter,Pagination,get_hierarchy,SpinIcon} from './helper/utility';
 
-import {get_url_parameter,Pagination,get_hierarchy} from './helper/utility';
 
-import {LoginRegistration} from './tools/auth';
-import {AdminBar} from './tools/admin-bar';
-import {Editor} from './tools/editor';
-import {Media} from './tools/media';
-
-import {RenderMediaFile} from './helper/render-media';
+import {LoginRegistration} from './apis/auth';
+import {AdminBar} from './apis/admin-bar';
+import {Editor} from './apis/editor';
+import {Media} from './apis/media';
+import {FileChooser} from './templates/file-chooser';
 
 import {array_pull_down, array_pull_up} from './helper/array';
+import {ajax_request} from './helper/ajax';
 
-import {ajaxRequest} from './helper/ajax';
+import {Input} from './templates/input/input-field';
+import {BasicSettings} from './templates/basic-settings';
 
-import * as ScodeHooks from './hooks/shortcode';
-import * as MenuHooks from './hooks/menu';
+import * as Parser from './helper/form-parser';
+import * as Cookies from './helper/cookie';
+
+import * as Auth from './hooks/auth';
+import * as PartsHooks from './hooks/parts';
 import * as PostHooks from './hooks/post';
-import * as SidebarHooks from './hooks/sidebar';
 
-const hooks=
+import * as ScodeHooks from './templates/shortcode';
+import * as MenuHooks from './templates/menu';
+import * as SidebarHooks from './templates/sidebar';
+
+const bulk_export=
 [
+    Auth,
+    Parser,
+    PartsHooks,
     PostHooks, 
     SidebarHooks, 
     MenuHooks,
-    ScodeHooks
+    ScodeHooks,
+    Cookies
 ];
 
-const nr_ajax_url      = '/admin-ajax';
-const nr_socket_event    = 'nr-socket-io-core-channel';
+
+const ajax_url       = '/admin-ajax';
+const socket_event   = 'nr-socket-io-core-channel';
+
 
 export  {
-            nr_ajax_url ,
-            ajaxRequest, 
+    ajax_url ,
+    ajax_request, 
 
-            nr_socket_event,
+    socket_event,
 
-            parse_form,
-            get_hierarchy,
-            get_url_parameter,
-            array_pull_down,
-            array_pull_up, 
+    get_hierarchy,
+    get_url_parameter,
+    SpinIcon,
+    array_pull_down,
+    array_pull_up, 
 
-            LoginRegistration, 
-            Placeholder,
+    LoginRegistration, 
+    Placeholder,
 
-            AdminBar,
-            Editor,
-            Media,
-            
-            RenderMediaFile,
-            Pagination
-        }
+    AdminBar,
+    Editor,
+    Media,
+    FileChooser,
 
-/* Export various hooks dynamically */
-for(let i=0; i<hooks.length; i++)
+    Pagination,
+    
+    Input,
+    BasicSettings
+}
+
+for(let i=0; i<bulk_export.length; i++)
 {
-    for(let k in hooks[i])
+    for(let k in bulk_export[i])
     {
-        module.exports[k]=hooks[i][k];
+        module.exports[k]=bulk_export[i][k];
     }
 }

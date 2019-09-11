@@ -1,15 +1,13 @@
 global.nr_local_time=function($, dt, format)
 {
-	var z=$.get_option( 'time_zone', 0);
-
-	var zone=z || 'UTC';
+	var zone=$.get_option( 'time_zone', true) || 'UTC';
 	
 	return node_modules['moment-timezone'](dt).tz(zone).format(format ? format : 'YYYY-MM-DD HH:mma z');
 }
 
 global.nr_dom=function(content)
 {
-	str=new node_modules.jsdom('<!doctype html><html><body>'+content+'</body></html>');
+	var str=new node_modules.jsdom('<!doctype html><html><body>'+content+'</body></html>');
 	return node_modules.jquery(str.window);
 }
 
@@ -27,7 +25,7 @@ global.get_avatar_url=function(email, json)
 /* ~~~~~~~~~~~~~~~~~~~~~Helper functions~~~~~~~~~~~~~~~~~~~~~ */
 global.get_int=function(param, fallback)
 {
-	ret=false;
+	var ret=false;
 	
 	if(param)
 	{
@@ -66,6 +64,8 @@ global.set_utility_configs=function(cb, post)
 			switch(k)
 			{
 				case 'session_max_age'	:	
+				case 'nr_cookie_expiry'	:	
+				case 'nr_login_expiry'	:	
 				case 'max_upload_size'	:	var nm=parseInt(ob[k]);
 											(Number.isInteger(nm) && nm>(k=='session_max_age' ? 300 : 0)) ? global[k]=nm : 0;
 											break;
@@ -81,11 +81,9 @@ global.set_utility_configs=function(cb, post)
 											}
 											break;
 
-				case 'track_file_request':	track_file_request=ob[k]=='yes';
-											break;
-
-				case 'hot_linking_pattern'	:
-				case 'file_request_pattern'	:	global[k]=ob[k];
+				case 'nr_session_cookie_name': 
+				case 'nr_session_cookie_pass': 
+				case 'hot_linking_pattern'	:	global[k]=ob[k];
 												break;
 			}
 		}
@@ -120,8 +118,10 @@ global.set_utility_configs=function(cb, post)
 const nr_er_handler=(e)=>
 {
 	console.log('');
-	console.log('\x1b[31m\x1b[4m', 'Fatal Error Occurred.', '\x1b[0m');
+	console.log('\x1b[31m\x1b[7m', 'Fatal Error Occurred.', '\x1b[0m');
+	console.log('');
 	console.log(e);
+	console.log('');
 	console.log('\x1b[46m', 'Node Reactor has saved itself from unexpected termination.', '\x1b[0m');
 	console.log('\x1b[42m', 'Next methods have been queued.', '\x1b[0m');
 	console.log('');
@@ -220,103 +220,4 @@ module.exports.series_fire=function(functions)
 	}
 	
 	eval(nr_series_func_generate());
-}
-
-global.fl_up=function(string) 
-{
-    return typeof string=='string' ? string.charAt(0).toUpperCase() + string.slice(1) : string;
-}
-
-global.csv_to_array=function(csv)
-{
-
-	var lines=csv.split("\n");
-  
-	var result = [];
-  
-	var headers=lines[0].split(",");
-  
-	for(var i=1;i<lines.length;i++)
-	{
-		var obj = {};
-		var currentline=lines[i].split(",");
-  
-		for(var j=0;j<headers.length;j++)
-		{
-			obj[headers[j]] = currentline[j];
-		}
-  
-		result.push(obj);
-	}
-  
-	return result;
-}
-
-const get_sql_operator=function(conditions)
-{
-	if(typeof conditions=='object' && !Array.isArray(conditions))
-    {
-        /* If it is object (not array), then get it's operator, or set default operator (IN or LIKE). */
-        typeof conditions.operator=='string' ? conditions.operator=conditions.operator.trim().toUpperCase() : 0;
-        
-        var opr=conditions.operator;
-        (opr!=='LIKE' && opr!=='COMPARE') ? conditions.operator='IN' : 0;    // set operator
-        conditions.values	=conditions.values ? get_array(conditions.values) : []; // set values
-    }
-    else
-    {
-        conditions={'operator':'IN', 'values':get_array(conditions)};
-    }
-    
-	return conditions;
-}
-
-global.get_sql_clauses=function(column, key, column_name, table)
-{
-	var w_clause=[];
-
-	column=get_sql_operator(column);
-
-    if(column.values.length>0)
-    {
-        /* At first append and prepend double quotes as it is string. */
-        if(column.operator!=='COMPARE')
-        {
-            for(var i=0; i<column.values.length; i++)
-            {
-                column.values[i]='"'+trim(column.values[i],'"')+'"';
-            }
-        }
-        
-        var join_by=key=='unite' ? ' OR ' : ' AND ';
-        
-        /* Now add values to corresponding key. */
-        if(column.operator=='IN')
-        {
-            /* If it is IN operator */
-            w_clause.push(table+'.'+column_name+' '+(key=='exclude' ? 'NOT' : '')+' IN ('+column.values.join(',')+')');
-        }
-        else if(column.operator=='LIKE')
-        {
-            var likes=[];
-            for(var num=0; num<column.values.length; num++)
-            {
-                likes.push(table+'.'+column_name+' '+(key=='exclude' ? 'NOT' : '')+' LIKE '+column.values[num]);
-            }
-            
-            likes.length>0 ? w_clause.push(likes.join(join_by)) : null;
-        }
-        else if(column.operator=='COMPARE')
-        {
-            var comp=[];
-            for(var num=0; num<column.values.length; num++)
-            {
-                var v=column.values[num];
-                comp.push(table+'.'+column_name+v);
-            }
-            comp.length>0 ? w_clause.push(comp.join(join_by)) : null;
-        }
-	}
-	
-	return {'column':column, 'clause':w_clause}
 }

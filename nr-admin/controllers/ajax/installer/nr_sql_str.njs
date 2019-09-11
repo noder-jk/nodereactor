@@ -1,8 +1,73 @@
 module.exports=function(connection, nr_data)
 {
-	var default_core_options={"nr_nav_menus":{"Sample Menu Name":{"items":[{"post_id":"2","title":"Auto generated page","key":"v4zjhybyz7ffbgle3h8yw"},{"term_id":"1","title":"Programming","key":"a6nac3gyszqtmmsrq3l3","children":[{"term_id":"4","title":"Android","key":"9klfbg9x0ofs9a8w0rs6"},{"term_id":"3","title":"Web","key":"n8ckglaaxqf2w6h9nr797"}]},{"url":"https://web.facebook.com/NodeReactorCMS/","title":"FB","key":"5siluhvtpe509e9zi3d32qj"}],"association":["semp_nav_menu"]}},"post_post_permalink":"ttn","post_post_taxonomy":"category","term_permalink":"tt"};
+	var default_core_options=
+	{
+		"nr_nav_menus":
+		{
+			"Sample Menu Name":
+			{
+				"items":
+				[
+					{
+						"post_id":"2",
+						"title":"Auto generated page",
+						"key":"v4zjhybyz7ffbgle3h8yw"
+					},
+					{
+						"term_id":"1",
+						"title":"Programming",
+						"key":"a6nac3gyszqtmmsrq3l3",
+						"children":
+						[
+							{
+								"term_id":"4",
+								"title":"Android",
+								"key":"9klfbg9x0ofs9a8w0rs6"
+							},
+							{
+								"term_id":"3",
+								"title":"Web",
+								"key":"n8ckglaaxqf2w6h9nr797"
+							}
+						]
+					},
+					{
+						"url":"https://web.facebook.com/NodeReactorCMS/",
+						"title":"FB","key":"5siluhvtpe509e9zi3d32qj"
+					}
+				],
+				"association":
+				[
+					"semp_nav_menu"
+				]
+			}
+		},
+		"name":"Node Reactor",
+		"description":"Welcome to IOT",
+		"post_post_permalink":"ttn",
+		"post_post_taxonomy":"category",
+		"term_permalink":"tt"
+	};
 
-	var default_theme_option={"area_widget_linking":{"right_side_panel_theme":[{"key":"0.5pzlws0ui4x","widget_id":"custom_html_widget_handler","properties":{"nr_widget_title":"Sample Widget","custom_code":"<iframe style=\"max-width:100%\" src=\"https://www.youtube.com/embed/rN6nlNC9WQA\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"},"nr_package":true}]}};
+	var default_theme_option=
+	{
+		"area_widget_linking":
+		{
+			"right_side_panel_theme":
+			[
+				{
+					"key":"0.5pzlws0ui4x",
+					"widget_id":"custom_html_widget_handler",
+					"properties":
+					{
+						"nr_widget_title":"Sample Widget",
+						"custom_code":"<iframe style=\"max-width:100%\" src=\"https://www.youtube.com/embed/rN6nlNC9WQA\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"
+					},
+					"nr_package":true
+				}
+			]
+		}
+	};
 	
 	return	"\
 	SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\
@@ -134,10 +199,7 @@ module.exports=function(connection, nr_data)
 	) ENGINE="+nr_data.db_engine+" DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;\
 	\
 	INSERT INTO `"+nr_data.tb_prefix+"terms` (`term_id`, `name`, `slug`, `taxonomy`, `description`, `parent`) VALUES\
-	(1, 'Programming', 'programming', 'category', '', 0),\
-	(2, 'Hardware', 'hardware', 'category', '', 0),\
-	(3, 'Web', 'web', 'category', '', 1),\
-	(4, 'Android', 'android', 'category', '', 1);\
+	(1, 'Uncategorized', 'uncategorized', 'category', '', 0);\
 	\
 	INSERT INTO `nr_term_relationships` (`rel_id`, `owner_post_id`, `owner_term_id`) VALUES\
 	(1, 1, 3);\
@@ -161,7 +223,6 @@ module.exports=function(connection, nr_data)
 	  `json_values` longtext COLLATE utf8mb4_unicode_520_ci NOT NULL,\
 	  `password` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,\
 	  `user_id` bigint(20) UNSIGNED DEFAULT NULL,\
-	  `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\
 	  PRIMARY KEY (`id`)\
 	) ENGINE="+nr_data.db_engine+" DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;\
 	\

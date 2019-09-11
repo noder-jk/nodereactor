@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 import Swal from 'sweetalert2';
 import Spinner from 'react-svg-spinner';
 
-import {ajaxRequest ,LoginRegistration} from 'nodereactor/react';
+import {ajax_request ,LoginRegistration} from 'nodereactor/react';
 
 import './style.css';
 import Banner from './banner.jpg';
@@ -80,7 +80,7 @@ class NodeReactorInstaller extends Component
 
         this.setState({'loading':true});
 
-        ajaxRequest('nr_install_check', {to_do, ...this.state}, (r, d, e)=>
+        ajax_request('nr_install_check', {to_do, ...this.state}, (r, d, e)=>
         {
             this.setState({'loading':false});
 
@@ -90,9 +90,9 @@ class NodeReactorInstaller extends Component
                 return;
             }
 
-            let {status='failed', message='Could not process request. Please make sure configs are correct.'}=r;
+            let {status='error', message='Could not process request. Please make sure configs are correct.'}=r;
 
-            if(status!=='done')
+            if(status!=='success')
             {
                 Swal.fire('Error', message, 'error');
                 return;

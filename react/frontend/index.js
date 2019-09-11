@@ -13,9 +13,13 @@ var _react2 = require("nodereactor/react");
 
 var _compFinder = require("../helper/comp-finder");
 
+var _core = require("../hooks/core");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -64,7 +68,7 @@ function (_Component) {
       var _this2 = this;
 
       var pathname = window.location.pathname;
-      (0, _react2.ajaxRequest)('get_init_frontend' + window.location.search, {
+      (0, _react2.ajax_request)('get_init_frontend' + window.location.search, {
         pathname: pathname
       }, function (r, d, e) {
         if (e) {
@@ -99,14 +103,15 @@ function (_Component) {
           'nr_package': nr_package,
           'component': component,
           'fallback_component': 'Index'
-          /* Now load the theme component */
+        }; // Store contents in global scope
 
-        };
+        window.nr_contents = params;
+        /* Now load the theme component */
 
         _this2.setState({
-          'content': _react["default"].createElement(_compFinder.FindComp, _extends({
+          'content': _react["default"].createElement("div", null, _react["default"].createElement(_core.InitTheme, null), _react["default"].createElement(_compFinder.FindComp, _extends({
             comp_props: find_params
-          }, params))
+          }, params)))
         });
       });
     }

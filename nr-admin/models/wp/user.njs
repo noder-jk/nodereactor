@@ -1,17 +1,17 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~User/member related functions~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-global.is_user_logged_in=function($)
+module.exports.is_user_logged_in=function()
 {
-	return $.nr_current_user==false ? false : true;
+	return this.nr_current_user!==false;
 }
 
-global.nr_get_current_user=function($)
+module.exports.get_current_user=function()
 {
-	return $.nr_current_user;
+	return this.nr_current_user || null;
 }
 
-global.get_current_user_id=function($)
+module.exports.get_current_user_id=function()
 {
-	return $.nr_current_user==false ? false : $.nr_current_user.user_id;
+	return !this.nr_current_user ? null : this.nr_current_user.user_id;
 }
 
 global.get_edit_user_link=function(id)
@@ -46,7 +46,7 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 	/* Assign the new user to all the posts */
 	var reassignment=($, next)=>
 	{
-		if(is_numeric(reassign_id))
+		if(!isNaN(reassign_id))
 		{
 			var q='UPDATE '+nr_db_config.tb_prefix+'posts SET owner_user_id='+reassign_id+' WHERE owner_user_id IN ('+user_ids.join(',')+')';
 			
@@ -62,7 +62,7 @@ global.nr_delete_user=function($, user_ids, del_mode, reassign_id, next)
 	var del_posts=($, next)=>
 	{
 		/* If reassign is yes, then no need to delete post. Simply go to next function. */
-		if(is_numeric(reassign_id))
+		if(!isNaN(reassign_id))
 		{
 			next($);
 			return;
@@ -136,4 +136,133 @@ global.delete_user_meta=function($, user_id, meta_key, next)
 	var q='DELETE FROM '+nr_db_config.tb_prefix+'usermeta WHERE owner_user_id IN ('+users.join(',')+')'+and_clause;
 
 	nr_db_pool.query(q, (e,r)=>next($));
+}
+
+global.nr_login=function($, fields, next)
+{
+	$.do_action('nr_before_login', fields, function($)
+	{
+		var user_login	= nr_db_pool.escape(fields.username);
+		var pass		= fields.password;
+		
+		var q='SELECT * FROM '+nr_db_config.tb_prefix+'users WHERE user_email='+user_login+' OR user_login='+user_login+' LIMIT 1';
+		
+		nr_db_pool.query(q, function(err, result)
+		{
+			if(err)
+			{
+				next($, {'status':'error', 'message':'Database Error.'});
+				return; 
+			}
+
+			var resp={'status':'error', 'message':'Invalid credentials.'};
+
+			if(result.length==0)
+			{
+				$.do_action('nr_login_failed', fields, function($)
+				{
+					next($, resp);
+				});
+				return;
+			}
+			
+			password_verify(pass, result[0].user_pass, function(valid)
+			{
+				if(valid==true)
+				{
+					// Credentials matched and logged in
+					$.nr_current_user=result[0];
+					$.set_session('user_id', result[0].user_id, nr_login_expiry);
+					$.set_session('user_login', result[0].user_login, nr_login_expiry);
+					
+					resp={'status':'success', 'go_to':'/nr-admin'};
+
+					$.echo(resp);
+
+					$.do_action('nr_login', $.get_current_user_id(), function($)
+					{
+						next($, resp);
+					});
+				}
+				else
+				{
+					$.echo(resp);
+					
+					$.do_action('nr_login_failed', fields, function($)
+					{
+						next($, resp);
+					});
+				}
+			});
+		});
+	});
+}
+
+global.nr_logout=function($, next)
+{
+	delete $._SESSION['user_login'];
+	delete $._SESSION['user_id'];
+
+	var user_id=$.get_current_user_id();
+
+	$.do_action('nr_logout', user_id, function($, user_id, bummer)
+	{
+		next($);
+	});
+}
+
+global.nr_logout_all=function($, lg_next)
+{
+	// Gather data
+	var sess_tbl	= nr_db_config.tb_prefix+'sessions';
+	var user_id		= $.get_current_user_id();
+
+	// Get existing sessions of this user
+	var q='SELECT id, json_values FROM '+sess_tbl+' WHERE user_id='+user_id;
+	nr_db_pool.query(q, function(e, r)
+	{
+		!Array.isArray(r) ? r=[] : 0;
+
+		var funcs=[];
+
+		// Loop through all session of this user
+		r.forEach(js_ob=>
+		{
+			// Parse data
+			var id=js_ob.id;
+			var json={};
+			try{json=JSON.parse(js_ob.json_values)}catch(e){}
+
+			// Create updater/deleter function
+			var fnc=function($, json, id, loop_next)
+			{
+				// Delete user_id and user_login. These two are used to determine login status.
+				// No need to delete other data. Might be necessary those are.
+				delete json.user_id;
+				delete json.user_login;
+
+				// If there is no session data then delete. Otherwise update.
+				var q=Object.keys(json).length>0 ? 
+						'UPDATE '+sess_tbl+' SET json_values='+nr_db_pool.escape(JSON.stringify(json))+', user_id=NULL WHERE id='+id :
+						'DELETE FROM '+sess_tbl+' WHERE id='+id;
+
+				nr_db_pool.query(q, function()
+				{
+					loop_next($);
+				});
+			}
+			
+			funcs.push([fnc, json, id]);
+		});
+
+		funcs.push(function($)
+		{
+			$.do_action('nr_logout_all', user_id, function($, user_id, bummer)
+			{
+				lg_next($);
+			});
+		});
+
+		$.series_fire(funcs);
+	});
 }

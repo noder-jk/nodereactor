@@ -23,7 +23,7 @@ global.nr_timezones=
 	{
 		"zone": "US/Pacific",
 		"utc": "(UTC-08:00)",
-		"name": "Pacific Time (US &amp; Canada)"
+		"name": "Pacific Time (US & Canada)"
 	},
 	{
 		"zone": "America/Tijuana",
@@ -38,7 +38,7 @@ global.nr_timezones=
 	{
 		"zone": "US/Mountain",
 		"utc": "(UTC-07:00)",
-		"name": "Mountain Time (US &amp; Canada)"
+		"name": "Mountain Time (US & Canada)"
 	},
 	{
 		"zone": "America/Chihuahua",
@@ -68,12 +68,12 @@ global.nr_timezones=
 	{
 		"zone": "US/Central",
 		"utc": "(UTC-06:00)",
-		"name": "Central Time (US &amp; Canada)"
+		"name": "Central Time (US & Canada)"
 	},
 	{
 		"zone": "US/Eastern",
 		"utc": "(UTC-05:00)",
-		"name": "Eastern Time (US &amp; Canada)"
+		"name": "Eastern Time (US & Canada)"
 	},
 	{
 		"zone": "US/East-Indiana",

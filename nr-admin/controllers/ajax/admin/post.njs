@@ -56,7 +56,15 @@ module.exports.get=function($)
 
 		if($._POST.post_id)
 		{
-			var ob={'intersect':{'post_id':$._POST.post_id, 'post_type':$._POST['post_type']}};
+			var ob=
+			{
+				'intersect':
+				{
+					'post_id':$._POST.post_id, 
+					'post_type':$._POST['post_type'],
+					'post_status':'any'
+				}
+			};
 
 			$.get_posts(ob, function($, r)
 			{
@@ -64,20 +72,24 @@ module.exports.get=function($)
 
 				editor_resp.post=r;
 
-				$.echo(editor_resp);
-				exit($);
+				$.get_permalink('post_id', r.post_id, function($, url)
+				{
+					editor_resp.permalink=url;
+
+					$.exit(editor_resp);
+				});
 			})
 		}
 		else
 		{
 			$.echo(editor_resp);
-			exit($);
+			$.exit();
 		}
 	}
 	
 	if(!$._POST['post_type'])
 	{
-		exit($);
+		$.exit();
 		return;
 	}
 
@@ -112,16 +124,18 @@ module.exports.get_post_list=function($)
 	}
 	typeof condition!=='object' ? condition={} : 0;
 
-	var f=[
-			posts+'.post_id',
-			posts+'.post_title',
-			posts+'.post_name',
-			posts+'.post_status',
-			posts+'.post_date',
-			posts+'.post_modified',
-			posts+'.post_type',
-			users+'.display_name'
-		];
+	// Set necessary columns
+	var f=
+	[
+		posts+'.post_id',
+		posts+'.post_title',
+		posts+'.post_name',
+		posts+'.post_status',
+		posts+'.post_date',
+		posts+'.post_modified',
+		posts+'.post_type',
+		users+'.display_name'
+	];
 	
 	var q_ob=
 	{
@@ -136,10 +150,8 @@ module.exports.get_post_list=function($)
 	{
 		switch(k)
 		{
-			case 'post_type'	:	q_ob.intersect.post_type=condition[k];
-									break;
-			
-			case 'post_status'	:	q_ob.intersect.post_status=condition[k];
+			case 'post_type'	:
+			case 'post_status'	:	q_ob.intersect[k]=condition[k];
 									break;
 			
 			case 'keyword'		:	/\S+/.test(condition[k])==true ? q_ob.keyword=condition[k].trim() : 0;
@@ -153,7 +165,7 @@ module.exports.get_post_list=function($)
 		/* Now get posts and send to browser. */
 		$.get_posts(q_ob, function($, post_ob)
 		{
-			get_pagination($, q_ob, function($, pgn)
+			$.get_pagination(q_ob, function($, pgn)
 			{
 				var post_ids=[];
 
@@ -166,7 +178,7 @@ module.exports.get_post_list=function($)
 				{
 					post_ob[i].post_date=nr_local_time($, post_ob[i].post_date);
 					post_ob[i].post_modified=nr_local_time($, post_ob[i].post_modified);
-					post_ob[i].post_edit_link=get_edit_post_link(post_ob[i].post_id, post_ob[i].post_type);
+					post_ob[i].post_edit_link=$.get_edit_post_link(post_ob[i].post_id, post_ob[i].post_type);
 
 					post_ids.push(post_ob[i].post_id);
 				}
@@ -220,7 +232,7 @@ module.exports.get_post_list=function($)
 				{
 					$.echo({'posts':post_ob, 'pagination':pgn, 'taxonomies':txes});
 
-					exit($);
+					$.exit();
 				}
 
 				$.series_fire( [get_perms, get_taxs, resp_now]);
@@ -238,12 +250,12 @@ module.exports.delete_media=function($)
     {
 		$.delete_attachment($._POST.post_id, ($)=>
 		{
-			exit($, {'status':'done'})
+			$.exit( {'status':'success'})
 		});
     }
     else
     {
-        exit($);
+        $.exit();
     }
 }
 
@@ -253,26 +265,27 @@ module.exports.delete_posts=function($)
     {
 		$.delete_post($._POST.post_id, ($)=>
 		{
-			exit($, {'status':'done'});
+			$.exit( {'status':'success'});
 		});
     }
     else
     {
-        exit($);
+        $.exit();
     }
 }
 
 module.exports.check_slug=function($)
 {
-	get_available_slug
-	(
-		$,
-		{post_name: $._POST.post_name, post_id:$._POST.post_id},
-		function($,result)
-		{
-			exit($, {post_name:result});
-		}
-	);
+	var dt=
+	{
+		post_name: $._POST.post_name, 
+		post_id:$._POST.post_id
+	};
+
+	$.get_available_slug(dt, function($, result)
+	{
+		$.exit( {post_name:result});
+	});
 }
 
 module.exports.save=function($)
@@ -294,23 +307,33 @@ module.exports.save=function($)
 	{
 		if(!r)
 		{
-			exit($);
+			$.exit();
 			return;
 		}
 		
 		var p_id=r;
 
-		resp=
+		var resp=
 		{
-			'status':'done', 
+			'status':'success', 
 			'message':'Done',
 			'post_id':p_id,
 			'post_type':fields.post_type
 		}
 
-		update_post_meta($, p_id, fields.post_meta, function($)
+		// Update post meta data
+		$.update_post_meta(p_id, fields.post_meta, function($)
 		{
-			exit($, resp);
+			$.do_action('insert_post_from_editor', p_id, function($, id, next)
+			{
+				// now get the url of the saved post
+				$.get_permalink('post_id', p_id, function($, url)
+				{
+					resp.permalink=url;
+					
+					$.exit( resp);
+				});
+			});
 		});
 	});
 }
@@ -328,7 +351,7 @@ module.exports.get_hierarchy=function($)
 
 	$.get_posts(q_ob, function($, r)
 	{
-		exit($,{'posts':r});
+		$.exit({'posts':r});
 	});
 }
 
@@ -336,7 +359,7 @@ module.exports.get_featured_image=function($)
 {
 	$.get_attachment_url($._POST.post_id, function($, url)
 	{
-		exit($, (url ? {'url':url} : ''));
+		$.exit(url ? {'url':url} : '');
 	});
 }
 
@@ -365,6 +388,6 @@ module.exports.p_for_nav=function($)
 			posts[item.post_type].push(item);
 		});
 
-		exit($, {'objects':posts});
+		$.exit( {'objects':posts});
 	});
 }

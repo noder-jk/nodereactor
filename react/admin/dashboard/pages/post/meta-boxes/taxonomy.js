@@ -17,7 +17,9 @@ var _index = require("../taxonomy/index");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -86,7 +88,7 @@ function (_Component) {
       var _this$props2 = this.props,
           post_id = _this$props2.post_id,
           meta_box_id = _this$props2.meta_box_id;
-      (0, _react2.ajaxRequest)('nr_get_taxonomy_in_editor', {
+      (0, _react2.ajax_request)('nr_get_taxonomy_in_editor', {
         'taxonomy': meta_box_id,
         post_id: post_id
       }, function (r, d, e) {
@@ -189,7 +191,7 @@ function (_Component) {
       this.setState({
         'loading': true
       });
-      (0, _react2.ajaxRequest)('nr_save_post_editor_taxonomy', req_ob, function (r) {
+      (0, _react2.ajax_request)('nr_save_post_editor_taxonomy', req_ob, function (r) {
         _this3.setState({
           'loading': false
         });
@@ -206,19 +208,27 @@ function (_Component) {
       var _this4 = this;
 
       var meta_box_id = this.props.meta_box_id;
-      var pass_prop = {
-        'taxonomy': meta_box_id,
-        'hierarchical': this.state.hierarchical,
-        'taxonomy_title': false,
-        'taxonomies': this.state.all_terms
-      };
       var _this$state = this.state,
+          hierarchical = _this$state.hierarchical,
           all_terms = _this$state.all_terms,
           _this$state$current_t = _this$state.current_terms,
-          current_terms = _this$state$current_t === void 0 ? [] : _this$state$current_t;
-      return _react["default"].createElement("div", null, this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
+          current_terms = _this$state$current_t === void 0 ? [] : _this$state$current_t,
+          loading = _this$state.loading,
+          multiple = _this$state.multiple,
+          primary_term_key = _this$state.primary_term_key,
+          primary_term = _this$state.primary_term,
+          create = _this$state.create;
+      var pass_prop = {
+        'taxonomy': meta_box_id,
+        'hierarchical': hierarchical,
+        'taxonomy_title': false,
+        'taxonomies': all_terms
+      };
+      return _react["default"].createElement("div", {
+        id: "nr_taxonomy_metabox"
+      }, loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null, _react["default"].createElement("form", {
+      }) : null, _react["default"].createElement("i", null, _react["default"].createElement("small", null, "Don't forget to select primary term.")), _react["default"].createElement("form", {
         onSubmit: function onSubmit(e) {
           return e.preventDefault();
         },
@@ -237,24 +247,26 @@ function (_Component) {
           style: {
             'paddingLeft': item.nest_level * 12 + 'px'
           }
+        }, _react["default"].createElement("label", {
+          className: "label-pointer mb-0"
         }, _react["default"].createElement("input", {
-          type: _this4.state.multiple == true ? "checkbox" : "radio",
+          type: multiple == true ? "checkbox" : "radio",
           "data-ignore": true,
           name: "taxonomy_" + meta_box_id,
           value: item.term_id,
           defaultChecked: current_terms.indexOf(item.term_id) > -1,
           onChange: _this4.toggleCurrentTerms
-        }), " ", item.name)), _react["default"].createElement("td", {
+        }), " ", item.name))), _react["default"].createElement("td", {
           className: "text-right"
-        }, current_terms.indexOf(item.term_id) > -1 ? _react["default"].createElement("input", {
+        }, current_terms.indexOf(item.term_id) == -1 ? null : _react["default"].createElement("input", {
           type: "radio",
           title: "Select Primary Term",
-          name: _this4.state.primary_term_key,
+          name: primary_term_key,
           value: item.term_id,
-          defaultChecked: _this4.state.primary_term == item.term_id,
+          defaultChecked: primary_term == item.term_id,
           onChange: _this4.setPrimaryTerm
-        }) : null));
-      })))), this.state.create ? _react["default"].createElement("div", {
+        })));
+      })))), create ? _react["default"].createElement("div", {
         className: "mt-2"
       }, _react["default"].createElement(_index.Editor, _extends({}, pass_prop, {
         fetchTaxonomies: this.fetchTaxonomy,
