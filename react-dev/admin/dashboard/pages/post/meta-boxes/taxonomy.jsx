@@ -156,7 +156,7 @@ class PostTaxonomy extends Component
 
         let {
                 hierarchical, 
-                all_terms, 
+                all_terms=[], 
                 current_terms=[],
                 loading,
                 multiple,
@@ -175,10 +175,15 @@ class PostTaxonomy extends Component
         }
 
         return <div id="nr_taxonomy_metabox">
+            
             {
                 loading ? <Spinner size="15px"/> : null
             }
-            <i><small>Don't forget to select primary term.</small></i>
+
+            {
+                all_terms.length>0 ? <i><small>Don't forget to select primary term.</small></i> : null
+            }
+
             <form onSubmit={(e)=>e.preventDefault()} style={{'maxHeight':'500px', 'overflow':'auto'}}>
                 <table style={{'width':'100%'}}>
                     <tbody>

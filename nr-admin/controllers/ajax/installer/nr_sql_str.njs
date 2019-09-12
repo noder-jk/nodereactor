@@ -1,74 +1,83 @@
-module.exports=function(connection, nr_data)
+var default_core_options=
 {
-	var default_core_options=
+	"nr_nav_menus":
 	{
-		"nr_nav_menus":
+		"Sample Menu Name":
 		{
-			"Sample Menu Name":
-			{
-				"items":
-				[
-					{
-						"post_id":"2",
-						"title":"Auto generated page",
-						"key":"v4zjhybyz7ffbgle3h8yw"
-					},
-					{
-						"term_id":"1",
-						"title":"Programming",
-						"key":"a6nac3gyszqtmmsrq3l3",
-						"children":
-						[
-							{
-								"term_id":"4",
-								"title":"Android",
-								"key":"9klfbg9x0ofs9a8w0rs6"
-							},
-							{
-								"term_id":"3",
-								"title":"Web",
-								"key":"n8ckglaaxqf2w6h9nr797"
-							}
-						]
-					},
-					{
-						"url":"https://web.facebook.com/NodeReactorCMS/",
-						"title":"FB","key":"5siluhvtpe509e9zi3d32qj"
-					}
-				],
-				"association":
-				[
-					"semp_nav_menu"
-				]
-			}
-		},
-		"name":"Node Reactor",
-		"description":"Welcome to IOT",
-		"post_post_permalink":"ttn",
-		"post_post_taxonomy":"category",
-		"term_permalink":"tt"
-	};
-
-	var default_theme_option=
-	{
-		"area_widget_linking":
-		{
-			"right_side_panel_theme":
+			"items":
 			[
 				{
-					"key":"0.5pzlws0ui4x",
-					"widget_id":"custom_html_widget_handler",
-					"properties":
-					{
-						"nr_widget_title":"Sample Widget",
-						"custom_code":"<iframe style=\"max-width:100%\" src=\"https://www.youtube.com/embed/rN6nlNC9WQA\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"
-					},
-					"nr_package":true
+					"post_id":"2",
+					"title":"Sample Page",
+					"key":"v4zjhybyz7ffbgle3h8yw"
+				},
+				{
+					"term_id":"1",
+					"title":"Uncategorized",
+					"key":"a6nac3gyszqtmmsrq3l3"
+				},
+				{
+					"url":"#",
+					"title":"NR Links",
+					"key":"5siluhvtpe509e9zi3d32qj",
+					"children":
+					[
+						{
+							"url":"http://nodereactor.com",
+							"title":"NodeReactor",
+							"key":"5sialuhvtgape509e9zgsa2qj"
+						},
+						{
+							"url":"https://www.npmjs.com/~noder-jk",
+							"title":"NPM",
+							"key":"5siluhvtpe509e9zgsa2qj"
+						},
+						{
+							"url":"https://github.com/noder-jk",
+							"title":"Github",
+							"key":"5sifasdluhvtpe509e9zgsa2qj"
+						}
+					]
 				}
+			],
+			"association":
+			[
+				"semp_nav_menu"
 			]
 		}
-	};
-	
+	},
+	"name":"Node Reactor",
+	"description":"Welcome to IOT",
+	"post_post_permalink":"ttn",
+	"post_post_taxonomy":"category",
+	"term_permalink":"tt"
+}
+
+var default_theme_options=
+{
+	"area_widget_linking":
+	{
+		"right_side_panel_theme":
+		[
+			{
+				"key":"0.5pzlws0ui4x",
+				"widget_id":"custom_html_widget_handler",
+				"properties":
+				{
+					"nr_widget_title":"Sample Widget",
+					"custom_code":"<iframe style=\"max-width:100%\" src=\"https://www.youtube.com/embed/rN6nlNC9WQA\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"
+				},
+				"nr_package":true
+			}
+		]
+	}
+};
+
+module.exports=function(connection, nr_data)
+{
+	var core_c	= connection.escape(JSON.stringify(default_core_options));
+	var theme_c	= connection.escape(JSON.stringify(default_theme_options));
+
 	return	"\
 	SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\
 	SET AUTOCOMMIT = 0;\
@@ -141,7 +150,7 @@ module.exports=function(connection, nr_data)
 	(1, CURRENT_TIMESTAMP, 'Welcome. This is your first sample page.', 'Auto generated page', 'Sample page', 'sample-page', CURRENT_TIMESTAMP, 'page');\
 	\
 	INSERT INTO `nr_postmeta` (`owner_post_id`, `meta_key`, `meta_value`) VALUES\
-	(1, 'primary_term_id_of_category', '3');\
+	(1, 'primary_term_id_of_category', '1');\
 	\
 	DROP TABLE IF EXISTS `"+nr_data.tb_prefix+"comments`;\
 	CREATE TABLE IF NOT EXISTS `"+nr_data.tb_prefix+"comments` (\
@@ -202,7 +211,7 @@ module.exports=function(connection, nr_data)
 	(1, 'Uncategorized', 'uncategorized', 'category', '', 0);\
 	\
 	INSERT INTO `nr_term_relationships` (`rel_id`, `owner_post_id`, `owner_term_id`) VALUES\
-	(1, 1, 3);\
+	(1, 1, 1);\
 	DROP TABLE IF EXISTS `"+nr_data.tb_prefix+"nodes`;\
 	CREATE TABLE IF NOT EXISTS `"+nr_data.tb_prefix+"nodes` (\
 	  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\
@@ -214,8 +223,8 @@ module.exports=function(connection, nr_data)
 	) ENGINE="+nr_data.db_engine+" DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;\
 	\
 	INSERT INTO `"+nr_data.tb_prefix+"nodes` (`nr_package`, `type`, `options`, `active`) VALUES\
-	('c', 'core', "+connection.escape(JSON.stringify(default_core_options))+", 1),\
-	('semplicemente', 'theme', "+connection.escape(JSON.stringify(default_theme_option))+", 1);\
+	('c', 'core', "+core_c+", 1),\
+	('semplicemente', 'theme', "+theme_c+", 1);\
 	\
 	DROP TABLE IF EXISTS `"+nr_data.tb_prefix+"sessions`;\
 	CREATE TABLE IF NOT EXISTS `"+nr_data.tb_prefix+"sessions` (\

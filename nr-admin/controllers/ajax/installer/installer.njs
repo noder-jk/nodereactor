@@ -16,7 +16,7 @@ const install_nr=function($, nr_fields, nr_data)
 		{
 			pool.end();
 
-			$.exit( !e ? {'status':'success'} : {'status':'error','message':'Could not Connect. Make sure configs are correct and database is running.'});
+			$.exit( !e ? {'status':'success'} : {'status':'error','message':'Could not Connect. Make sure configs are correct and database is running.'}, false);
 			
 			return;
 		}
@@ -29,7 +29,7 @@ const install_nr=function($, nr_fields, nr_data)
 
 			if(e)
 			{
-				$.exit( {'status':'error', 'message':'Database Import Error.'});
+				$.exit( {'status':'error', 'message':'Database Import Error.'}, false);
 				return;
 			}
 
@@ -52,7 +52,7 @@ const install_nr=function($, nr_fields, nr_data)
 			{
 				if(e)
 				{
-					$.exit( {'status':'error','message':'Installed, But Error in creating config file.'});
+					$.exit( {'status':'error','message':'Installed, But Error in creating config file.'}, false);
 					return;
 				}
 				
@@ -61,7 +61,7 @@ const install_nr=function($, nr_fields, nr_data)
 				/* So, everything okay. Now load new pool. */
 				nr_db_pool=get_pool();
 
-				$.exit( {'status':'success'});
+				$.exit( {'status':'success'}, false);
 			});
 		});
 	});

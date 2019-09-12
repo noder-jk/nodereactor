@@ -210,7 +210,8 @@ function (_Component) {
       var meta_box_id = this.props.meta_box_id;
       var _this$state = this.state,
           hierarchical = _this$state.hierarchical,
-          all_terms = _this$state.all_terms,
+          _this$state$all_terms = _this$state.all_terms,
+          all_terms = _this$state$all_terms === void 0 ? [] : _this$state$all_terms,
           _this$state$current_t = _this$state.current_terms,
           current_terms = _this$state$current_t === void 0 ? [] : _this$state$current_t,
           loading = _this$state.loading,
@@ -228,7 +229,7 @@ function (_Component) {
         id: "nr_taxonomy_metabox"
       }, loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
         size: "15px"
-      }) : null, _react["default"].createElement("i", null, _react["default"].createElement("small", null, "Don't forget to select primary term.")), _react["default"].createElement("form", {
+      }) : null, all_terms.length > 0 ? _react["default"].createElement("i", null, _react["default"].createElement("small", null, "Don't forget to select primary term.")) : null, _react["default"].createElement("form", {
         onSubmit: function onSubmit(e) {
           return e.preventDefault();
         },

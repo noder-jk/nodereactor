@@ -26,7 +26,7 @@ module.exports.http_response_code=function(code)
 }
 
 /* This function remove temporary scripts from cache. */
-module.exports.exit=function(resp)
+module.exports.exit=function(resp, sess_opt)
 {
 	terminate(this, function($)
 	{
@@ -76,6 +76,9 @@ module.exports.exit=function(resp)
 			$.nr_response.status($.nr_response_code).end(rsp_t);
 		};
 
-		$.series_fire( [real_set_option, real_set_session, send_resp_now]);
+		// Check if session, option save is necessary. It's not necessary after install call.
+		var fnc_q= sess_opt===false ? [send_resp_now] : [real_set_option, real_set_session, send_resp_now];
+
+		$.series_fire(fnc_q);
 	});
 }

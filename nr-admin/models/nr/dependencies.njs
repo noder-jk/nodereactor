@@ -134,7 +134,8 @@ module.exports.deploy_src=function()
 
 module.exports.deploy_db=function()
 {    
-    global.nr_db_config		= require(normalize_path(nr_configs+'database.njs'));
+    global.nr_db_config		= false;
+    try{nr_db_config=require(normalize_path(nr_configs+'database.njs'));}catch(e){}
     
     var required    = ['db_host', 'db_user', 'db_name', 'db_pass', 'tb_prefix'];
     var installed   = (typeof nr_db_config=='object' && required.filter(item=>(nr_db_config[item]!==undefined && typeof nr_db_config[item]=='string')).length==required.length);
