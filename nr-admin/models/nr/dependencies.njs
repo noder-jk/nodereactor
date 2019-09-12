@@ -79,7 +79,7 @@ module.exports.deploy_src=function()
 
         for(var k in node_package)
         {
-            var comp=node_package[k].dir.replace(/\\/g, '/')+'/react';
+            var comp=k+'/react';
             var comp_file=normalize_path(node_package[k].dir+'/react/index.js');
             
             var as='PKG_'+k.replace(/\-/g, '_');
@@ -109,35 +109,11 @@ module.exports.deploy_src=function()
     var react_app_source= nr_package_root+'/react-scripts/NodeReactorApp.jsx';
     var react_app_dest  = src+'/NodeReactorApp.jsx';
 
-    // Modify react script to enable outside import
-    var s_path  = normalize_path(nr_project_root+'/node_modules/react-dev-utils/ModuleScopePlugin.js');
-    var r_script= file_get_contents_sync(s_path);
-    var rem_str = "return relative.startsWith('../') || relative.startsWith('..\\\\\');";
-    if(r_script)
-    {
-        var identifier='/* modified_by_node_reactor */';
-
-        if(r_script.indexOf(rem_str)>-1)
-        {
-            r_script=r_script.replace(rem_str, "return true;"+identifier);
-            fs.writeFile(s_path, r_script, er=>er ? console.log('Fatal Error. Could not enable react outsider import. Write File Error.') : 0);
-        }
-        else if(r_script.indexOf(identifier)==-1)
-        {
-            console.log('Fatal Error. It seems, React Outsider import enabler could not be implemented properly. It will lead to build error.');
-        }
-    }
-    else
-    {
-        console.log('Fatal Error. Could not enable react outsider importer. Code not found.');
-    }
-
     /* Deploy importer scripts */
     var existing_str=file_get_contents_sync(react_app_source);
     if(existing_str)
     {
-        existing_str=existing_str.split('//do_not_delete_or_modify_this_comment');
-        var final_str=existing_str[0]+vendor_import+'\n'+mods_str+'\n'+existing_str[1];
+        var final_str=existing_str.replace('//do_not_delete_or_modify_this_comment', vendor_import+'\n'+mods_str+'\n');
 
         // Add package imports
         fs.writeFile(react_app_dest, final_str, (err)=>{err ? console.log('Fatal Error. Could not copy app file to src.') : 0});
