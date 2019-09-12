@@ -2,23 +2,12 @@ import React, {Component} from "react";
 import Swal from 'sweetalert2';
 import Spinner from 'react-svg-spinner';
 
+import {array_chunk} from 'php-functions';
 import {FindComp} from 'nodereactor/react/helper/comp-finder';
 
 import {ajax_request , Placeholder, parse_dom_form, array_pull_down, array_pull_up} from 'nodereactor/react';
 
 import './style.scss';
-
-const array_chunk=(arr, chunkLen)=>
-{
-    var chunkList = []
-    var chunkCount = Math.ceil(arr.length/chunkLen)
-    for(var i = 0; i < chunkCount; i++)
-	{
-        chunkList.push(arr.splice(0, chunkLen));
-    }
-    return chunkList;
-}
-
 
 const LoadInputComponent=(props)=>
 {

@@ -79,8 +79,10 @@ module.exports.app=function(project_root)
 
 	// get NR dependencies from project root 
 	var pr_d={};
+	var nrp_deps=pack.nr_configs.dependencies || [];
+	
 	// Loop through all NR dependencies
-	pack.nr_configs.dependencies.forEach(function(d)
+	nrp_deps.forEach(function(d)
 	{
 		// Check if the add-on is really installed.
 		// Check if exists in either core dependency or devDependency object. 

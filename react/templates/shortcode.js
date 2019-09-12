@@ -7,17 +7,13 @@ exports.do_shortcodes = exports.do_shortcode = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _phpFunctions = require("php-functions");
+
 var _compFinder = require("nodereactor/react/helper/comp-finder");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-function trim(s, c) {
-  if (c === "]") c = "\\]";
-  if (c === "\\") c = "\\\\";
-  return s.replace(new RegExp("^[" + c + "]+|[" + c + "]+$", "g"), "");
-}
 
 var do_shortcode = function do_shortcode(str) {
   var pack = '';
@@ -45,7 +41,7 @@ var do_shortcode = function do_shortcode(str) {
     return /\S+/.test(item) == true;
   });
   pack = pack[0] || '';
-  pack = trim(pack, ']');
+  pack = (0, _phpFunctions.trim)(pack, ']');
   var comp_props = {
     'component': comp_name,
     'nr_package': pack,

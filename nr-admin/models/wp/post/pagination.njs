@@ -101,7 +101,7 @@ module.exports.get_pagination=function(pgn_condition, next)
 		}
 
 		/* This call back function is really weird. Confused about algorithm. But it's working. Will check later. */
-		var pages=array_chunk(posts, args.posts_per_page);
+		var pages=node_modules['php-functions'].array_chunk(posts, args.posts_per_page);
 		
 		/* Set default current page */
 		pgnt.current=args.current_page;

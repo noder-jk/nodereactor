@@ -11,6 +11,8 @@ var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
+var _phpFunctions = require("php-functions");
+
 var _compFinder = require("nodereactor/react/helper/comp-finder");
 
 var _react2 = require("nodereactor/react");
@@ -42,17 +44,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-var array_chunk = function array_chunk(arr, chunkLen) {
-  var chunkList = [];
-  var chunkCount = Math.ceil(arr.length / chunkLen);
-
-  for (var i = 0; i < chunkCount; i++) {
-    chunkList.push(arr.splice(0, chunkLen));
-  }
-
-  return chunkList;
-};
 
 var LoadInputComponent = function LoadInputComponent(props) {
   var _props$area = props.area,
@@ -292,7 +283,7 @@ function (_Component) {
       });
       var ch_length = Math.floor(ob.length / 3);
       ch_length = ch_length < 1 ? 1 : ch_length;
-      var chunk = ob.length > 0 ? array_chunk(ob, ch_length) : [];
+      var chunk = ob.length > 0 ? (0, _phpFunctions.array_chunk)(ob, ch_length) : [];
       return _react["default"].createElement("div", {
         id: "widget_area_page",
         className: "row",

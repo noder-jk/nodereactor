@@ -278,7 +278,7 @@ module.exports.get_sql_clauses=function(column, key, column_name, table)
         {
             for(var i=0; i<column.values.length; i++)
             {
-                column.values[i]='"'+trim(column.values[i],'"')+'"';
+                column.values[i]='"'+node_modules['php-functions'].trim(column.values[i],'"')+'"';
             }
         }
         

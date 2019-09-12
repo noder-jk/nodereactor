@@ -1,15 +1,8 @@
 import React from 'react';
 
+import {trim} from 'php-functions';
 import {FindComp} from 'nodereactor/react/helper/comp-finder';
 
-function trim (s, c) {
-    if (c === "]") c = "\\]";
-    if (c === "\\") c = "\\\\";
-    return s.replace(new RegExp(
-      "^[" + c + "]+|[" + c + "]+$", "g"
-    ), "");
-  }
-  
 const do_shortcode=(str)=>
 {
     let pack='';

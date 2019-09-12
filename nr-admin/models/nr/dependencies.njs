@@ -208,9 +208,7 @@ module.exports.deploy_custom_scripts=function()
         'nr/timezones.njs',
         'nr/wpdb.njs',
 
-        'php/string.njs',
         'php/file.njs',
-        'php/array.njs',
         'php/cookie.njs',
         'php/session.njs',
         'php/encryption.njs',
@@ -244,6 +242,7 @@ module.exports.deploy_vendor_scripts=function()
 {
     var mods=
     [
+        'php-functions',
         'jsdom',
         'express',
         'http',
