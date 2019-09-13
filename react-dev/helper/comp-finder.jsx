@@ -59,9 +59,17 @@ const FindComp=(props)=>
             if(!resp)
             {
                 return <small className="text-danger">
-                            Component <u><b><i>{component}</i></b></u> not found.
-                            Fallback component <u><b><i>{fallback_component}</i></b></u> not found too.
-                        </small>
+                    Component <u><b><i>{component}</i></b></u> not found.
+                    
+                    {
+                        component==fallback_component ? null :
+                        <span>
+                            Also fallback component 
+                            <u><b><i>{fallback_component}</i></b></u> 
+                            not found.
+                        </span>
+                    }
+                </small>
             }
         }
 

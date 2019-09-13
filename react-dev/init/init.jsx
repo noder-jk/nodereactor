@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Helmet} from 'react-helmet';
 
 import Spinner from "react-svg-spinner";
 import Socket from 'socket.io-client/dist/socket.io.js';
@@ -98,8 +99,17 @@ class InitApp extends Component
 
     render()
     {
+        let {site_name=''}=window.nr_configs || {};
+
         return <div>
+            <Helmet>
+                <title>
+                    {site_name}
+                </title>
+            </Helmet>
+
             <Init/>
+
             {this.state.content}
         </div> 
     }

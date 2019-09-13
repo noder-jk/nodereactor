@@ -54,6 +54,10 @@ module.exports=function(nodes, rel_dir)
                     'type':pk.nr_configs.type
                 }
             }
+            else
+            {
+                console.log('"'+pk.name+'" extension type is invalid or undefined.');
+            }
 		}
         catch(e)
         {

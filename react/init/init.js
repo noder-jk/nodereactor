@@ -7,6 +7,8 @@ exports.InitApp = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _reactHelmet = require("react-helmet");
+
 var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
 
 var _socketIo = _interopRequireDefault(require("socket.io-client/dist/socket.io.js"));
@@ -158,7 +160,11 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react["default"].createElement("div", null, _react["default"].createElement(_core.Init, null), this.state.content);
+      var _ref = window.nr_configs || {},
+          _ref$site_name = _ref.site_name,
+          site_name = _ref$site_name === void 0 ? '' : _ref$site_name;
+
+      return _react["default"].createElement("div", null, _react["default"].createElement(_reactHelmet.Helmet, null, _react["default"].createElement("title", null, site_name)), _react["default"].createElement(_core.Init, null), this.state.content);
     }
   }]);
 

@@ -1,56 +1,18 @@
 #theme_list_cont
 {
-    .background_thumb
+    td:first-child
     {
-        height:100%;
-        background: 
+        img
         {
-            position: center center;
-            size: cover;
-            repeat: no-repeat; 
-        }
-    }
+            width: auto;
+            height: auto;
 
-    .activated_theme
-    {
-        .theme_action
-        {
-            display: none;
-        }
-    }
+            max-width: 100%;
+            max-height: 140px;
 
-    .data_el>div
-    {
-        height:300px;
-        margin-top:15px;
+            display: block;
+            margin-bottom: 6px;
+        }
     }
     
-    .data_el>div>div:nth-child(2){	position:absolute;
-                                    left:15px;
-                                    right:15px;
-                                    bottom:0;
-                                    top:15px;
-                                    background:#f5f5f5;
-                                    opacity:.5}
-            
-    .data_el>div>div:last-child{		position:absolute;
-                                    left:15px;
-                                    right:15px;
-                                    padding:7px;
-                                    bottom:0;
-                                    background:black;
-                                    opacity:.7;
-                                    color:white;
-                                    font-weight:bold;}
-
-    .theme_detail_btn{cursor:pointer;cursor:-webkit-pointer;display:table;height:100%;width:100%;}
-    .theme_detail_btn>div{display:table-cell;text-align:center;width:100%;vertical-align:middle}
-    .theme_detail_btn>div>span{background:black;color:white;padding:10px 30px;font-weight:bold;border-radius:5px;}
-
-
-    .details_overlay{display: none}
-    .theme_thumb_cont:hover
-    {
-        .details_overlay{display: block}
-    }
 }

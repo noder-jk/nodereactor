@@ -71,9 +71,11 @@ const the_previous_url=(pagination)=>
 
 const PaginateLinks=(props)=>
 {
-    let {pagination={}, Wrapper, hide_single=true}=props;
+    let {pagination={}, wrapper, hide_single=true, class_name='', active_class='current'}=props;
+
     let {pages=[], current=false}=pagination || {};
 
+    let Wrapper = wrapper;
 
     return (pages.length<=1 && hide_single) ? null :
     pages.map(content=>
@@ -83,7 +85,7 @@ const PaginateLinks=(props)=>
         let page=typeof content=='object' ? content.page+1 : content;
 
         // Generate class name
-        let className=(current==(content.url || content) ? 'current' : '');
+        let className=class_name+' '+(current==(content.url || content) ? active_class : '');
 
         var anchor=<a key={url} href={url} className={className} {...props}>{page}</a>
 

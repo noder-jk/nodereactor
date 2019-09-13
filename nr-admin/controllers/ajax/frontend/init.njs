@@ -9,11 +9,6 @@ module.exports.init=function($)
 			'component'	: 'Index',
 			'nr_installed':nr_db_config ? true : false
 		},
-		'bloginfo':
-		{
-			'name':$.bloginfo('name'),
-			'description':$.bloginfo('description')
-		},
 		'queried_object':{},
 		'is_singular':false
 	}

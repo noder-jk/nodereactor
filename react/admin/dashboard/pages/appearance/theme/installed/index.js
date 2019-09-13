@@ -9,8 +9,6 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _sweetalert = _interopRequireDefault(require("sweetalert2"));
 
-var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
-
 var _react2 = require("nodereactor/react");
 
 require("./style.scss");
@@ -113,49 +111,49 @@ function (_Component) {
     value: function render() {
       var _this4 = this;
 
-      var themes = this.state.themes;
+      var _this$state = this.state,
+          themes = _this$state.themes,
+          loading = _this$state.loading;
       return _react["default"].createElement("div", {
         className: "row",
         id: "theme_list_cont"
       }, _react["default"].createElement("div", {
         className: "col-12"
-      }, _react["default"].createElement("h3", null, "Installed Themes ", this.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
-        size: "15px"
-      }) : null)), Object.keys(themes).map(function (k) {
-        var item = themes[k];
-        var ind_theme = _this4.state.themes[k] ? _this4.state.themes[k] : {};
-        return _react["default"].createElement("div", {
+      }, _react["default"].createElement("h3", null, "Installed Themes", _react["default"].createElement(_react2.SpinIcon, {
+        show: loading
+      }))), _react["default"].createElement("table", {
+        className: "bg-white table table-bordered"
+      }, _react["default"].createElement("thead", null, _react["default"].createElement("tr", null, _react["default"].createElement("th", null, "Thumbnail"), _react["default"].createElement("th", null, "Package"), _react["default"].createElement("th", null, "Description"), _react["default"].createElement("th", null, "Version"), _react["default"].createElement("th", null, "Author"), _react["default"].createElement("th", null, "License"))), _react["default"].createElement("tbody", null, Object.keys(themes).map(function (k) {
+        var ind_theme = themes[k] ? themes[k] : {};
+        var thumbnail = ind_theme.thumbnail,
+            activated = ind_theme.activated,
+            description = ind_theme.description,
+            author = ind_theme.author,
+            version = ind_theme.version,
+            license = ind_theme.license;
+        var _author$name = author.name,
+            name = _author$name === void 0 ? '' : _author$name,
+            _author$url = author.url,
+            url = _author$url === void 0 ? false : _author$url;
+        var btn_cls = 'btn btn-' + (activated ? 'secondary' : 'info') + ' btn-sm';
+        return _react["default"].createElement("tr", {
           key: k,
-          className: "data_el col-12 col-md-6 col-xl-3 mb-4" + (ind_theme.activated ? ' activated_theme' : '')
-        }, _react["default"].createElement("div", {
-          className: "theme_thumb_cont"
-        }, _react["default"].createElement("div", {
-          className: "background_thumb",
-          style: {
-            'backgroundImage': 'url(' + item.thumbnail + ')'
-          }
-        }), _react["default"].createElement("div", {
-          className: "details_overlay"
-        }, _react["default"].createElement("div", {
-          className: "theme_detail_btn"
-        }, _react["default"].createElement("div", null, _react["default"].createElement("span", null, "Theme Details"), _react["default"].createElement("br", null), _react["default"].createElement("br", null)))), _react["default"].createElement("div", {
-          className: "button_container"
-        }, _react["default"].createElement("span", {
-          style: {
-            "float": "left",
-            "padding": "6px 0px"
-          }
-        }, k, "\xA0"), _react["default"].createElement("span", {
-          className: "theme_action"
-        }, _react["default"].createElement("button", {
-          className: "btn btn-info btn-sm float-right",
-          onClick: function onClick() {
+          className: "data_el col-12 col-md-6 col-xl-3 mb-4"
+        }, _react["default"].createElement("td", null, _react["default"].createElement("img", {
+          src: thumbnail
+        }), _react["default"].createElement("button", {
+          className: btn_cls,
+          disabled: activated,
+          onClick: activated ? function (_) {} : function (_) {
             return _this4.activateTheme(k);
           }
-        }, "Activate \xA0", _this4.state.loading ? _react["default"].createElement(_reactSvgSpinner["default"], {
-          size: "15px"
-        }) : null)))));
-      }));
+        }, activated ? 'Activated' : 'Activate', _react["default"].createElement(_react2.SpinIcon, {
+          show: loading
+        }))), _react["default"].createElement("td", null, k), _react["default"].createElement("td", null, description), _react["default"].createElement("td", null, version), _react["default"].createElement("td", null, !url ? name : _react["default"].createElement("a", {
+          href: url,
+          target: "_blank"
+        }, name)), _react["default"].createElement("td", null, license));
+      }))));
     }
   }]);
 

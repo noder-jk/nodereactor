@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import Swal from 'sweetalert2';
-import Spinner from 'react-svg-spinner';
 
-import {ajax_request} from 'nodereactor/react';
+import {ajax_request, SpinIcon} from 'nodereactor/react';
 
 import './style.scss';
 
@@ -67,49 +66,77 @@ class InstalledThemes extends Component
 
     render()
     {
-        let {themes}=this.state;
+        let {themes, loading}=this.state;
 
-        return(
-            <div className="row" id="theme_list_cont">
-                <div className="col-12">
-                    <h3>Installed Themes {this.state.loading ? <Spinner size="15px"/> : null}</h3>
-                </div>
-                {
-                    Object.keys(themes).map(k=>
-                    {
-                        let item=themes[k];
-                        let ind_theme=this.state.themes[k] ? this.state.themes[k] : {};
-
-                        return (
-                            <div key={k} className={"data_el col-12 col-md-6 col-xl-3 mb-4"+ (ind_theme.activated ? ' activated_theme' : '')}>
-                                <div className="theme_thumb_cont">
-                                    <div className="background_thumb" style={{'backgroundImage':'url('+item.thumbnail+')'}}></div>
-
-                                    <div className="details_overlay">
-                                        <div className="theme_detail_btn">
-                                            <div>
-                                                <span>Theme Details</span>
-                                                <br/><br/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                        
-                                    <div className="button_container">
-                                        <span style={{"float":"left","padding":"6px 0px"}}>{k}&nbsp;</span>
-                                        <span className="theme_action">
-                                            <button className="btn btn-info btn-sm float-right" onClick={()=>this.activateTheme(k)}>
-                                                Activate &nbsp;
-                                                {this.state.loading ? <Spinner size="15px"/> : null}
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        )
-                    })
-                }
+        return <div className="row" id="theme_list_cont">
+            <div className="col-12">
+                <h3>
+                    Installed Themes
+                    <SpinIcon show={loading}/>
+                </h3>
             </div>
-        )
+
+            <table className="bg-white table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Thumbnail</th>
+                        <th>Package</th>
+                        <th>Description</th>
+                        <th>Version</th>
+                        <th>Author</th>
+                        <th>License</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        Object.keys(themes).map(k=>
+                        {
+                            let ind_theme=themes[k] ? themes[k] : {};
+
+                            let {
+                                    thumbnail, 
+                                    activated,
+                                    description,
+                                    author,
+                                    version,
+                                    license
+                                }=ind_theme;
+
+                            let {name='', url=false}=author;
+
+                            let btn_cls='btn btn-'+(activated ? 'secondary' : 'info')+' btn-sm';
+
+                            return <tr key={k} className="data_el col-12 col-md-6 col-xl-3 mb-4">
+                                <td>
+                                    <img src={thumbnail}/>
+
+                                    <button className={btn_cls} disabled={activated} onClick={activated ? _=>{} : _=>this.activateTheme(k)}>
+                                        {activated ? 'Activated' : 'Activate'}
+                                        
+                                        <SpinIcon show={loading}/>
+                                    </button>
+                                </td>
+                                <td>
+                                    {k}
+                                </td>
+                                <td>
+                                    {description}
+                                </td>
+                                <td>
+                                    {version}
+                                </td>
+                                <td>
+                                    {!url ? name : <a href={url} target="_blank">{name}</a>}
+                                </td>
+                                <td>
+                                    {license}
+                                </td>
+                            </tr>
+                        })
+                    }
+                </tbody>
+            </table>
+        </div>
     }
 }
 

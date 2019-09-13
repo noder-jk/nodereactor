@@ -68,7 +68,7 @@ var FindComp = function FindComp(props) {
       if (!resp) {
         return _react["default"].createElement("small", {
           className: "text-danger"
-        }, "Component ", _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, component))), " not found. Fallback component ", _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, fallback_component))), " not found too.");
+        }, "Component ", _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, component))), " not found.", component == fallback_component ? null : _react["default"].createElement("span", null, "Also fallback component", _react["default"].createElement("u", null, _react["default"].createElement("b", null, _react["default"].createElement("i", null, fallback_component))), "not found."));
       }
     }
 

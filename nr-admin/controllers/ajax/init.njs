@@ -15,6 +15,8 @@ module.exports.dispatch=function($)
     {
         'nr_configs':
         {
+            'site_name'                 :   $.bloginfo('name'),
+            'site_description'          :   $.bloginfo('description'),
             'active_nodes'              :   $.nr_active_nodes, 
             'max_upload_size_byte'      :   max_upload_size,
             'max_upload_size_readable'  :   node_modules.filesize(max_upload_size),

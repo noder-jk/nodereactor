@@ -7,15 +7,15 @@ exports.DashboardContainer = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _reactSvgSpinner = _interopRequireDefault(require("react-svg-spinner"));
+var _reactHelmet = require("react-helmet");
 
 var _navs = require("../navs");
 
 var _compFinder = require("nodereactor/react/helper/comp-finder");
 
-require("./style.css");
+var _react2 = require("nodereactor/react");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+require("./style.css");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -51,8 +51,10 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(DashboardContainer).call(this, props));
     _this.state = {
-      'content': _react["default"].createElement(_reactSvgSpinner["default"], {
-        size: "15px"
+      'page_title': '',
+      'content': _react["default"].createElement(_react2.SpinIcon, {
+        show: true,
+        space: false
       })
     };
     return _this;
@@ -64,19 +66,24 @@ function (_Component) {
       var _this2 = this;
 
       (0, _navs.getNavList)(function (r, c) {
+        var _c$page_title = c.page_title,
+            page_title = _c$page_title === void 0 ? '' : _c$page_title;
+
         _this2.setState({
           'content': r ? _react["default"].createElement(_compFinder.FindComp, {
             comp_props: c
-          }) : _react["default"].createElement("div", null, "Something went wrong.")
+          }) : _react["default"].createElement("div", null, "Something went wrong."),
+          page_title: page_title
         });
       });
     }
   }, {
     key: "render",
     value: function render() {
+      var page_title = this.state.page_title;
       return _react["default"].createElement("main", {
         id: "dashboard_main"
-      }, _react["default"].createElement("div", {
+      }, _react["default"].createElement(_reactHelmet.Helmet, null, _react["default"].createElement("title", null, page_title)), _react["default"].createElement("div", {
         id: "admin_panel_container",
         className: "container-fluid"
       }, this.state.content));

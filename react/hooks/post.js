@@ -128,9 +128,13 @@ exports.the_previous_url = the_previous_url;
 var PaginateLinks = function PaginateLinks(props) {
   var _props$pagination = props.pagination,
       pagination = _props$pagination === void 0 ? {} : _props$pagination,
-      Wrapper = props.Wrapper,
+      wrapper = props.wrapper,
       _props$hide_single = props.hide_single,
-      hide_single = _props$hide_single === void 0 ? true : _props$hide_single;
+      hide_single = _props$hide_single === void 0 ? true : _props$hide_single,
+      _props$class_name = props.class_name,
+      class_name = _props$class_name === void 0 ? '' : _props$class_name,
+      _props$active_class = props.active_class,
+      active_class = _props$active_class === void 0 ? 'current' : _props$active_class;
 
   var _ref = pagination || {},
       _ref$pages = _ref.pages,
@@ -138,12 +142,13 @@ var PaginateLinks = function PaginateLinks(props) {
       _ref$current = _ref.current,
       current = _ref$current === void 0 ? false : _ref$current;
 
+  var Wrapper = wrapper;
   return pages.length <= 1 && hide_single ? null : pages.map(function (content) {
     // Get url and page number
     var url = pager_helper(content.url || content);
     var page = _typeof(content) == 'object' ? content.page + 1 : content; // Generate class name
 
-    var className = current == (content.url || content) ? 'current' : '';
+    var className = class_name + ' ' + (current == (content.url || content) ? active_class : '');
 
     var anchor = _react["default"].createElement("a", _extends({
       key: url,
