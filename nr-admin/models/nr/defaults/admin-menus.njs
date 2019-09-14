@@ -1,0 +1,153 @@
+module.exports=
+{
+    'index':
+    {
+        'main':
+        {
+            'page_title':'Dashboard',
+            'menu_title':'Dashboard',
+            'menu_icon':'faPager',
+            'slug':'dashboard',
+            'component':'MainDashboard',
+            'nr_package':true
+        },
+        'sub':[]
+    },
+    'files':
+    {
+        'main':
+        {
+            'page_title':'Media Files',
+            'menu_title':'Media',
+            'menu_icon':'faFileImage',
+            'slug':'explorer',
+            'component':'MediaPage',
+            'nr_package':true
+        },
+        'sub':[]
+    },
+    'appearance':
+    {
+        'main':
+        {
+            'page_title':'Appearance',
+            'menu_title':'Appearance',
+            'menu_icon':'faPaintBrush',
+            'slug':'themes',
+            'component':'InstalledThemes',
+            'nr_package':true
+        },
+        'sub':
+        [
+            {
+                'page_title':'Explore themes at Theme Directory',
+                'menu_title':'Theme Directory',
+                'slug':'theme-directory',
+                'component':'ThemeDirectory',
+                'nr_package':true
+            },
+            {
+                'page_title':'Widgets',
+                'menu_title':'Widgets',
+                'slug':'widgets',
+                'component':'AdminWidget',
+                'nr_package':true
+            },
+            {
+                'page_title':'Menus',
+                'menu_title':'Menus',
+                'slug':'menus',
+                'component':'MenuPage',
+                'nr_package':true
+            }
+        ]
+    },
+    'plugins':
+    {
+        'main':
+        {
+            'page_title':'Plugins',
+            'menu_title':'Plugins',
+            'menu_icon':'faPlug',
+            'slug':'all',
+            'component':'InstalledPlugins',
+            'nr_package':true
+        },
+        'sub':
+        [
+            {
+                'page_title':'Explore plugins at Theme Directory',
+                'menu_title':'Plugin Directory',
+                'slug':'plugin-directory',
+                'component':'PluginDirectory',
+                'nr_package':true
+            }
+        ]
+    },
+    'users':
+    {
+        'main':
+        {
+            'page_title':'Users',
+            'menu_title':'All Users',
+            'menu_icon':'faUser',
+            'slug':'all',
+            'component':'Users',
+            'nr_package':true
+        },
+        'sub':
+        [
+            {
+                'page_title':'Create User',
+                'menu_title':'Create User',
+                'slug':'create',
+                'component':'UserCreate',
+                'nr_package':true
+            },
+            {
+                'page_title':'Edit User',
+                'menu_title':'Edit User',
+                'slug':'edit',
+                'hide_if_not':'/nr-admin/users/edit',
+                'component':'EditUser',
+                'nr_package':true
+            },
+            {
+                'page_title':'My Profile',
+                'menu_title':'My Profile',
+                'slug':'my-profile',
+                'component':'MyProfile',
+                'nr_package':true
+            }
+        ]
+    },
+    'settings':
+    {
+        'main':
+        {
+            'page_title':'Settings',
+            'menu_title':'Settings',
+            'menu_icon':'faCog',
+            'slug':'general',
+            'component':'GeneralSetting',
+            'nr_package':true
+        },
+        'sub':
+        [
+            {
+                'page_title':'Permalink Setting',
+                'menu_title':'Permalink',
+                'slug':'permalink',
+                'component':'PermalinkSetting',
+                'nr_package':true
+            },
+            {
+                'page_title':'Reading Setting',
+                'menu_title':'Reading',
+                'slug':'reading',
+                'component':'ReadingSetting',
+                'nr_package':true
+            }
+        ]
+    }
+}

@@ -57,14 +57,3 @@ global.use_taxonomies=function($, callback)
 {
 	$.do_action('use_taxonomies', callback);
 }
-
-/* socket */
-global.socket_connected=function($, callback)
-{
-	$.do_action('socket_connected', callback);
-}
-
-global.socket_disconnected=function($, callback)
-{
-	$.do_action('socket_disconnected', callback);
-}

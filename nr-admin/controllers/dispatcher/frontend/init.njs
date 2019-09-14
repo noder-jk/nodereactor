@@ -153,14 +153,10 @@ module.exports.init=function($)
 
 		if(p=='logout/all')
 		{
-			console.log('');
-			console.log('Log out all called');
 			nr_logout_all($, red);
 		}
 		else if(p=='logout')
 		{
-			console.log('');
-			console.log('Log out called');
 			nr_logout($, red);
 		}
 		else

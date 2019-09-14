@@ -142,29 +142,21 @@ module.exports.init=function(nr_app)
 	// All the socket request here
 	nr_socket.on('connection', function(socket)
 	{
-		var $=blues.get_socket_blueprint(socket.request, socket);
+		var $=blues.get_socket_blueprint(socket);
+		deps.handle_route($, true, 'connected');
 
-		$.socket_event='connected';
-		
-		$.set_cookie( 'test-socketCookie', 'test-socket cookie value', 3600);
-
-		deps.handle_route($);
-
-		// Socket response receive
 		socket.on('nr-socket-io-core-channel', function(data)
 		{
-
-			$.socket_event=false;
-			
+			// Get new blueprint.
+			var $=blues.get_socket_blueprint(socket);
 			$._IO=data;
-
-			deps.handle_route($);
+			deps.handle_route($, true, 'message');
 
 		}).on('disconnect', function()
 		{
-			$.socket_event='disconnected';
-
-			deps.handle_route($);
+			// Get new blueprint.
+			var $=blues.get_socket_blueprint(socket);
+			deps.handle_route($, true, 'disconnected');
 		});
 	});
 	

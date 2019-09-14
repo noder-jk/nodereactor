@@ -108,8 +108,9 @@ const allowed_hotlinked=($)=>
 	return matched;
 }
 
-module.exports.run=($)=>
+module.exports.run=function($, sock_event)
 {
+	// At first check if it is file request
 	var check_if_file=($, inc_next)=>
 	{
 		is_it_file_request($, ($, f)=>
@@ -124,7 +125,7 @@ module.exports.run=($)=>
 		if($.requested_file_path && !allowed_hotlinked($))
 		{
 			$.http_response_code(403);
-			$.exit( 'Access Forbidden');
+			$.exit('Access Forbidden');
 			return;
 		}
 			
@@ -137,6 +138,7 @@ module.exports.run=($)=>
 
 		inc_next($);
 	}
+
 
 	var load_static=($, next)=>
 	{
@@ -200,15 +202,11 @@ module.exports.run=($)=>
 	{
 		if($._SERVER['REQUEST_METHOD']=='IO')
 		{
-			var ev=$.socket_event;
-		
-			delete $.socket_event;
-
-			ev=='connected' ? socket_connected($) : 0;
-
-			ev=='disconnected' ? socket_disconnected($) : 0;
-			
-			if(ev=='connected' || ev=='disconnected'){return;}
+			if(sock_event=='connected' || sock_event=='disconnected')
+			{
+				$.do_action('socket_'+sock_event, ($, bummer)=>{}); 
+				return;
+			}
 		}
 		
 		next($);

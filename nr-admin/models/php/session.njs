@@ -95,13 +95,6 @@ global.real_set_session=function($, call_back)
 
 		nr_db_pool.query(q, function(e)
 		{
-			if($._POST.pathname=='/logout')
-			{
-				console.log('')
-				console.log($._POST.pathname)
-				console.log(q)
-			}
-
 			call_back($);
 		});
 	}
@@ -117,9 +110,6 @@ global.real_set_session=function($, call_back)
 			
 			nr_db_pool.query(q, function(e,r)
 			{
-				console.log('');
-				console.log('Inserted', $._POST.pathname);
-
 				if(!e)
 				{
 					$.set_cookie(nr_session_cookie_name, r.insertId, nr_cookie_expiry);

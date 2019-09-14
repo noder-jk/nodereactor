@@ -259,13 +259,14 @@ module.exports.deploy_vendor_scripts=function()
 
 const nr_router	= require(normalize_path(nr_controllers+'router.njs'));
 
-module.exports.handle_route=function($)
+module.exports.handle_route=function($, socket_handler, socket_event)
 {
     var handle_req=()=>
     {
-        if($._SERVER['REQUEST_METHOD']=='IO')
+        socket_event=='disconnected' ? console.log('s n') : 0;
+        if(socket_handler)
         {
-            nr_router.run($);
+            nr_router.run($, socket_event);
             return;
         }
             

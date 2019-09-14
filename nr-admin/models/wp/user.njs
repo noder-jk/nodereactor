@@ -179,7 +179,7 @@ global.nr_login=function($, fields, next)
 
 					$.echo(resp);
 
-					$.do_action('nr_login', $.get_current_user_id(), function($)
+					$.do_action('login', $.get_current_user_id(), function($)
 					{
 						next($, resp);
 					});

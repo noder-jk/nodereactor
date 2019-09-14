@@ -57,7 +57,7 @@ module.exports.run=function($, next)
 	{
 		$.add_action(k, ($, key, next)=>
 		{
-			routes[key] ? require(normalize_path(nr_controllers+'ajax/'+routes[key].path))[routes[key].method]($, next) : null;
+			routes[key] ? require(normalize_path(nr_controllers+'dispatcher/'+routes[key].path))[routes[key].method]($, next) : null;
 		});
 	}
 

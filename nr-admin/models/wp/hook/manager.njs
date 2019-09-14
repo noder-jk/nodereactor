@@ -6,7 +6,7 @@ module.exports.add_action=function(hook, callback)
 		this.nr_registered_ajax[hook]=callback;
 		return;
 	}
-	
+
 	!this.nr_hooks[hook] ? this.nr_hooks[hook]=[] : 0;
 	
 	this.nr_hooks[hook].push(callback);

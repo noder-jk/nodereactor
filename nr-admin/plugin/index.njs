@@ -1,16 +1,5 @@
-module.exports.run=function($,next)
+module.exports.run=function($, next)
 {
-	/* $.add_action('socket_connected', function($, next)
-	{
-		next($);
-	});
-
-	$.add_action('socket_disconnected', function($, next)
-	{
-		next($);
-	}); */
-
-
 	var meta_box_file	= require(nr_admin+'plugin/plugin-modules/post_modules.njs').run;
 	var widget_file		= require(nr_admin+'plugin/plugin-modules/widgets.njs').run;
 	var post_type		= require(nr_admin+'plugin/plugin-modules/post_type.njs').run;
