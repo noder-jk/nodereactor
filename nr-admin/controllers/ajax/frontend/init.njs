@@ -105,11 +105,7 @@ module.exports.init=function($)
 					// Generate queried object
 					get_queried_ob($, function($)
 					{
-						// then invoke hook so third parties can modify
-						$.do_action('theme_response', nr_resp, function($, nr_resp, bummer_next)
-						{
-							$.exit(nr_resp);
-						});
+						$.exit(nr_resp);
 					});
 				});
 			});

@@ -140,7 +140,7 @@ global.delete_user_meta=function($, user_id, meta_key, next)
 
 global.nr_login=function($, fields, next)
 {
-	$.do_action('nr_before_login', fields, function($)
+	$.do_action('pre_login', fields, function($)
 	{
 		var user_login	= nr_db_pool.escape(fields.username);
 		var pass		= fields.password;
@@ -159,7 +159,7 @@ global.nr_login=function($, fields, next)
 
 			if(result.length==0)
 			{
-				$.do_action('nr_login_failed', fields, function($)
+				$.do_action('login_failed', fields, function($)
 				{
 					next($, resp);
 				});
@@ -188,7 +188,7 @@ global.nr_login=function($, fields, next)
 				{
 					$.echo(resp);
 					
-					$.do_action('nr_login_failed', fields, function($)
+					$.do_action('login_failed', fields, function($)
 					{
 						next($, resp);
 					});
@@ -205,7 +205,7 @@ global.nr_logout=function($, next)
 
 	var user_id=$.get_current_user_id();
 
-	$.do_action('nr_logout', user_id, function($, user_id, bummer)
+	$.do_action('logout', user_id, function($, user_id, bummer)
 	{
 		next($);
 	});
@@ -257,7 +257,7 @@ global.nr_logout_all=function($, lg_next)
 
 		funcs.push(function($)
 		{
-			$.do_action('nr_logout_all', user_id, function($, user_id, bummer)
+			$.do_action('logout_all', user_id, function($, user_id, bummer)
 			{
 				lg_next($);
 			});

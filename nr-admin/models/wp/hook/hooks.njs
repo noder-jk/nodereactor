@@ -4,11 +4,6 @@ global.init=function($,callback)
 	$.do_action('init',callback);
 }
 
-global.terminate=function($, callback)
-{
-	$.do_action('terminate', callback);
-}
-
 /* --------------post hooks-------------- */
 global.use_meta_boxes=function($, callback)
 {
@@ -23,11 +18,6 @@ global.register_meta_boxes=function($,callback)
 global.register_post_types=function($,callback)
 {
 	$.do_action('register_post_types',callback);
-}
-
-global.save_post=function($,callback)
-{
-	$.do_action('save_post',callback);
 }
 
 global.register_custom_templates=function($,callback)
@@ -46,10 +36,6 @@ global.widgets_init=function($,callback)
 	$.do_action('widgets_init',callback);
 }
 
-global.save_post=function($,callback)
-{
-	$.do_action('save_post',callback);
-}
 
 global.delete_user=function($, user_id, callback)
 {

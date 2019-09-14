@@ -29,14 +29,14 @@ const get_commons=function()
 	return query_object;
 }
 
-module.exports.before_get_terms=function($, callback)
+module.exports.pre_get_terms=function($, callback)
 {
-	$.do_action('before_get_terms', get_commons(), callback);
+	$.do_action('pre_get_terms', get_commons(), callback);
 }
 
 module.exports.nr_fill_term_cond=function(nr_cond, args)
 {
-	/* Loop through all hook and before_get provided params, and fill the condition */
+	/* Loop through all hook and before get provided params, and fill the condition */
 	for(var k in args)
 	{
 		/* Store the first level value to condition, if not exist already. */

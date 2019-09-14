@@ -36,7 +36,7 @@ module.exports.get_posts=function(nr_condition, get_p_n)
 	var hlpr				= require('./helper.njs');
 
 	// Invoke hook so they can modify query object
-	hlpr.before_get_posts(this, nr_condition, function($, query, bummer_next)
+	hlpr.pre_get_posts(this, nr_condition, function($, query, bummer_next)
 	{
 		// Set defaults
 		typeof nr_condition!=='object' ? nr_condition={} : 0;
@@ -375,7 +375,7 @@ module.exports.delete_post=function(post_id, d_next)
 	}
 
 	// Invoke before delete post hook
-	this.do_action('before_delete_post', post_ids, function($, ids, bummer)
+	this.do_action('pre_delete_post', post_ids, function($, ids, bummer)
 	{
 		// Delete post meta and execute functions above
 		$.delete_post_meta(post_ids, true, function($)

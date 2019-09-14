@@ -126,7 +126,7 @@ const get_commons=function($)
 	return query_object;
 }
 
-module.exports.before_get_posts=function($, condition, callback)
+module.exports.pre_get_posts=function($, condition, callback)
 {
 	var commons=get_commons($);
 	
@@ -143,7 +143,7 @@ module.exports.before_get_posts=function($, condition, callback)
 		condition.page ? commons.page=condition.page : 0;
 	}
 
-	$.do_action('before_get_posts', commons, callback);
+	$.do_action('pre_get_posts', commons, callback);
 }
 
 module.exports.nr_condition_processor=function(args,condition)

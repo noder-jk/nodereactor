@@ -44,8 +44,5 @@ module.exports.dispatch=function($)
         }
     }
 
-    $.do_action('init_response', resp, function($, resp, bummer)
-    {
-        $.exit(resp);
-    });
+    $.exit(resp);
 }

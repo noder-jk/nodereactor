@@ -28,7 +28,7 @@ module.exports.http_response_code=function(code)
 /* This function remove temporary scripts from cache. */
 module.exports.exit=function(resp, sess_opt)
 {
-	terminate(this, function($)
+	this.do_action('exit', function($)
 	{
 		var send_str=false;
 

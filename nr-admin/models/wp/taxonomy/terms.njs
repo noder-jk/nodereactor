@@ -38,7 +38,7 @@ module.exports.use_taxonomy=function(ob)
 
 module.exports.delete_term=function(term_ids_ar, d_next)
 {
-	this.do_action('before_delete_term', term_ids_ar, function($)
+	this.do_action('pre_delete_term', term_ids_ar, function($)
 	{
 		term_ids=term_ids_ar.join(',');
 
@@ -364,7 +364,7 @@ module.exports.get_terms=function(nr_condition, get_p_n)
 	var pst_helper=require('../post/helper.njs');
 	
 	/* Get query object, that will come through registered hooks too. [Oh god! what a complicated function. Need refactoring.] */
-	helper.before_get_terms(this, function($, query, not_appl)
+	helper.pre_get_terms(this, function($, query, not_appl)
 	{
 		typeof nr_condition!=='object' ? nr_condition={} : 0;
 
