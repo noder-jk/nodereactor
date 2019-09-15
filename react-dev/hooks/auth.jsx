@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {FindActionHook} from '../helper/hook-finder';
+import {DoAction} from 'nodereactor/react';
 
 const login=()=>
 {
-    return <FindActionHook hook="login"/>
+    return <DoAction hook="login"/>
 }
 
 export {login}

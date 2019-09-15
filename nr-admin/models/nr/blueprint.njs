@@ -56,7 +56,9 @@ module.exports.get_socket_blueprint=function(socket)
 
     $.nr_socket             = socket;
 
-    var ckk                 = node_modules.cookie.parse(request.headers.cookie);
+    var ckk                 = request.headers.cookie;
+    ckk                     = typeof ckk=='string' ? node_modules.cookie.parse(ckk) : {};
+    
     $._COOKIE_ORIGINAL		= node_modules.deepcopy(ckk);
     $._COOKIE				= node_modules.deepcopy(ckk);
     

@@ -1,34 +1,33 @@
 import React from "react";
-import {FindActionHook} from '../helper/hook-finder';
+import {DoAction} from 'nodereactor/react';
 
 import moment from 'moment-timezone';
 
 const the_title=(item)=>
 {
-    return <FindActionHook hook="the_title" value={item.post_title} properties={{'post':item}}/>
+    return <DoAction hook="the_title" value={item.post_title} properties={item}/>
 }
 
 const the_content=(item)=>
 {
-    return <FindActionHook hook="the_content" value={item.post_content} danger={true} properties={{'post':item}}/>
+    return <DoAction hook="the_content" value={item.post_content} danger={true} properties={item}/>
 }
 
 const the_author=(item)=>
 {
-    return <FindActionHook hook="the_author" value={item.display_name} properties={{'post':item}}/>
+    return <DoAction hook="the_author" value={item.display_name} properties={item}/>
 }
-
 
 const the_date=(item, format)=>
 {
     let date = moment(item.post_date).tz(window.nr_configs.time_zone).format(format ? format : 'YYYY-MM-DD HH:mma z');
 
-    return <FindActionHook hook="the_date" value={date} properties={{'post':item}}/>
+    return <DoAction hook="the_date" value={date} properties={item}/>
 }
 
 const the_excerpt=(item)=>
 {
-    return <FindActionHook hook="the_excerpt" value={item.post_excerpt} properties={{'post':item}}/>
+    return <DoAction hook="the_excerpt" value={item.post_excerpt} properties={item}/>
 }
 
 const the_permalink=(item)=>

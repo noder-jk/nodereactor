@@ -12,7 +12,7 @@ const invokeHooks=(h_name, single_hook, properties)=>
     {
         if(n!==h_name){continue;}
 
-        // Make object if its component directly
+        // Make object if its component directly, rather than defining before, component property.
         if(typeof single_hook[n]=='function')
         {
             single_hook[n]={'component':single_hook[n], 'before':false};
@@ -40,7 +40,7 @@ const invokeHooks=(h_name, single_hook, properties)=>
     return {position:(before ? 'unshift' : 'push'), content:comps_ar}
 }
 
-const FindActionHook=(props)=>
+const DoAction=(props)=>
 {
     let comps=window.nr_vendor_comps;
 
@@ -50,7 +50,13 @@ const FindActionHook=(props)=>
             value='', 
             properties={}
         }=props;
+    
+    let apply_filt=props.apply_filters==undefined ? true : props.apply_filters;
 
+    // Filter the string
+    apply_filt ? value=apply_filters(hook, value, properties) : 0;
+
+    // Now do shortcode (if necessary) and make array
     value = danger==true ? [do_shortcodes(value)] : [value];
 
     /* Loop through all node type, theme and plugin to find hook */
@@ -65,8 +71,11 @@ const FindActionHook=(props)=>
                 let hooks=comps[k][i].component.action_hooks;
 
                 /* Check the hook type, multiple or single, position defined or not. */
+                // It needs to be array, because devs might need to attach multiple handler to same hook.
+                // So it would be something like this [{the_title:Comp}, {the_title:Comp2}] and so on
                 !Array.isArray(hooks) ? hooks=[hooks] : 0;
                 
+                // Loop through 
                 hooks.forEach(h=>
                 {
                     let {position, content}=invokeHooks(hook, h, properties);
@@ -79,4 +88,36 @@ const FindActionHook=(props)=>
     return value;
 }
 
-export {FindActionHook}
+const apply_filters=(hook_name, str, props)=>
+{
+    if(typeof str!=='string'){return str}
+    
+    let comps=window.nr_vendor_comps;
+
+    /* Loop through all node type, theme and plugin to find hook */
+    for(let k in comps)
+    {
+        /* Loop through individual node (theme and plugin) */
+        for(let i=0; i<comps[k].length; i++)
+        {
+            /* Check if the specified hook is available in the node */
+            if(comps[k][i] && comps[k][i].component && typeof comps[k][i].component.filter_hooks=='object')
+            {
+                let hooks=comps[k][i].component.filter_hooks;
+
+                if(hooks[hook_name])
+                {
+                    let hk=hooks[hook_name];
+                    !Array.isArray(hk) ? hk=[hk] : 0;
+
+                    // Call the filter function
+                    hk.forEach(h=>typeof h=='function' ? str=h(str, props) : 0);
+                }
+            }
+        }
+    }
+
+    return str;
+}
+
+export {DoAction, apply_filters}

@@ -3,6 +3,18 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+Object.defineProperty(exports, "DoAction", {
+  enumerable: true,
+  get: function get() {
+    return _hookFinder.DoAction;
+  }
+});
+Object.defineProperty(exports, "apply_filters", {
+  enumerable: true,
+  get: function get() {
+    return _hookFinder.apply_filters;
+  }
+});
 Object.defineProperty(exports, "Placeholder", {
   enumerable: true,
   get: function get() {
@@ -95,6 +107,8 @@ Object.defineProperty(exports, "BasicSettings", {
 });
 exports.socket_event = exports.ajax_url = void 0;
 
+var _hookFinder = require("./helper/hook-finder");
+
 var _compPlaceholder = require("./helper/comp-placeholder");
 
 var _utility = require("./helper/utility");
@@ -143,6 +157,7 @@ exports.ajax_url = ajax_url;
 var socket_event = 'nr-socket-io-core-channel';
 exports.socket_event = socket_event;
 
+// Export some stuffs dynamically, these are sort of unknown.
 for (var i = 0; i < bulk_export.length; i++) {
   for (var k in bulk_export[i]) {
     module.exports[k] = bulk_export[i][k];

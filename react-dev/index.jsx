@@ -1,3 +1,4 @@
+import {DoAction, apply_filters} from './helper/hook-finder';
 import {Placeholder} from './helper/comp-placeholder';
 import {get_url_parameter,Pagination,get_hierarchy,SpinIcon} from './helper/utility';
 
@@ -48,6 +49,9 @@ export  {
 
     socket_event,
 
+    DoAction,
+    apply_filters,
+    
     get_hierarchy,
     get_url_parameter,
     SpinIcon,
@@ -68,6 +72,7 @@ export  {
     BasicSettings
 }
 
+// Export some stuffs dynamically, these are sort of unknown.
 for(let i=0; i<bulk_export.length; i++)
 {
     for(let k in bulk_export[i])

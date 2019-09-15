@@ -1,15 +1,10 @@
 import React from 'react';
 
-import {FindActionHook} from '../helper/hook-finder';
+import {DoAction} from 'nodereactor/react';
 
 const Init=()=>
 {
-    return <FindActionHook hook="init" type="function"/>
+    return <DoAction hook="init"/>
 }
 
-const InitTheme=(props)=>
-{
-    return <FindActionHook hook="init_theme" type="function" properties={props.properties}/>
-}
-
-export {Init, InitTheme}
+export {Init}
