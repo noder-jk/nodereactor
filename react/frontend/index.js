@@ -13,6 +13,8 @@ var _react2 = require("nodereactor/react");
 
 var _compFinder = require("../helper/comp-finder");
 
+var _core = require("../hooks/core");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -107,7 +109,7 @@ function (_Component) {
         /* Now load the theme component */
 
         _this2.setState({
-          'content': _react["default"].createElement("div", null, _react["default"].createElement(_compFinder.FindComp, _extends({
+          'content': _react["default"].createElement("div", null, _react["default"].createElement(_core.InitTheme, null), _react["default"].createElement(_compFinder.FindComp, _extends({
             comp_props: find_params
           }, params)))
         });

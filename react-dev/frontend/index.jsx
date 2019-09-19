@@ -3,6 +3,7 @@ import Spinner from 'react-svg-spinner';
 
 import {ajax_request} from 'nodereactor/react';
 import {FindComp} from '../helper/comp-finder';
+import {InitTheme} from '../hooks/core';
 
 class InitFrontEnd extends Component
 {
@@ -55,6 +56,7 @@ class InitFrontEnd extends Component
             this.setState
             ({
                 'content': <div>
+                    <InitTheme/>
                     <FindComp comp_props={find_params} {...params}/>
                 </div>
             });

@@ -7,4 +7,14 @@ const Init=()=>
     return <DoAction hook="init"/>
 }
 
-export {Init}
+const InitAdmin=()=>
+{
+    return <DoAction hook="init_admin"/>
+}
+
+const InitTheme=()=>
+{
+    return <DoAction hook="init_theme"/>
+}
+
+export {Init, InitAdmin, InitTheme}
