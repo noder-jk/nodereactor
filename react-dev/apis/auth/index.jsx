@@ -26,8 +26,6 @@ class LoginRegistration extends Component
 
         let form=parse_dom_form(this.auth_form);
 
-        console.log(form);
-
         ajax_request('nr_login', form, (r, d, e)=>
         {
             this.setState({'loading':false});

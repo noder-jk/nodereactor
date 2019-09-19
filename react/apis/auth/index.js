@@ -66,7 +66,6 @@ function (_Component) {
         'loading': true
       });
       var form = (0, _react2.parse_dom_form)(this.auth_form);
-      console.log(form);
       (0, _react2.ajax_request)('nr_login', form, function (r, d, e) {
         _this2.setState({
           'loading': false

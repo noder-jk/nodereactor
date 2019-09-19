@@ -21,7 +21,6 @@ var the_title = function the_title(item) {
   return _react["default"].createElement(_react2.DoAction, {
     hook: "the_title",
     value: item.post_title,
-    apply_filters: false,
     properties: item
   });
 };

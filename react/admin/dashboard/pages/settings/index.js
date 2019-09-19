@@ -96,7 +96,6 @@ var GeneralSettingProcess = function GeneralSettingProcess(props) {
 };
 
 var GeneralSetting = function GeneralSetting() {
-  console.log('Loaded');
   return _react["default"].createElement(_react2.Placeholder, {
     action: "nr_get_gen_settings",
     component: GeneralSettingProcess

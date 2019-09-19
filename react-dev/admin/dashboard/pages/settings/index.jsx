@@ -46,7 +46,6 @@ const GeneralSettingProcess=(props)=>
 
 const GeneralSetting=()=>
 {
-    console.log('Loaded');
     return <Placeholder action="nr_get_gen_settings" component={GeneralSettingProcess}/>
 }
 

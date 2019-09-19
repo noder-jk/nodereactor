@@ -263,7 +263,6 @@ module.exports.handle_route=function($, socket_handler, socket_event)
 {
     var handle_req=()=>
     {
-        socket_event=='disconnected' ? console.log('s n') : 0;
         if(socket_handler)
         {
             nr_router.run($, socket_event);

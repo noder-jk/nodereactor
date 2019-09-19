@@ -132,8 +132,6 @@ class PostList extends Component
             /* This block will be called when user click pagination buttons */
             e.preventDefault();
 
-            console.log(this.list_container)
-
             let el=this.list_container.getElementsByClassName('nr_pagination_page_number')[0];
             el.value=page_num;
             form.page=page_num;

@@ -104,10 +104,7 @@ module.exports.app=function(project_root)
 		ad_deps[k].type=='theme' ? nr_themes[k]=ad_deps[k] : 0;
 		ad_deps[k].type=='plugin' ? nr_plugins[k]=ad_deps[k] : 0;
 	}
-	// console.log(Object.keys(nr_themes));
-	// console.log(Object.keys(nr_plugins));
-
-
+	
 	/* Load server modules and initialize */
 	return require('express')();
 }
