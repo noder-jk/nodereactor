@@ -38,22 +38,14 @@ module.exports.app=function(project_root)
 		global[k]=utility_configs[k];
 	}
 
-	/* Init configs of theme, plugins etc */
-	var data_ob=
-	{
-		nr_port			: pack.nr_configs.port,
-		nr_home_url		: pack.nr_configs.url,
-		nr_project_root	: project_root
-	}
-
 	global.nrg						= {};
-	global.nr_port					= data_ob.nr_port;
-
-	global.nr_home_url				= data_ob.nr_home_url; // including trailing slash
+	
+	global.nr_port					= eval(pack.nr_configs.port); // eval because it might be dynamic port
+	global.nr_home_url				= eval(pack.nr_configs.url); // including trailing slash
 
 	global.node_modules				= {path:require('path')};
 
-	global.nr_project_root			= data_ob.nr_project_root;
+	global.nr_project_root			= project_root;
 	global.nr_package_root			= __dirname;
 
 
@@ -63,10 +55,10 @@ module.exports.app=function(project_root)
 	global.nr_models		= nr_package_root+'/nr-admin/models/';
 	global.nr_modules		= nr_package_root+'/nr-admin/modules/';
 
-	global.nr_configs		= data_ob.nr_project_root+'/nr-content/configs/';
+	global.nr_configs		= nr_project_root+'/nr-content/configs/';
 
-	global.nr_contents		= data_ob.nr_project_root+'/nr-content/';
-	global.nr_uploads		= data_ob.nr_project_root+'/nr-content/uploads/';
+	global.nr_contents		= nr_project_root+'/nr-content/';
+	global.nr_uploads		= nr_project_root+'/nr-content/uploads/';
 	
 	global.nr_includes		= nr_package_root+'/nr-includes/';
 
