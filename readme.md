@@ -1,3 +1,2 @@
 Node Reactor is a Node and React based complete content management system, inspired by WordPress. It's not a typical headless CMS.
-<br/> 
-Visit <a href="https://nodereactor.com">http://NodeReactor.com</a> for details and documentation.
+<div><a href="https://drive.google.com/open?id=1iNmoHZdGL-gAMUip8X3aTzTQbM7ZElK2">Download Offline Documentation</a> from Google Drive.</div>
